@@ -16,12 +16,12 @@ function Establishment() {
   return (
     <>
       {/* if user has'not any establishment, show this */}
-    <div className="col-10 col-sm-9 py-5">
+    <div className="col-10 col-sm-9 py-4">
       {/* if showForm=False show this block */}
       {!showForm && (
         <>
-          <div className="container">
-            <h2>Заведения</h2>
+          <div className="container px-0">
+            <h1 className="text-center mb-4">Заведения</h1>
             <p>Здесь будет отображен список ваших заведений.</p>
             <p>Чтобы добавить заведения, нажмите кнопку "Добавить заведения".</p>
             {/* Button to open the form */}
