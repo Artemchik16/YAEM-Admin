@@ -13,10 +13,10 @@ function Logout() {
 
     return (
         <div className="col-10 col-sm-9 py-4">
-            <h2 className="ms-3">Выход из аккаунта</h2>
-            <p className="ms-3">Вы действительно хотите выйти?</p>
+            <h2 className="ms-4">Выход из аккаунта</h2>
+            <p className="ms-4">Вы действительно хотите выйти?</p>
             {/* handle logged out user */}
-            <button className="btn btn-danger ms-3" onClick={handleLogout}>Да, Выйти</button>
+            <button className="btn btn-danger ms-4" onClick={handleLogout}>Да, Выйти</button>
         </div>
     );
 }

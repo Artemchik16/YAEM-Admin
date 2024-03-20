@@ -1,5 +1,5 @@
 import React, { useState } from "react";
-import logo from '../../assets/images/favicon1-min.png';
+import logo from '../../assets/images/favicon.png';
 import { Link, useNavigate } from 'react-router-dom';
 
 function Login() {
@@ -60,15 +60,15 @@ function Login() {
 
     return (
         <main>
-            <div className="container">
+            <div className="container-fluid background">
                 <section className="section register min-vh-100 d-flex flex-column align-items-center justify-content-center py-4">
                     <div className="container">
                         <div className="row justify-content-center">
                             <div className="col-lg-4 col-md-6 d-flex flex-column align-items-center justify-content-center">
                                 <div className="d-flex justify-content-center py-4">
                                     <div className="logo d-flex align-items-center w-auto">
-                                        <img className="mx-auto my-4 text-center d-block d-sm-none" style={{ maxHeight: '40px' }} src={logo} alt="YAEM logo" />
-                                        <span className="">YAEM.KZ</span>
+                                        <img className="mx-auto my-4 text-center" style={{ maxHeight: '30px' }} src={logo} alt="YAEM logo" />
+                                        <span className="fs-3 fw-bold yaem-color mx-2">YAEM.KZ</span>
                                     </div>
                                 </div>
                                 <div className="card mb-3">
@@ -112,12 +112,12 @@ function Login() {
                                                 </div>
                                             </div>
                                             <div className="col-12">
-                                                <button className="btn btn-primary w-100" type="submit">Войти</button>
+                                                <button className="btn btn-primary w-100 btn-animate" type="submit">Войти</button>
                                             </div>
                                             {/* error messages */}
                                             {error && <div className="col-12 text-danger">{error}</div>}
                                             <div className="col-12">
-                                                <Link to='/registration'>Нет аккаунта? Зарегистрируйтесь!</Link>
+                                                <span>Нет аккаунта?</span> <Link to='/registration'>Зарегистрируйтесь!</Link>
                                             </div>
                                         </form>
 

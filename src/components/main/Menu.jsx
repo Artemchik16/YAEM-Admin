@@ -37,28 +37,28 @@ function Main() {
             <hr />
             <ul className="list-group list-group-light my-3">
               {/* Profile tab */}
-              <li className={`list-group-item d-flex justify-content-center ${activeTab === 'profile' && 'active'}`} onClick={() => handleTabChange('profile')}>
+              <li className={`list-group-item d-flex justify-content-center btn-animate ${activeTab === 'profile' && 'active'}`} onClick={() => handleTabChange('profile')}>
                 <div className="d-flex">
                   <i className="fas fa-user mx-auto my-auto"></i>
                   <p className="mb-0 fw-bold d-none d-sm-block mx-2"><strong>Профиль</strong></p>
                 </div>
               </li>
               {/* Establishment tab */}
-              <li className={`list-group-item d-flex justify-content-center ${activeTab === 'establishments' && 'active'}`} onClick={() => handleTabChange('establishments')}>
+              <li className={`list-group-item d-flex justify-content-center btn-animate ${activeTab === 'establishments' && 'active'}`} onClick={() => handleTabChange('establishments')}>
                 <div className="d-flex">
                   <i className="fas fa-utensils mx-auto my-auto"></i>
                   <p className="mb-0 fw-bold d-none d-sm-block mx-2"><strong>Заведения</strong></p>
                 </div>
               </li>
               {/* Payment tab */}
-              <li className={`list-group-item d-flex justify-content-center ${activeTab === 'payment' && 'active'}`} onClick={() => handleTabChange('payment')}>
+              <li className={`list-group-item d-flex justify-content-center btn-animate ${activeTab === 'payment' && 'active'}`} onClick={() => handleTabChange('payment')}>
                 <div className="d-flex align-items-center">
                   <i className="fas fa-coins mx-auto my-auto"></i>
                   <p className="mb-0 fw-bold d-none d-sm-block mx-2"><strong>Оплата</strong></p>
                 </div>
               </li>
               {/* Logout tab */}
-              <li className={`list-group-item d-flex justify-content-center ${activeTab === 'logout' && 'active'}`} onClick={() => handleTabChange('logout')}>
+              <li className={`list-group-item d-flex justify-content-center btn-animate ${activeTab === 'logout' && 'active'}`} onClick={() => handleTabChange('logout')}>
                 <div className="d-flex align-items-center">
                   <i className="fas fa-right-from-bracket mx-auto my-auto text-danger"></i>
                   <p className="mb-0 text-danger d-none d-sm-block mx-2"><strong>Выйти</strong></p>

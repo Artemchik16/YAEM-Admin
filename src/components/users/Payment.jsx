@@ -44,11 +44,11 @@ function Payment() {
   
   return (
     <div className="col-10 col-sm-9 py-4">
-      <h1 className="text-center mb-4">Оплата</h1>
+      <h1 className="ms-4 mb-4">Оплата</h1>
       <div className="card-group">
 
       {/* bronze card */}
-      <div className='card mx-1 cardStyle' style={{ boxShadow: activeTarifTab === 'bronze' && '0 0 25px 3px rgba(300, 187, 153, 5)' }} onClick={() => handleTarifTabChange('bronze')}>
+      <div className='card mx-1 cardStyle btn-animate' style={{ boxShadow: activeTarifTab === 'bronze' && '0 0 25px 3px rgba(300, 187, 153, 5)' }} onClick={() => handleTarifTabChange('bronze')}>
           <div className="card-body px-3">
             <h5 className="card-title text-center">Бронза</h5>
             <p className="fw-bold fs-5 my-0 text-center mb-3" style={{ color: '#fd7014' }}>10 000 ₸/мес </p>
@@ -59,7 +59,7 @@ function Payment() {
         </div>
 
         {/* silver card */}
-        <div className='card mx-1 cardStyle2' style={{ boxShadow: activeTarifTab === 'silver' && '0 0 25px 3px rgba(140, 139, 150, 5)' }} onClick={() => handleTarifTabChange('silver')}>
+        <div className='card mx-1 cardStyle2 btn-animate' style={{ boxShadow: activeTarifTab === 'silver' && '0 0 25px 3px rgba(140, 139, 150, 5)' }} onClick={() => handleTarifTabChange('silver')}>
           <div className="card-body px-3">
             <h5 className="card-title text-center">Серебро</h5>
             <del className="text-center" style={{ color: '#fd7014' }}><p className="fw-bold fs-6 my-0" >15 000 ₸/мес </p></del>
@@ -75,7 +75,7 @@ function Payment() {
         </div>
 
       {/* gold card */}
-      <div className='card mx-1 cardStyle3' style={{ boxShadow: activeTarifTab === 'gold' && '0 0 25px 3px rgba(255, 156, 18, 5)' }} onClick={() => handleTarifTabChange('gold')}>
+      <div className='card mx-1 cardStyle3 btn-animate' style={{ boxShadow: activeTarifTab === 'gold' && '0 0 25px 3px rgba(255, 156, 18, 5)' }} onClick={() => handleTarifTabChange('gold')}>
           <div className="card-body px-2">
             <h5 className="card-title text-center">Золото</h5>
             <p className="fw-bold fs-5 my-0 text-center mb-3" style={{ color: '#fd7014' }}>30 000 ₸/мес </p>
