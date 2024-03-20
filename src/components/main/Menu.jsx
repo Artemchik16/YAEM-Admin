@@ -7,10 +7,10 @@ import favicon from '../../assets/images/favicon.png';
 import logo from '../../assets/images/logo.png';
 
 // components import
-import Profile from './Profile.jsx';
+import Profile from '../users/Profile.jsx';
 import Establishments from './Establishments.jsx';
-import Payment from './Payment.jsx';
-import Logout from './Logout.jsx';
+import Payment from '../users/Payment.jsx';
+import Logout from '../users/Logout.jsx';
 
 function Main() {
   // set active tab, on default 'establishments' tab
@@ -66,42 +66,42 @@ function Main() {
               </li>
 
               {/* Contacts */}
-              <div class="d-flex justify-content-center flex-wrap my-5">
+              <div className="d-flex justify-content-center flex-wrap my-5">
 
-            <a class="" target="_blank"
-               href="mailto:yaem.menu@gmail.com?subject=Ваше заведение">
-                <div
-                        class="btn btn-primary text-white btn-floating mt-1 mx-1">
-                    <i class="far fa-envelope fa-2x"></i>
-                </div>
-            </a>
+                <a className="" target="_blank"
+                  href="mailto:yaem.menu@gmail.com?subject=Ваше заведение">
+                  <div
+                    className="btn btn-primary text-white btn-floating mt-1 mx-1">
+                    <i className="far fa-envelope fa-2x"></i>
+                  </div>
+                </a>
 
-            <a class="" target="_blank"
-               href="https://wa.me/77713581356?text=Здравствуйте, ">
-                <div
-                        class="btn btn-success text-white btn-floating mt-1 mx-1">
-                    <i class="fab fa-whatsapp fa-2x"></i>
-                </div>
-            </a>
+                <a className="" target="_blank"
+                  href="https://wa.me/77713581356?text=Здравствуйте, ">
+                  <div
+                    className="btn btn-success text-white btn-floating mt-1 mx-1">
+                    <i className="fab fa-whatsapp fa-2x"></i>
+                  </div>
+                </a>
 
-            <a class="" href="https://www.instagram.com/yaem_qr/" target="_blank">
-                <div class="btn btn-danger text-white btn-floating mt-1 mx-1">
-                    <i class="fab fa-instagram fa-2x"></i>
-                </div>
-            </a>
+                <a className="" href="https://www.instagram.com/yaem_qr/" target="_blank">
+                  <div className="btn btn-danger text-white btn-floating mt-1 mx-1">
+                    <i className="fab fa-instagram fa-2x"></i>
+                  </div>
+                </a>
 
-            <a class="" target="_blank"
-               href="https://wa.me/77713581356?text=Здравствуйте, прошу внести изменения в меню: %0a
+                <a className="" target="_blank"
+                  href="https://wa.me/77713581356?text=Здравствуйте, прошу внести изменения в меню: %0a
 Моё имя, должность: %0a
 Заведение: %0a
 Изменения: %0a
 ">
-                <div
-                        class="btn btn-warning text-white btn-floating mt-1 mx-1">
-                    <i class="fas fa-screwdriver-wrench fa-2x text-dark"></i>
-                </div>
-            </a>
-        </div>
+                  <div
+                    className="btn btn-warning text-white btn-floating mt-1 mx-1">
+                    <i className="fas fa-screwdriver-wrench fa-2x text-dark"></i>
+                  </div>
+                </a>
+              </div>
             </ul>
           </div>
           {/* Content block */}

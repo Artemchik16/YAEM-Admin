@@ -33,8 +33,7 @@ function Establishment() {
       {showForm && <CreateEstablishmentForm onClose={handleFormIsClose}></CreateEstablishmentForm>}
     </div>
       {/* in the else statement show establishment list */}
-    <div>...</div>
-
+    <div></div>
     </>
   );
 }
