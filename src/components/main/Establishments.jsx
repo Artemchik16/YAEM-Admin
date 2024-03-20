@@ -1,39 +1,67 @@
 // default imports
-import React, { useState } from 'react';
+import React, { useState, useEffect } from 'react';
 
-// create establishment form component import
+//components import
 import CreateEstablishmentForm from './CreateEstablishmentForm.jsx';
+import EstablishmentCard from './EstablishmentCard.jsx'
 
 function Establishment() {
-  // open establishment create form
-  const [showForm, setShowForm] = useState(false)
+
+  // establishment create form logic
+  const [showForm, setShowForm] = useState(false);
+  const [establishments, setEstablishments] = useState([]);
   const handleFormIsOpen = () => { setShowForm(true); };
   const handleFormIsClose = () => { setShowForm(false); };
 
-  // request on backend..
+  // get request on backend and get user establishments
+  useEffect(() => {
+    const fetchEstablishments = async () => {
+      try {
+        const token = sessionStorage.getItem('accessToken');
+        const response = await fetch('http://localhost:8000/api/v1/menu/clients/', {
+          headers: {
+            'Authorization': `Bearer ${token}`
+          }
+        });
+        const data = await response.json();
+        setEstablishments(data);
+        console.log(data)
+      } catch (error) {
+        console.error('Ошибка при получении списка заведений:', error);
+      }
+    };
 
+    fetchEstablishments();
+  }, []);
 
   return (
     <>
-      {/* if user has'not any establishment, show this */}
-    <div className="col-10 col-sm-9 py-4">
-      {/* if showForm=False show this block */}
-      {!showForm && (
-        <>
+      <div className="col-10 col-sm-9 py-4">
+        {!showForm && (
           <div className="container px-0">
             <h1 className="text-center mb-4">Заведения</h1>
-            <p>Здесь будет отображен список ваших заведений.</p>
-            <p>Чтобы добавить заведения, нажмите кнопку "Добавить заведения".</p>
-            {/* Button to open the form */}
+            {/* if user has not establishments show this block */}
+            {establishments.length === 0 && (
+              <>
+                <p>Здесь будет отображен список ваших заведений.</p>
+                <p>Чтобы добавить заведение, нажмите кнопку "Добавить заведение".</p>
+              </>
+            )}
+            {/* if user has establishments show this block*/}
+            {establishments.length > 0 && (
+              <>
+                <p>Заведения:</p>
+                {/* this card getting user est and work with it, card with user establishments */}
+                <EstablishmentCard establishments={establishments} />
+              </>
+            )}
+            {/* on both cases show this button */}
             <button className="btn btn-primary" onClick={handleFormIsOpen}>Добавить заведение</button>
           </div>
-        </>
-      )}
-      {/* else render the form if showForm=True */}
-      {showForm && <CreateEstablishmentForm onClose={handleFormIsClose}></CreateEstablishmentForm>}
-    </div>
-      {/* in the else statement show establishment list */}
-    <div></div>
+        )}
+        {/* if user clicked on button 'Добавить заведение' show add establishment form */}
+        {showForm && <CreateEstablishmentForm onClose={handleFormIsClose} />}
+      </div>
     </>
   );
 }
