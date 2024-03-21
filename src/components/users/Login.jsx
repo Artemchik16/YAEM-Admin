@@ -1,14 +1,24 @@
+// default import
 import React, { useState } from "react";
+
+// import image
 import logo from '../../assets/images/favicon.png';
+
+// import redirect, navigation
 import { Link, useNavigate } from 'react-router-dom';
+
+// import messages
+import { ToastContainer, toast } from 'react-toastify';
+import 'react-toastify/dist/ReactToastify.css';
+
 
 function Login() {
 
     // phone number value
-    const [phone, setPhone] = useState('');
+    const [phone, setPhone] = useState(null);
 
     // password value
-    const [password, setPassword] = useState('');
+    const [password, setPassword] = useState(null);
 
     // error message
     const [error, setError] = useState(null);
@@ -40,13 +50,13 @@ function Login() {
             // save tokens in the sessionStorage
             sessionStorage.setItem('accessToken', accessToken);
             sessionStorage.setItem('refreshToken', refreshToken);
-            console.log(accessToken)
 
-            // success logic
-            console.log('Вход выполнен успешно');
+            // save success message in session storage
+            sessionStorage.setItem('IsLoginSuccess', 'Добро пожаловать');
 
-            // navigate on menu page
-            navigate('/menu');
+            // navigate on menu page and reload page
+            window.location.reload()
+            navigate('/menu', { replace: true });
 
             // error block
         } catch (error) {
@@ -55,6 +65,8 @@ function Login() {
             } else {
                 setError(error.message);
             }
+            // Show error message with toast
+            toast.error(error.message, { autoClose: 2000 });
         }
     };
 
@@ -114,8 +126,10 @@ function Login() {
                                             <div className="col-12">
                                                 <button className="btn btn-primary w-100 btn-animate" type="submit">Войти</button>
                                             </div>
+
                                             {/* error messages */}
-                                            {error && <div className="col-12 text-danger">{error}</div>}
+                                            <ToastContainer></ToastContainer>
+
                                             <div className="col-12">
                                                 <span>Нет аккаунта?</span> <Link to='/registration'>Зарегистрируйтесь!</Link>
                                             </div>

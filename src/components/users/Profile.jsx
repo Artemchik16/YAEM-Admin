@@ -3,6 +3,8 @@ import React from "react";
 
 
 function Profile() {
+
+  
   return (
     <div className="col-10 col-sm-9 py-4 px-2" style={{ maxWidth: '600px' }}>
       <h1 className="ms-4">Профиль</h1>

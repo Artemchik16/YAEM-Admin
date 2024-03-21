@@ -1,10 +1,13 @@
 // default imports
-import React, { useState } from 'react';
-import { Link } from 'react-router-dom';
+import React, { useState, useEffect } from 'react';
 
 // images import
 import favicon from '../../assets/images/favicon.png';
 import logo from '../../assets/images/logo.png';
+
+// import messages
+import { ToastContainer, toast } from 'react-toastify';
+import 'react-toastify/dist/ReactToastify.css';
 
 // components import
 import Profile from '../users/Profile.jsx';
@@ -13,18 +16,35 @@ import Payment from '../users/Payment.jsx';
 import Logout from '../users/Logout.jsx';
 
 function Main() {
+
   // set active tab, on default 'establishments' tab
   const [activeTab, setActiveTab] = useState('establishments');
   const handleTabChange = (tab) => {
     setActiveTab(tab);
   };
 
-  // open profile component
+  // messages block, enumerating all keys in a session
+  const [sessionMessages, setSessionMessages] = useState({});
 
-  // open payment component
+  useEffect(() => {
+    const storedMessages = { ...sessionStorage };
+    setSessionMessages(storedMessages);
+  }, []);
 
-  // open logout notification
-
+  useEffect(() => {
+    Object.keys(sessionMessages).forEach((key) => {
+      // if session key include Success
+      if (key.includes('Success')) {
+        toast.success(sessionMessages[key], { autoClose: 2000 });
+        sessionStorage.removeItem(key);
+      }
+      // if session key include Error
+      else if (key.includes('Error')) {
+        toast.error(sessionMessages[key], { autoClose: 2000 });
+        sessionStorage.removeItem(key);
+      }
+    });
+  }, [sessionMessages]);
 
   return (
     <div className="section">
@@ -105,6 +125,7 @@ function Main() {
             </ul>
           </div>
           {/* Content block */}
+          {/* messages */}
           {/* Profile component */}
           {activeTab === 'profile' && (<Profile></Profile>)}
           {/* Establishment component */}
@@ -114,6 +135,8 @@ function Main() {
           {/* Logout component */}
           {activeTab === 'logout' && (<Logout></Logout>)}
           {/* End content block */}
+          {/* messages block */}
+          <ToastContainer></ToastContainer>
         </div>
       </div>
     </div>

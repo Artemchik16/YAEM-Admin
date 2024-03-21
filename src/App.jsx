@@ -14,23 +14,36 @@ import Registration from './components/users/Registration.jsx';
 import Menu from './components/main/Menu.jsx';
 
 
-
-
 function App() {
-  // check is authenticated user
+
+  // check is authenticated user, getting user token
   const isAuthenticated = sessionStorage.getItem('accessToken') !== null;
 
   return (
     <Router>
       <Routes>
+
         {/* The login page is available to non-logged in users, otherwise redirection to the menu page */}
-        <Route path='/login' element={isAuthenticated ? <Navigate to='/menu' /> : <Login />} />
-        
+        <Route
+          path='/login'
+          element={isAuthenticated ? <Navigate to='/menu'></Navigate> : <Login></Login>}
+        >
+        </Route>
+
         {/* The registration page is only available to unauthenticated users */}
-        <Route path='/registration' element={isAuthenticated ? <Navigate to='/menu' /> : <Registration />} />
+        <Route
+          path='/registration'
+          element={isAuthenticated ? <Navigate to='/menu'></Navigate> : <Registration></Registration>}
+        >
+        </Route>
 
         {/* The menu page is only accessible to authenticated users */}
-        <Route path='/menu' element={isAuthenticated ? <Menu /> : <Navigate to='/login' />} />
+        <Route
+          path='/menu'
+          element={isAuthenticated ? <Menu></Menu> : <Navigate to='/login'></Navigate>}
+        >
+        </Route>
+
       </Routes>
     </Router>
   );

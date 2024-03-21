@@ -13,7 +13,7 @@ function Establishment() {
   const handleFormIsOpen = () => { setShowForm(true); };
   const handleFormIsClose = () => { setShowForm(false); };
 
-  // get request on backend and get user establishments
+  // get request on backend and get user establishments list with base info
   useEffect(() => {
     const fetchEstablishments = async () => {
       try {
@@ -42,7 +42,7 @@ function Establishment() {
             <h1 className="ms-4 mb-3">Заведения
             {/* on both cases show this button */}
               <span>
-                <div className="btn shadow-0 btn-outline-success btn-rounded btn-animate px-3 my-3 my-1" onClick={handleFormIsOpen}>
+                <div className="btn shadow-0 btn-outline-success btn-rounded btn-animate px-3 my-1" onClick={handleFormIsOpen}>
                   <i class="far fa-square-plus"></i>
                   Добавить заведение
                 </div>
@@ -53,6 +53,7 @@ function Establishment() {
               <>
                 <p>Здесь будет отображен список ваших заведений.</p>
                 <p>Чтобы добавить заведение, нажмите кнопку "Добавить заведение".</p>
+                <hr/>
               </>
             )}
             {/* if user has establishments show this block*/}
