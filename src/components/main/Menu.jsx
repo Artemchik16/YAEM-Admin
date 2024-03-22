@@ -1,15 +1,15 @@
-// default imports
+// Default imports
 import React, { useState, useEffect } from 'react';
 
-// images import
+// Images import
 import favicon from '../../assets/images/favicon.png';
 import logo from '../../assets/images/logo.png';
 
-// import messages
+// Import messages
 import { ToastContainer, toast } from 'react-toastify';
 import 'react-toastify/dist/ReactToastify.css';
 
-// components import
+// Components import
 import Profile from '../users/Profile.jsx';
 import Establishments from './Establishments.jsx';
 import Payment from '../users/Payment.jsx';
@@ -17,13 +17,13 @@ import Logout from '../users/Logout.jsx';
 
 function Main() {
 
-  // set active tab, on default 'establishments' tab
+  // Set active tab, default to 'establishments' tab
   const [activeTab, setActiveTab] = useState('establishments');
   const handleTabChange = (tab) => {
     setActiveTab(tab);
   };
 
-  // messages block, enumerating all keys in a session
+  // Messages block, enumerating all keys in a session
   const [sessionMessages, setSessionMessages] = useState({});
 
   useEffect(() => {
@@ -33,12 +33,12 @@ function Main() {
 
   useEffect(() => {
     Object.keys(sessionMessages).forEach((key) => {
-      // if session key include Success
+      // If session key include Success
       if (key.includes('Success')) {
         toast.success(sessionMessages[key], { autoClose: 2000 });
         sessionStorage.removeItem(key);
       }
-      // if session key include Error
+      // If session key include Error
       else if (key.includes('Error')) {
         toast.error(sessionMessages[key], { autoClose: 2000 });
         sessionStorage.removeItem(key);
@@ -87,7 +87,6 @@ function Main() {
 
               {/* Contacts */}
               <div className="d-flex justify-content-center flex-wrap my-5">
-
                 <a className="" target="_blank"
                   href="mailto:yaem.menu@gmail.com?subject=Ваше заведение">
                   <div
@@ -125,7 +124,6 @@ function Main() {
             </ul>
           </div>
           {/* Content block */}
-          {/* messages */}
           {/* Profile component */}
           {activeTab === 'profile' && (<Profile></Profile>)}
           {/* Establishment component */}
@@ -135,7 +133,7 @@ function Main() {
           {/* Logout component */}
           {activeTab === 'logout' && (<Logout></Logout>)}
           {/* End content block */}
-          {/* messages block */}
+          {/* Messages block */}
           <ToastContainer></ToastContainer>
         </div>
       </div>

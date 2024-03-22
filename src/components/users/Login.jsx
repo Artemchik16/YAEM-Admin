@@ -1,70 +1,65 @@
-// default import
+// Default imports
 import React, { useState } from "react";
 
-// import image
+// Import image
 import logo from '../../assets/images/favicon.png';
 
-// import redirect, navigation
+// Import redirect and navigation
 import { Link, useNavigate } from 'react-router-dom';
 
-// import messages
+// Import messages
 import { ToastContainer, toast } from 'react-toastify';
 import 'react-toastify/dist/ReactToastify.css';
 
-
 function Login() {
+    // State variables
+    const [phone, setPhone] = useState(null); // Phone number
+    const [password, setPassword] = useState(null); // Password
+    const [error, setError] = useState(null); // Error message
+    const navigate = useNavigate(); // Navigation
 
-    // phone number value
-    const [phone, setPhone] = useState(null);
-
-    // password value
-    const [password, setPassword] = useState(null);
-
-    // error message
-    const [error, setError] = useState(null);
-
-    // navigate value
-    const navigate = useNavigate();
-
-    // post request on backend
+    // Submit handler for login form
     const handleSubmit = async (e) => {
         e.preventDefault();
 
         try {
+            // Send POST request to backend
             const response = await fetch('http://localhost:8000/api/v1/token/', {
                 method: 'POST',
                 headers: { 'Content-Type': 'application/json' },
                 body: JSON.stringify({ phone_number: phone, password: password })
             });
-            // error message
+
+            // Handle error response
             if (!response.ok) {
                 throw new Error('Неверный номер телефона или пароль.');
             }
-            // get data from response
+
+            // Get data from response
             const data = await response.json();
 
-            // get tokens
+            // Get tokens
             const accessToken = data.access;
             const refreshToken = data.refresh;
 
-            // save tokens in the sessionStorage
+            // Save tokens in sessionStorage
             sessionStorage.setItem('accessToken', accessToken);
             sessionStorage.setItem('refreshToken', refreshToken);
 
-            // save success message in session storage
+            // Save success message in session storage
             sessionStorage.setItem('IsLoginSuccess', 'Добро пожаловать');
 
-            // navigate on menu page and reload page
-            window.location.reload()
+            // Navigate to menu page and reload page
+            window.location.reload();
             navigate('/menu', { replace: true });
-
-            // error block
         } catch (error) {
+            // Handle error
             if (error.message === 'No active account found with the given credentials') {
                 setError('Неверный номер телефона или пароль');
             } else {
                 setError(error.message);
             }
+
             // Show error message with toast
             toast.error(error.message, { autoClose: 2000 });
         }
@@ -90,10 +85,10 @@ function Login() {
                                             <p className="text-center small">Введите номер телефона и пароль для входа</p>
                                         </div>
 
+                                        {/* Form */}
                                         <form className="row g-3 needs-validation" onSubmit={handleSubmit}>
                                             <div className="col-12">
                                                 <label htmlFor="phone" className="form-label">Номер телефона</label>
-                                                {/* get phone value */}
                                                 <input
                                                     type="text"
                                                     className="form-control"
@@ -109,7 +104,6 @@ function Login() {
                                             </div>
                                             <div className="col-12">
                                                 <label htmlFor="password" className="form-label">Пароль</label>
-                                                {/* get password value */}
                                                 <input
                                                     type="password"
                                                     className="form-control"
@@ -127,14 +121,13 @@ function Login() {
                                                 <button className="btn btn-primary w-100 btn-animate" type="submit">Войти</button>
                                             </div>
 
-                                            {/* error messages */}
+                                            {/* Messages */}
                                             <ToastContainer></ToastContainer>
 
                                             <div className="col-12">
                                                 <span>Нет аккаунта?</span> <Link to='/registration'>Зарегистрируйтесь!</Link>
                                             </div>
                                         </form>
-
                                     </div>
                                 </div>
 

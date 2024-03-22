@@ -1,4 +1,4 @@
-// default imports
+// Default imports
 import React, {useState} from "react";
 
 
@@ -7,17 +7,17 @@ import React, {useState} from "react";
 
 function Payment() {
 
-  // set active tab, on default 'SILVER TARIF' tab
+  // Set active tab, on default 'SILVER TARIF' tab
   const [activeTarifTab, setActiveTarifTab] = useState('silver');
-  // set price, on default 13000 'SILVER TARIF'
+  // Set price, on default 13000 'SILVER TARIF'
   const [tarifPrice, setTarifPrice] = useState(13000);
-  // set tarif title, on default None
+  // Set tarif title, on default None
   const [tarifTitle, setTarifTitle] = useState('Серебро');
-  // get discount and total price
+  // Get discount and total price
   const discountedPrice = tarifPrice - (tarifPrice * 0.8);
   const totalPrice = tarifPrice - discountedPrice;
 
-  // set values
+  // Set values
   const handleTarifTabChange = (tab) => {
     setActiveTarifTab(tab);
     switch (tab) {
@@ -47,7 +47,7 @@ function Payment() {
       <h1 className="ms-4 mb-4">Оплата</h1>
       <div className="card-group">
 
-      {/* bronze card */}
+      {/* Bronze card */}
       <div className='card mx-1 cardStyle btn-animate' style={{ boxShadow: activeTarifTab === 'bronze' && '0 0 25px 3px rgba(300, 187, 153, 5)' }} onClick={() => handleTarifTabChange('bronze')}>
           <div className="card-body px-3">
             <h5 className="card-title text-center">Бронза</h5>
@@ -58,7 +58,7 @@ function Payment() {
           </div>
         </div>
 
-        {/* silver card */}
+        {/* Silver card */}
         <div className='card mx-1 cardStyle2 btn-animate' style={{ boxShadow: activeTarifTab === 'silver' && '0 0 25px 3px rgba(140, 139, 150, 5)' }} onClick={() => handleTarifTabChange('silver')}>
           <div className="card-body px-3">
             <h5 className="card-title text-center">Серебро</h5>
@@ -74,7 +74,7 @@ function Payment() {
           </div>
         </div>
 
-      {/* gold card */}
+      {/* Gold card */}
       <div className='card mx-1 cardStyle3 btn-animate' style={{ boxShadow: activeTarifTab === 'gold' && '0 0 25px 3px rgba(255, 156, 18, 5)' }} onClick={() => handleTarifTabChange('gold')}>
           <div className="card-body px-2">
             <h5 className="card-title text-center">Золото</h5>
@@ -89,7 +89,7 @@ function Payment() {
         </div>
       </div>
 
-      {/* get tarif title */}
+      {/* Get tarif title */}
       <h5 className="my-4">Купить тариф {tarifTitle}</h5>
       <input
         type="number"
@@ -111,18 +111,18 @@ function Payment() {
       />
       <small className="fst-italic text-secondary"> <i className="fas fa-tag "></i> При оплате за 12 месяцев 2 месяца в подарок</small>
       <div className="d-flex justify-content-between mt-3" style={{ maxWidth: '300px' }}>
-        {/* get price */}
+        {/* Get price */}
         <small>Сумма</small>
         <small> {tarifPrice.toLocaleString()} ₸</small>
       </div>
       <div className="d-flex justify-content-between" style={{ maxWidth: '300px' }}>
-        {/* get discounded price */}
+        {/* Get discounded price */}
         <small>Скидка (20%)</small>
         <small> -{discountedPrice.toLocaleString()} ₸</small>
       </div>
       <hr style={{ maxWidth: '300px' }} />
       <div className="d-flex justify-content-between fw-bold" style={{ maxWidth: '300px', color: '#fd7014' }}>
-        {/* get total price */}
+        {/* Get total price */}
         <p>Итого</p>
         <p> {totalPrice.toLocaleString()}  ₸</p>
       </div>

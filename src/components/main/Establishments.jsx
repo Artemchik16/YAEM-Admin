@@ -1,19 +1,22 @@
-// default imports
+// Default imports
 import React, { useState, useEffect } from 'react';
 
-//components import
+// Components import
 import CreateEstablishmentForm from './CreateEstablishmentForm.jsx';
 import EstablishmentCard from './EstablishmentCard.jsx'
 
 function Establishment() {
 
-  // establishment create form logic
+  // Establishment create form logic
   const [showForm, setShowForm] = useState(false);
   const [establishments, setEstablishments] = useState([]);
+
+  // Function to open establishment creation form
   const handleFormIsOpen = () => { setShowForm(true); };
+  // Function to close establishment creation form
   const handleFormIsClose = () => { setShowForm(false); };
 
-  // get request on backend and get user establishments list with base info
+  // Fetch user establishments from the backend on component mount
   useEffect(() => {
     const fetchEstablishments = async () => {
       try {
@@ -40,32 +43,32 @@ function Establishment() {
         {!showForm && (
           <div className="container px-0">
             <h1 className="ms-4 mb-3">Заведения
-            {/* on both cases show this button */}
               <span>
+                {/* Button to open establishment creation form */}
                 <div className="btn shadow-0 btn-outline-success btn-rounded btn-animate px-3 my-1" onClick={handleFormIsOpen}>
                   <i class="far fa-square-plus"></i>
                   Добавить заведение
                 </div>
               </span>
             </h1>
-            {/* if user has not establishments show this block */}
+            {/* Rendered when user has no establishments */}
             {establishments.length === 0 && (
               <>
                 <p>Здесь будет отображен список ваших заведений.</p>
                 <p>Чтобы добавить заведение, нажмите кнопку "Добавить заведение".</p>
-                <hr/>
+                <hr />
               </>
             )}
-            {/* if user has establishments show this block*/}
+            {/* Rendered when user has establishments */}
             {establishments.length > 0 && (
               <>
-                {/* this card getting user est and work with it, card with user establishments */}
+                {/* Render establishment card with user's establishments */}
                 <EstablishmentCard establishments={establishments} />
               </>
             )}
           </div>
         )}
-        {/* if user clicked on button 'Добавить заведение' show add establishment form */}
+        {/* Render establishment creation form when 'showForm' state is true */}
         {showForm && <CreateEstablishmentForm onClose={handleFormIsClose} />}
       </div>
     </>
