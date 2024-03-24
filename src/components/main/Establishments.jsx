@@ -45,8 +45,8 @@ function Establishment() {
             <h1 className="ms-4 mb-3">Заведения
               <span>
                 {/* Button to open establishment creation form */}
-                <div className="btn shadow-0 btn-outline-success btn-rounded btn-animate px-3 my-1" onClick={handleFormIsOpen}>
-                  <i class="far fa-square-plus"></i>
+                <div className="btn shadow-0 btn-outline-success btn-rounded btn-animate px-3 my-1 mx-2" onClick={handleFormIsOpen}>
+                  <i class="far fa-square-plus me-2"></i>
                   Добавить заведение
                 </div>
               </span>

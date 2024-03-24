@@ -61,13 +61,15 @@ function EstablishmentCard({ establishments }) {
                         <div className="card-body">
                             {/* Check if deletion confirmation is active */}
                             {confirmDelete === key ? (
-                                <div>
+                                <div className="container">
                                     {/* Render deletion confirmation message */}
                                     <p>Безвозвратно удалить заведение "{establishments[key].name}"?</p>
+                                    <div className="d-flex justify-content-center">
                                     {/* Button to confirm deletion */}
-                                    <button className="btn btn-sm btn-danger" onClick={() => handleDeleteEstablishment(establishments[key].id, key)}>Да, удалить</button>
+                                    <button className="btn btn-sm btn-danger me-2" onClick={() => handleDeleteEstablishment(establishments[key].id, key)}>Да, удалить</button>
                                     {/* Button to cancel deletion */}
-                                    <button className="btn btn-sm btn-success" onClick={() => setConfirmDelete(null)}>Нет</button>
+                                    <button className="btn btn-sm btn-success" onClick={() => setConfirmDelete(null)}>Отмена</button>
+                                    </div>
                                 </div>
                             ) : (
                                 <>
