@@ -37,17 +37,20 @@ function CreateEstablishmentForm({onClose}) {
                   <input
                     type="number"
                     class="form-control"
-                    aria-label="Amount (to the nearest dollar)"
+                    placeholder="77071112233"
                   />
                 </div>
                 <p className="text mb-0">Выберите город</p>
-                <div class="input-group mb-3">
-                  <input
-                    type="text"
-                    class="form-control"
-                    placeholder="SELECT CITIES"
-                  />
-                </div>
+                <select data-mdb-select-init class="select">
+                  <option value="1">One</option>
+                  <option value="2">Two</option>
+                  <option value="3">Three</option>
+                  <option value="4">Four</option>
+                  <option value="5">Five</option>
+                  <option value="6">Six</option>
+                  <option value="7">Seven</option>
+                  <option value="8">Eight</option>
+                </select>
                 <p className="text mb-0">Описание</p>
                 <div class="input-group mb-3">
                   <textarea class="form-control" aria-label="With textarea"></textarea>
