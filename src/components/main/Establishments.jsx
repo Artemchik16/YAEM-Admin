@@ -1,22 +1,28 @@
-// Default imports
 import React, { useState, useEffect } from 'react';
-
-// Components import
 import CreateEstablishmentForm from './CreateEstablishmentForm.jsx';
-import EstablishmentCard from './EstablishmentCard.jsx'
+import EditEstablishmentForm from './EditEstablishmentForm.jsx';
+import EstablishmentCard from './EstablishmentCard.jsx';
 
 function Establishment() {
+  const [editingEstablishmentId, setEditingEstablishmentId] = useState(null);
+  const [showEstablishments, setShowEstablishments] = useState(true); 
 
-  // Establishment create form logic
-  const [showForm, setShowForm] = useState(false);
+  const handleEditEstablishment = (establishmentId) => {
+    setEditingEstablishmentId(establishmentId);
+    setShowEstablishments(false); 
+  };
+
+  const handleFinishEditing = () => {
+    setEditingEstablishmentId(null);
+    setShowEstablishments(true); 
+  };
+
+  const handleCreateFormIsOpen = () => { setShowCreateForm(true); };
+  const handleCreateFormIsClose = () => { setShowCreateForm(false); };
+
+  const [showCreateForm, setShowCreateForm] = useState(false);
   const [establishments, setEstablishments] = useState([]);
 
-  // Function to open establishment creation form
-  const handleFormIsOpen = () => { setShowForm(true); };
-  // Function to close establishment creation form
-  const handleFormIsClose = () => { setShowForm(false); };
-
-  // Fetch user establishments from the backend on component mount
   useEffect(() => {
     const fetchEstablishments = async () => {
       try {
@@ -28,9 +34,8 @@ function Establishment() {
         });
         const data = await response.json();
         setEstablishments(data);
-        console.log(data)
       } catch (error) {
-        console.error('Ошибка при получении списка заведений:', error);
+        console.error('Ошибка при получении списка заведений');
       }
     };
 
@@ -40,18 +45,17 @@ function Establishment() {
   return (
     <>
       <div className="col-10 col-sm-9 py-4">
-        {!showForm && (
+
+        {showEstablishments && !showCreateForm && (
           <div className="container px-0">
             <h1 className="ms-4 mb-3">Заведения
               <span>
-                {/* Button to open establishment creation form */}
-                <div className="btn shadow-0 btn-outline-success btn-rounded btn-animate px-3 my-1 mx-2" onClick={handleFormIsOpen}>
+                <div className="btn shadow-0 btn-outline-success btn-rounded btn-animate px-3 my-1 mx-2" onClick={handleCreateFormIsOpen}>
                   <i class="far fa-square-plus me-2"></i>
                   Добавить заведение
                 </div>
               </span>
             </h1>
-            {/* Rendered when user has no establishments */}
             {establishments.length === 0 && (
               <>
                 <p>Здесь будет отображен список ваших заведений.</p>
@@ -59,17 +63,21 @@ function Establishment() {
                 <hr />
               </>
             )}
-            {/* Rendered when user has establishments */}
             {establishments.length > 0 && (
               <>
-                {/* Render establishment card with user's establishments */}
-                <EstablishmentCard establishments={establishments} />
+                <EstablishmentCard establishments={establishments} onEdit={handleEditEstablishment} />
               </>
             )}
           </div>
         )}
-        {/* Render establishment creation form when 'showForm' state is true */}
-        {showForm && <CreateEstablishmentForm onClose={handleFormIsClose} />}
+
+        {showCreateForm && (
+          <CreateEstablishmentForm onClose={handleCreateFormIsClose} />
+        )}
+
+        {editingEstablishmentId && (
+          <EditEstablishmentForm establishmentId={editingEstablishmentId} onFinishEditing={handleFinishEditing} />
+        )}
       </div>
     </>
   );

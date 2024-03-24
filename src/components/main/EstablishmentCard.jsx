@@ -5,19 +5,15 @@ import axios from "axios";
 // Messages import
 import { toast } from 'react-toastify';
 import 'react-toastify/dist/ReactToastify.css';
-// Components import
-import EditEstablishmentForm from './EditEstablishmentForm.jsx';
+// Link import
+import { Link } from 'react-router-dom';
 
 
-function EstablishmentCard({ establishments }) {
+function EstablishmentCard({ establishments, onEdit }) {
 
-    // Establishment change form logic
-    const [showEstablishmentChangeForm, setshowEstablishmentChangeForm] = useState(false);
-
-    // Function to open establishment change form
-    const handleEstablishmentChangeFormIsOpen = () => { setshowEstablishmentChangeForm(true); };
-    // Function to close establishment change form
-    const handleEstablishmentChangeFormIsClose = () => { setshowEstablishmentChangeForm(false); };
+    const handleEdit = (establishmentId) => {
+        onEdit(establishmentId);
+    };
 
 
 
@@ -65,10 +61,10 @@ function EstablishmentCard({ establishments }) {
                                     {/* Render deletion confirmation message */}
                                     <p>Безвозвратно удалить заведение "{establishments[key].name}"?</p>
                                     <div className="d-flex justify-content-center">
-                                    {/* Button to confirm deletion */}
-                                    <button className="btn btn-sm btn-danger me-2" onClick={() => handleDeleteEstablishment(establishments[key].id, key)}>Да, удалить</button>
-                                    {/* Button to cancel deletion */}
-                                    <button className="btn btn-sm btn-success" onClick={() => setConfirmDelete(null)}>Отмена</button>
+                                        {/* Button to confirm deletion */}
+                                        <button className="btn btn-sm btn-danger me-2" onClick={() => handleDeleteEstablishment(establishments[key].id, key)}>Да, удалить</button>
+                                        {/* Button to cancel deletion */}
+                                        <button className="btn btn-sm btn-success" onClick={() => setConfirmDelete(null)}>Отмена</button>
                                     </div>
                                 </div>
                             ) : (
@@ -81,15 +77,23 @@ function EstablishmentCard({ establishments }) {
                                     <div className="d-flex flex-wrap justify-content-evenly text-center">
                                         {/* Render action buttons */}
 
-                                        {/*  */}
-                                        <div className="btn btn-animate my-1" style={{ width: '70px' }}><i className="fas fa-qrcode fa-lg"></i></div>
+                                        {/* Button to redirect on yaem.kz menu */}
+                                        <a href={`http://127.0.0.1:8000/${establishments[key].url_name}/menu`} target="_blank">
+                                            <div className="btn btn-animate my-1" style={{ width: '70px' }}>
+                                                <i className="fas fa-qrcode fa-lg"></i>
+                                            </div>
+                                        </a>
+
 
                                         {/*  */}
-                                        <div className="btn btn-animate my-1" style={{ width: '70px' }}><i className="fas fa-book-open fa-lg"></i></div>
+                                        <div className="btn btn-animate my-1" style={{ width: '70px' }}>
+                                            <i className="fas fa-book-open fa-lg"></i>
+                                        </div>
 
-                                        {/* Render establishment change form when 'showEstablishmentChangeForm' state is true */}
-                                        <div className="btn btn-animate my-1" onClick={handleEstablishmentChangeFormIsOpen} style={{ width: '70px' }}><i className="fas fa-pen fa-lg"></i></div>
-                                        {showEstablishmentChangeForm && <EditEstablishmentForm onClose={handleEstablishmentChangeFormIsClose} />}
+                                        {/* Button to open DetailEstablishment component */}
+                                        <div className="btn btn-animate my-1" style={{ width: '70px' }} onClick={() => handleEdit(establishments[key].id)}>
+                                            <i className="fas fa-pen fa-lg"></i>
+                                        </div>
 
                                         {/* Button to trigger deletion confirmation */}
                                         <div className="btn btn-animate btn-outline-danger my-1" style={{ width: '70px' }}
