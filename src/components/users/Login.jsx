@@ -7,14 +7,17 @@ import logo from '../../assets/images/favicon.png';
 // Import redirect and navigation
 import { Link, useNavigate } from 'react-router-dom';
 
+// HTTP import
+import axios from "axios";
+
 // Import messages
 import { ToastContainer, toast } from 'react-toastify';
 import 'react-toastify/dist/ReactToastify.css';
 
 function Login() {
     // State variables
-    const [phone, setPhone] = useState(null); // Phone number
-    const [password, setPassword] = useState(null); // Password
+    const [phone, setPhone] = useState(''); // Phone number
+    const [password, setPassword] = useState(''); // Password
     const [error, setError] = useState(null); // Error message
     const navigate = useNavigate(); // Navigation
 
@@ -23,24 +26,15 @@ function Login() {
         e.preventDefault();
 
         try {
-            // Send POST request to backend
-            const response = await fetch('http://localhost:8000/api/v1/token/', {
-                method: 'POST',
-                headers: { 'Content-Type': 'application/json' },
-                body: JSON.stringify({ phone_number: phone, password: password })
+            // Send POST request to backend using Axios
+            const response = await axios.post('http://localhost:8000/api/v1/auth/jwt/create/', {
+                phone_number: phone,
+                password: password,
             });
 
-            // Handle error response
-            if (!response.ok) {
-                throw new Error('Неверный номер телефона или пароль.');
-            }
-
-            // Get data from response
-            const data = await response.json();
-
             // Get tokens
-            const accessToken = data.access;
-            const refreshToken = data.refresh;
+            const accessToken = response.data.access;
+            const refreshToken = response.data.refresh;
 
             // Save tokens in sessionStorage
             sessionStorage.setItem('accessToken', accessToken);
@@ -52,16 +46,17 @@ function Login() {
             // Navigate to menu page and reload page
             window.location.reload();
             navigate('/menu', { replace: true });
+
         } catch (error) {
             // Handle error
-            if (error.message === 'No active account found with the given credentials') {
+            if (error.response && error.response.status === 401) {
                 setError('Неверный номер телефона или пароль');
             } else {
                 setError(error.message);
             }
 
             // Show error message with toast
-            toast.error(error.message, { autoClose: 2000 });
+            toast.error('Неверный номер телефона или пароль', { autoClose: 2000 });
         }
     };
 

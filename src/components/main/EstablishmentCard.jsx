@@ -5,8 +5,23 @@ import axios from "axios";
 // Messages import
 import { toast } from 'react-toastify';
 import 'react-toastify/dist/ReactToastify.css';
+// Components import
+import EditEstablishmentForm from './EditEstablishmentForm.jsx';
+
 
 function EstablishmentCard({ establishments }) {
+
+    // Establishment change form logic
+    const [showEstablishmentChangeForm, setshowEstablishmentChangeForm] = useState(false);
+
+    // Function to open establishment change form
+    const handleEstablishmentChangeFormIsOpen = () => { setshowEstablishmentChangeForm(true); };
+    // Function to close establishment change form
+    const handleEstablishmentChangeFormIsClose = () => { setshowEstablishmentChangeForm(false); };
+
+
+
+
     // State for deleted establishments and confirmation of deletion
     const [deletedEstablishments, setDeletedEstablishments] = useState([]);
     const [confirmDelete, setConfirmDelete] = useState(null);
@@ -42,11 +57,11 @@ function EstablishmentCard({ establishments }) {
                 {Object.keys(establishments).map((key) => (
                     // Render the establishment card if it's not deleted
                     !deletedEstablishments.includes(key) &&
-                    <div key={key} className={`card mx-2 my-2${deletedEstablishments.includes(key) ? ' fadeOut' : ''}`} style={{ width: '400px' }}>
+                    <div key={key} className={`card mx-2 my-2${deletedEstablishments.includes(key) ? '' : ''}`} style={{ width: '400px' }}>
                         <div className="card-body">
                             {/* Check if deletion confirmation is active */}
                             {confirmDelete === key ? (
-                                <div className="text-center">
+                                <div>
                                     {/* Render deletion confirmation message */}
                                     <p>Безвозвратно удалить заведение "{establishments[key].name}"?</p>
                                     {/* Button to confirm deletion */}
@@ -63,9 +78,17 @@ function EstablishmentCard({ establishments }) {
                                     <hr />
                                     <div className="d-flex flex-wrap justify-content-evenly text-center">
                                         {/* Render action buttons */}
+
+                                        {/*  */}
                                         <div className="btn btn-animate my-1" style={{ width: '70px' }}><i className="fas fa-qrcode fa-lg"></i></div>
+
+                                        {/*  */}
                                         <div className="btn btn-animate my-1" style={{ width: '70px' }}><i className="fas fa-book-open fa-lg"></i></div>
-                                        <div className="btn btn-animate my-1" style={{ width: '70px' }}><i className="fas fa-pen fa-lg"></i></div>
+
+                                        {/* Render establishment change form when 'showEstablishmentChangeForm' state is true */}
+                                        <div className="btn btn-animate my-1" onClick={handleEstablishmentChangeFormIsOpen} style={{ width: '70px' }}><i className="fas fa-pen fa-lg"></i></div>
+                                        {showEstablishmentChangeForm && <EditEstablishmentForm onClose={handleEstablishmentChangeFormIsClose} />}
+
                                         {/* Button to trigger deletion confirmation */}
                                         <div className="btn btn-animate btn-outline-danger my-1" style={{ width: '70px' }}
                                             onClick={() => setConfirmDelete(key)}>
