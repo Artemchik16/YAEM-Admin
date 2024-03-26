@@ -72,31 +72,60 @@ function Categories({ establishmentId, onFinishDish }) {
 
     // Render loading state while fetching data
     if (loading) {
-        return <div>Загрузка...</div>;
+        return <div class="spinner-border text-warning" role="status">
+                <span class="visually-hidden">Loading...</span>
+                </div>;
     }
 
     // Render content after data is fetched
     return (
-        <div>
-            <h2>Dish - {establishmentData.name} {establishmentData.id}</h2>
-            {/* <h2>+ : Add category</h2> */}
-            {/* Render categories for loop */}
-            <ul>
+<div>
+<div className="btn shadow-0 btn-animate my-auto btn-outline-dark">
+          <i class="fas fa-arrow-left-long fa-lg"></i>
+</div>
+<h2 className="my-3">Разделы
+    <div className="btn shadow-0 btn-outline-success btn-rounded btn-animate px-2 mx-2">
+          <i className="far fa-square-plus me-2"></i>
+          Добавить Раздел
+    </div>
+</h2>
+
+
+
+<div className="row my-3">
+        <div className="col-12 col-lg-auto">
+            <ul className="nav mb-3">
+              <li className="nav-item bg-primary bg-opacity-25 py-1 rounded-7" role="presentation">
                 {categories.map(category => (
-                    // list of all categories from backend, add image?..
-                    <li key={category.id} onClick={() => handleCategoryClick(category)}>
-                        {category.name}
-                    </li>
+                  <a
+                    href="#"
+                    className="btn btn-rounded btn-secondary mx-2 btn-animate my-1"
+                    key={category.id}
+                    onClick={() => handleCategoryClick(category)}
+                  >
+                    {category.name}
+                  </a>
                 ))}
+              </li>
             </ul>
+        </div>
+        <div className="col-12 col-lg-auto text-end  my-auto">
+            <div className="btn shadow-0 btn-animate my-auto btn-outline-success mx-1 px-3">
+                      <i className="far fa-square-plus fa-lg"></i>
+            </div>
+            <div className="btn shadow-0 btn-animate my-auto btn-outline-dark mx-1 px-3">
+                      <i className="fas fa-pen"></i>
+            </div>
+            <div className="btn shadow-0 btn-animate my-auto btn-outline-danger mx-1 px-3">
+                      <i className="fas fa-trash fa-lg"></i>
+            </div>
+        </div>
+    </div>
 
             {/* Conditionally render Subcategories component based on the selected category */}
             {selectedCategory && (
                 <Subcategories categoryId={selectedCategory.id} />
             )}
-
-            {/* Button to cancel */}
-            <button className="btn btn-danger" onClick={onFinishDish}>Отменить</button>
         </div>
     );
 }
