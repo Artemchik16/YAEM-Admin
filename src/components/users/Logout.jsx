@@ -1,11 +1,22 @@
+// default import
 import React from "react";
+
+// Import messages
+import { ToastContainer, toast } from 'react-toastify';
+import 'react-toastify/dist/ReactToastify.css';
+
 
 function Logout() {
     // Logout function to remove tokens and redirect to login page
     const handleLogout = () => {
-        sessionStorage.removeItem('accessToken'); // Remove access token
-        sessionStorage.removeItem('refreshToken'); // Remove refresh token
-        window.location.href = '/login'; // Redirect to login page
+        toast.info("Выход из аккаунта..", {
+            autoClose: 1000,
+        });
+        setTimeout(() => {
+            sessionStorage.removeItem('accessToken'); // Remove access token
+            sessionStorage.removeItem('refreshToken'); // Remove refresh token
+            window.location.href = '/login'; // Redirect to login page
+        }, 1400);
     };
 
     return (

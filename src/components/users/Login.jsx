@@ -15,24 +15,23 @@ import { ToastContainer, toast } from 'react-toastify';
 import 'react-toastify/dist/ReactToastify.css';
 
 function Login() {
-    // State variables
+
     const [phone, setPhone] = useState(''); // Phone number
     const [password, setPassword] = useState(''); // Password
-    const [error, setError] = useState(null); // Error message
     const navigate = useNavigate(); // Navigation
 
     // Submit handler for login form
     const handleSubmit = async (e) => {
         e.preventDefault();
-
+        // Send post request to backend and get JWT tokens
         try {
-            // Send POST request to backend using Axios
             const response = await axios.post('http://localhost:8000/api/v1/auth/jwt/create/', {
+                // send user info
                 phone_number: phone,
                 password: password,
             });
 
-            // Get tokens
+            // Get tokens from response
             const accessToken = response.data.access;
             const refreshToken = response.data.refresh;
 
@@ -43,20 +42,19 @@ function Login() {
             // Save success message in session storage
             sessionStorage.setItem('IsLoginSuccess', 'Добро пожаловать');
 
-            // Navigate to menu page and reload page
+            // Navigate to menu page and reload page and save tokens in sessionStorage
             window.location.reload();
-            navigate('/menu', { replace: true });
+            navigate('/menu');
 
         } catch (error) {
-            // Handle error
-            if (error.response && error.response.status === 401) {
-                setError('Неверный номер телефона или пароль');
+            // Check if the error is due to server unavailability or other technical issues
+            if (!error.response) {
+                // Handle error when server is unavailable
+                toast.error('Технические неполадки. Пожалуйста, попробуйте позже.', { autoClose: 2000 });
             } else {
-                setError(error.message);
+                // Handle other errors (e.g., invalid credentials)
+                toast.error('Неверный номер телефона или пароль', { autoClose: 2000 });
             }
-
-            // Show error message with toast
-            toast.error('Неверный номер телефона или пароль', { autoClose: 2000 });
         }
     };
 
@@ -80,10 +78,11 @@ function Login() {
                                             <p className="text-center small">Введите номер телефона и пароль для входа</p>
                                         </div>
 
-                                        {/* Form */}
+                                        {/* Form logic and handlers */}
                                         <form className="row g-3 needs-validation" onSubmit={handleSubmit}>
                                             <div className="col-12">
                                                 <label htmlFor="phone" className="form-label">Номер телефона</label>
+                                                {/* handle input */}
                                                 <input
                                                     type="text"
                                                     className="form-control"
@@ -93,12 +92,10 @@ function Login() {
                                                     onChange={(e) => setPhone(e.target.value)}
                                                     required
                                                 />
-                                                <div className="invalid-feedback">
-                                                    Пожалуйста, введите номер телефона.
-                                                </div>
                                             </div>
                                             <div className="col-12">
                                                 <label htmlFor="password" className="form-label">Пароль</label>
+                                                {/* handle input */}
                                                 <input
                                                     type="password"
                                                     className="form-control"
@@ -108,17 +105,15 @@ function Login() {
                                                     onChange={(e) => setPassword(e.target.value)}
                                                     required
                                                 />
-                                                <div className="invalid-feedback">
-                                                    Пожалуйста, введите пароль.
-                                                </div>
                                             </div>
                                             <div className="col-12">
                                                 <button className="btn btn-primary w-100 btn-animate" type="submit">Войти</button>
                                             </div>
 
-                                            {/* Messages */}
+                                            {/* Messages on this page */}
                                             <ToastContainer></ToastContainer>
 
+                                            {/* Redirect to registration page */}
                                             <div className="col-12">
                                                 <span>Нет аккаунта?</span> <Link to='/registration'>Зарегистрируйтесь!</Link>
                                             </div>
