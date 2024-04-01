@@ -15,7 +15,7 @@ function Payment() {
     // Base phone number validation and empty value validation
     const phoneNumberPattern = /^(\+7|8)\d{10}$/;
     if (!kaspiNumber || !phoneNumberPattern.test(kaspiNumber)) {
-      toast.error('Пожалуйста, укажите корректный номер телефона в формате (+77777777777)', { autoClose: 2000 });
+      toast.error('Пожалуйста, укажите корректный номер Kaspi в формате (+77777777777)', { autoClose: 2000 });
       return;
     }
     // Post request on telegram API
