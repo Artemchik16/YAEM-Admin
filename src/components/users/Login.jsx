@@ -1,18 +1,15 @@
 // Default imports
 import React, { useState } from "react";
-
 // Import image
 import logo from '../../assets/images/favicon.png';
-
 // Import redirect and navigation
 import { Link, useNavigate } from 'react-router-dom';
-
 // HTTP import
 import axios from "axios";
-
 // Import messages
 import { ToastContainer, toast } from 'react-toastify';
 import 'react-toastify/dist/ReactToastify.css';
+
 
 function Login() {
 
