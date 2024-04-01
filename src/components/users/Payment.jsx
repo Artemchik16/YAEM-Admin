@@ -20,14 +20,25 @@ function Payment() {
     }
     // Post request on telegram API
     try {
+      // Get access token
+      const token = sessionStorage.getItem('accessToken');
+      // Get bot token
       const telegramBotToken = '6540080500:AAESZ_bD2sPa0TKJfwPcDlbnSeukIw82Iw8';
+      // Chat bot id
       const telegramCatID = '1913989114';
+      // Get user phone number
+      const userPhoneNumber = await axios.get('http://localhost:8000/api/v1/auth/phone-number', {
+        // Send token on backend
+        headers: {
+          'Authorization': `Bearer ${token}`
+        }
+      })
       const response = await axios.post(
         `https://api.telegram.org/bot${telegramBotToken}/sendMessage`,
         {
-          user_phone_number: kaspiNumber,
           chat_id: telegramCatID,
           text: `Новая оплата:
+          Номер телефона: ${userPhoneNumber.data.phone_number}
           Номер каспи: ${kaspiNumber}
           Тариф: ${tarifTitle}
           Количество месяцев: ${months}
@@ -38,7 +49,7 @@ function Payment() {
       toast.success('Заявка отправлена', { autoClose: 2000 });
       // Error block
     } catch (error) {
-      toast.success('Ошибка при отправке сообщения', { autoClose: 2000 });
+      toast.error('Ошибка при отправке сообщения', { autoClose: 2000 });
     }
   };
 
@@ -112,7 +123,7 @@ function Payment() {
         {/* Bronze card */}
         <div className={`card mx-1 cardStyle ${activeTarifTab === 'bronze' ? '' : 'btn-animate'}`}
           style={{
-            boxShadow: activeTarifTab === 'bronze' ? '0 0 10px 3px rgba(59, 113, 202, 0.5)' : '',
+            boxShadow: activeTarifTab === 'bronze' ? '0 0 10px 3px rgba(59, 113, 260, 0.5)' : '',
             transform: activeTarifTab === 'bronze' ? 'scale(1.05)' : '',
             zIndex: activeTarifTab === 'bronze' ? 1 : 0,
             cursor: 'pointer'
@@ -130,7 +141,7 @@ function Payment() {
         {/* Silver card */}
         <div className={`card mx-1 cardStyle2 ${activeTarifTab === 'silver' ? '' : 'btn-animate'}`}
           style={{
-            boxShadow: activeTarifTab === 'silver' ? '0 0 10px 3px rgba(59, 113, 202, 0.5)' : '',
+            boxShadow: activeTarifTab === 'silver' ? '0 0 10px 3px rgba(59, 113, 260, 0.5)' : '',
             transform: activeTarifTab === 'silver' ? 'scale(1.05)' : '',
             zIndex: activeTarifTab === 'silver' ? 1 : 0,
             cursor: 'pointer'
@@ -153,7 +164,7 @@ function Payment() {
         {/* Gold card */}
         <div className={`card mx-1 cardStyle3 ${activeTarifTab === 'gold' ? '' : 'btn-animate'}`}
           style={{
-            boxShadow: activeTarifTab === 'gold' ? '0 0 10px 3px rgba(59, 113, 202, 0.5)' : '',
+            boxShadow: activeTarifTab === 'gold' ? '0 0 10px 3px rgba(59, 113, 260, 0.5)' : '',
             transform: activeTarifTab === 'gold' ? 'scale(1.05)' : '',
             zIndex: activeTarifTab === 'gold' ? 1 : 0,
             cursor: 'pointer'
