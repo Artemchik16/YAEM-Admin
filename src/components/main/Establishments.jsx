@@ -110,14 +110,14 @@ function Establishment() {
           </div>
         )}
 
-        {/* if user clicked on 'Добавить заведение' button, show CreateEstablishmentForm component and close handler */}
+        {/* if user clicked on 'Добавить заведение' button, show CreateEstablishmentForm component and close handler, and update state */}
         {showCreateForm && (
-          <CreateEstablishmentForm onClose={handleCreateFormIsClose} />
+          <CreateEstablishmentForm onClose={handleCreateFormIsClose} updateEstablishments={setEstablishments} />
         )}
 
-        {/* If editingEstablishmentId is set, render EditEstablishmentForm component, send establishmentId and close handler */}
+        {/* If editingEstablishmentId is set, render EditEstablishmentForm component, send establishmentId and close handler, and update state */}
         {editingEstablishmentId && (
-          <EditEstablishmentForm establishmentId={editingEstablishmentId} onFinishEditing={handleFinishEditing} />
+          <EditEstablishmentForm establishmentId={editingEstablishmentId} onFinishEditing={handleFinishEditing} updateEstablishments={setEstablishments} />
         )}
         {/* If editingDishId is set, render Dishes component, send establishmentId and close handler */}
         {editingDishId && (

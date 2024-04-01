@@ -67,8 +67,9 @@ function EstablishmentCard({ establishments, onEdit, onEditDishes }) {
                                 <>
                                     {/* Render establishment data from backend */}
                                     <h5 className="card-title">{establishments[key].name}</h5>
-                                    <p className="card-text text-muted">{establishments[key].address}</p>
+                                    {/* <p className="card-text text-muted">{establishments[key].address}</p> */}
                                     <small className="card-text">{establishments[key].description}</small>
+                                    {/* <img src={establishments[key].logo}/> */}
                                     <hr />
                                     <div className="d-flex flex-wrap justify-content-evenly text-center">
                                         {/* Render action buttons */}

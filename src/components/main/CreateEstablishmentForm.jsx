@@ -5,14 +5,14 @@ import { toast } from 'react-toastify';
 import 'react-toastify/dist/ReactToastify.css';
 
 
-function CreateEstablishmentForm({ onClose }) {
+function CreateEstablishmentForm({ onClose, updateEstablishments }) {
 
   const [name, setName] = useState("");
   const [url, setUrl] = useState("");
   const [city, setCity] = useState(""); // Selected city ID
   const [cities, setCities] = useState([]); // List of cities
 
-  // Fetch list of cities from backend
+  // Get list of cities from backend
   useEffect(() => {
     // Get access token value
     const token = sessionStorage.getItem('accessToken');
@@ -49,23 +49,42 @@ function CreateEstablishmentForm({ onClose }) {
           'Authorization': `Bearer ${token}`
         }
       });
-      // Save success message in session storage
-      sessionStorage.setItem('SuccessCreateEstablishment', 'Заведение успешно созданно');
-      // Close the form after successful creation
-      onClose();
-      // Reload page
-      window.location.reload();
-
+      // Success block
+      toast.success(`Заведение ${name.charAt(0).toUpperCase() + name.slice(1)} успешно созданно`, { autoClose: 2000 });
+      onClose()
+      // Another request on backend
+      const updatedEstablishmentsResponse = await axios.get('http://localhost:8000/api/v1/menu/clients/', {
+        // Send token on backend
+        headers: {
+          'Authorization': `Bearer ${token}`
+        }
+      });
+      updateEstablishments(updatedEstablishmentsResponse.data);
       // Error block
     } catch (error) {
-      // console.error("Error creating establishment:", error);
-      toast.error('Ошибка при создании заведения', { autoClose: 2000 });
+      if (error.response && error.response.data) {
+        // Validate name
+        if (error.response.data.name) {
+          toast.error('Имя может содержать только русские/английские буквы', { autoClose: 2000 });
+        }
+        // Validate URL
+        if (error.response.data.url_name) {
+          toast.error('URL может содержать только английские буквы или он уже занят', { autoClose: 2000 });
+        }
+      } else {
+        // Other errors
+        toast.error('Ошибка при создании заведения', { autoClose: 2000 });
+      }
     }
   };
 
   return (
     <div className="container">
       <div className="create-establishment">
+        {/* Back handler */}
+        <div className="btn shadow-0 btn-animate my-auto btn-outline-dark" onClick={onClose}>
+          <i className="fas fa-arrow-left-long fa-lg"></i>
+        </div>
         <h2>Добавить заведение</h2>
         {/* Add establishment form */}
         <form className="my-4" onSubmit={handleSubmit}>
@@ -111,10 +130,9 @@ function CreateEstablishmentForm({ onClose }) {
             ))}
           </select>
 
-          {/* Submit and close handlers */}
+          {/* Submit handler */}
           <div className="d-flex justify-content-center">
             <button type="submit" className="btn btn-success my-3 me-2">Добавить</button>
-            <button type="button" className="btn btn-danger my-3" onClick={onClose}>Отмена</button>
           </div>
         </form>
       </div>
