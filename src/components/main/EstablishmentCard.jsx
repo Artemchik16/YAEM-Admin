@@ -7,7 +7,7 @@ import { toast } from 'react-toastify';
 import 'react-toastify/dist/ReactToastify.css';
 
 
-function EstablishmentCard({ establishments, onEdit, onEditDishes }) {
+function EstablishmentCard({ establishments, onEdit, onEditDishes, updateEstablishments }) {
 
     // is used to handle the establishment edit event and calls the onEdit function, passing it the establishmentId.
     const handleEdit = (establishmentId) => { onEdit(establishmentId); };
@@ -31,10 +31,20 @@ function EstablishmentCard({ establishments, onEdit, onEditDishes }) {
                     }
                 }
             );
+            // Success block
             // Notify user about successful deletion
             toast.warning('Заведение удалено.', { autoClose: 2000 })
+            // Another request on backend
+            const updatedEstablishmentsResponse = await axios.get('http://localhost:8000/api/v1/menu/clients/', {
+                // Send token on backend
+                headers: {
+                    'Authorization': `Bearer ${token}`
+                }
+            });
+            updateEstablishments(updatedEstablishmentsResponse.data);
             // Update the list of deleted establishments
             setDeletedEstablishments([...deletedEstablishments, key]);
+            // Error block
         } catch (error) {
             // Notify user about deletion error
             toast.error('Ошибка при удалении заведения', { autoClose: 2000 })

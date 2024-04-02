@@ -9,6 +9,8 @@ import 'react-toastify/dist/ReactToastify.css';
 
 
 function Payment() {
+  // Let's add a state that will be responsible for blocking the submit button
+  const [isSending, setIsSending] = useState(false);
 
   // Handle payment button and get telegram message
   const handlePaymentClick = async () => {
@@ -16,6 +18,11 @@ function Payment() {
     const phoneNumberPattern = /^(\+7|8)\d{10}$/;
     if (!kaspiNumber || !phoneNumberPattern.test(kaspiNumber)) {
       toast.error('Пожалуйста, укажите корректный номер Kaspi в формате (+77777777777)', { autoClose: 2000 });
+      return;
+    }
+    // Months validation
+    if (!months){
+      toast.error('Пожалуйста, укажите количество месяцев', { autoClose: 2000 });
       return;
     }
     // Post request on telegram API
@@ -45,10 +52,16 @@ function Payment() {
           Итого: ${calculateTotalPrice().toLocaleString()} ₸`,
         }
       );
+      // Set the blocking flag
+      setIsSending(true)
       // Success block
       toast.success('Заявка отправлена', { autoClose: 2000 });
+      // Enable a delay for sending a new request after the current one has been successfully sent
+      setTimeout(() => { setIsSending(false); }, 10000);
       // Error block
     } catch (error) {
+      // Set the blocking flag
+      setIsSending(false)
       toast.error('Ошибка при отправке сообщения', { autoClose: 2000 });
     }
   };
@@ -238,10 +251,15 @@ function Payment() {
             <p> {calculateTotalPrice().toLocaleString()} ₸</p>
           </div>
           {/* Send message in telegram bot */}
-          <div className="btn btn-danger btn-rounded btn-animate"
-            style={{ minWidth: '300px' }}
-            onClick={handlePaymentClick}
-          >Выставить счёт на Kaspi</div>
+          <div className="col-10 col-sm-9 py-4">
+            {/* if the application has been successfully sent, turn off the button */}
+            <div className={`btn btn-rounded ${isSending ? 'btn-secondary disabled' : 'btn-danger btn-animate'}`}
+              style={{ minWidth: '300px' }}
+              onClick={handlePaymentClick}
+            >
+              Выставить счёт на Kaspi
+            </div>
+          </div>
         </>
       )}
     </div>

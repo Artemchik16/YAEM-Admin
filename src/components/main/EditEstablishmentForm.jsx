@@ -11,6 +11,8 @@ function EditEstablishmentForm({ establishmentId, onFinishEditing, updateEstabli
   // Set value from form
   const [name, setName] = useState('');
   const [urlName, setUrlName] = useState('');
+  // Set form changed status
+  const [formChanged, setFormChanged] = useState(false);
 
   // Get detail data on backend on ID
   useEffect(() => {
@@ -67,20 +69,35 @@ function EditEstablishmentForm({ establishmentId, onFinishEditing, updateEstabli
       // Error block
     } catch (error) {
       if (error.response && error.response.data) {
-        // Validate name
-        if (error.response.data.name) {
-          toast.error('Имя может содержать только русские/английские буквы', { autoClose: 2000 });
-        }
-        // Validate URL
-        if (error.response.data.url_name) {
-          toast.error('URL может содержать только английские буквы', { autoClose: 2000 });
+        // Check if the error message is related to exceeding the limit on created establishments
+        if (error.response.data[0] === "Вы превысили лимит на количество созданных заведений") {
+          toast.error('Вы превысили лимит на количество созданных заведений', { autoClose: 2000 });
+        } else {
+          // Other validation errors
+          if (error.response.data.name && error.response.data.name[0] === 'The name can only contain letters (Russian and English)') {
+            toast.error('Имя может содержать только русские/английские буквы', { autoClose: 2000 });
+          }
+          if (error.response.data.name && error.response.data.name[0] === 'Max len error') {
+            toast.error('Имя может содержать только 30 символов', { autoClose: 2000 });
+          }
+          if (error.response.data.url_name && error.response.data.url_name[0] === 'The URL name can only contain Latin characters') {
+            toast.error('URL может содержать только английские буквы', { autoClose: 2000 });
+          }
+          if (error.response.data.url_name && error.response.data.url_name[0] === 'Заведение с таким /url уже существует.') {
+            toast.error('URL уже занят', { autoClose: 2000 });
+          }
         }
       } else {
         // Other errors
-        toast.error('Не удалось обновить заведение', { autoClose: 2000 });
+        toast.error('Ошибка при создании заведения', { autoClose: 2000 });
       }
     }
   };
+
+  // Check if the form is changed
+  useEffect(() => {
+    setFormChanged(name !== establishmentData?.name || urlName !== establishmentData?.url_name);
+  }, [name, urlName, establishmentData]);
 
   if (loading) {
     return <div>Перенаправление..</div>;
@@ -119,7 +136,8 @@ function EditEstablishmentForm({ establishmentId, onFinishEditing, updateEstabli
           />
         </div>
         <div className="d-flex justify-content-center">
-          <button type="submit" className="btn btn-success me-2 btn-animate">Сохранить</button>
+          {/* Render the submit button only if formChanged is true */}
+          {formChanged && <button type="submit" className="btn btn-success me-2 btn-animate">Сохранить</button>}
         </div>
       </form>
     </div>

@@ -103,8 +103,8 @@ function Establishment() {
             {/* If user have any establishments*/}
             {establishments.length > 0 && (
               <>
-                {/* Render EstablishmentCard component and send establishments data list in this component and edit handler, dish handler*/}
-                <EstablishmentCard establishments={establishments} onEdit={handleEditEstablishment} onEditDishes={handleEditDishes} />
+                {/* Render EstablishmentCard component and send establishments data list in this component and edit handler, dish handler, update handler*/}
+                <EstablishmentCard establishments={establishments} onEdit={handleEditEstablishment} onEditDishes={handleEditDishes} updateEstablishments={setEstablishments} />
               </>
             )}
           </div>

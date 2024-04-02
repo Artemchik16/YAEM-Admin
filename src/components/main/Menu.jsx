@@ -83,7 +83,7 @@ function Main() {
               {/* Payment tab */}
               {/* Handle payment tab change */}
               <li className={`list-group-item d-flex justify-content-center btn-animate ${activeTab === 'payment' && 'active'}`} onClick={() => handleTabChange('payment')}>
-                <div className="d-flex align-items-center">
+                <div className="d-flex">
                   <i className="fas fa-coins mx-auto my-auto"></i>
                   <p className="mb-0 fw-bold d-none d-sm-block mx-2"><strong>Оплата</strong></p>
                 </div>
@@ -91,7 +91,7 @@ function Main() {
               {/* Logout tab */}
               {/* Handle logout tab change */}
               <li className={`list-group-item d-flex justify-content-center btn-animate ${activeTab === 'logout' && 'active'}`} onClick={() => handleTabChange('logout')}>
-                <div className="d-flex align-items-center">
+                <div className="d-flex">
                   <i className="fas fa-right-from-bracket mx-auto my-auto text-danger"></i>
                   <p className="mb-0 text-danger d-none d-sm-block mx-2"><strong>Выйти</strong></p>
                 </div>

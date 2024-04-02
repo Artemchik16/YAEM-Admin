@@ -42,7 +42,7 @@ function CreateEstablishmentForm({ onClose, updateEstablishments }) {
         // Send data
         name: name,
         url_name: url,
-        city_id: city,
+        city: city,
       }, {
         // Send token on backend
         headers: {
@@ -62,14 +62,22 @@ function CreateEstablishmentForm({ onClose, updateEstablishments }) {
       updateEstablishments(updatedEstablishmentsResponse.data);
       // Error block
     } catch (error) {
+      console.log(city)
       if (error.response && error.response.data) {
-        // Validate name
-        if (error.response.data.name) {
-          toast.error('Имя может содержать только русские/английские буквы', { autoClose: 2000 });
-        }
-        // Validate URL
-        if (error.response.data.url_name) {
-          toast.error('URL может содержать только английские буквы или он уже занят', { autoClose: 2000 });
+        // Check if the error message is related to exceeding the limit on created establishments
+        if (error.response.data[0] === "Вы превысили лимит на количество созданных заведений") {
+          toast.error('Вы превысили лимит на количество созданных заведений', { autoClose: 2000 });
+        } else {
+          // Other validation errors
+          if (error.response.data.name && error.response.data.name[0] === 'The name can only contain letters (Russian and English)') {
+            toast.error('Имя может содержать только русские/английские буквы', { autoClose: 2000 });
+          }
+          if (error.response.data.url_name && error.response.data.url_name[0] === 'The URL name can only contain Latin characters') {
+            toast.error('URL может содержать только английские буквы', { autoClose: 2000 });
+          }
+          if (error.response.data.url_name && error.response.data.url_name[0] === 'Заведение с таким /url уже существует.') {
+            toast.error('URL уже занят', { autoClose: 2000 });
+          }
         }
       } else {
         // Other errors
