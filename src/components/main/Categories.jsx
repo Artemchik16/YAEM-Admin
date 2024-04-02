@@ -45,31 +45,19 @@ function Categories({ establishmentId, onFinishDish }) {
                 <i className="fas fa-arrow-left-long fa-lg"></i>
             </div>
             {/* show this block if user has not any categories */}
-            <h2 className="my-3">Категории
+            <h2 className="my-3">Разделы
                 {categories.length === 0 && (
-                    <div className="btn shadow-0 btn-outline-success btn-rounded btn-animate px-2 mx-2">
+                    <div className="btn shadow-0 btn-outline-success btn-animate px-2 mx-2">
                         <i className="far fa-square-plus me-2"></i>
-                        Добавить Категорию
+                        Добавить Раздел
                     </div>
                 )}
-            </h2>
-            <ul className="list-group">
-                {categories.map(category => (
-                    <li
-                        className="list-group-item"
-                        key={category.id}
-                        onClick={() => handleCategoryClick(category)}
-                    >
-                        {category.name}
-                    </li>
-                ))}
-            </ul>
-            <div className="row my-3">
                 {/* show this block if user have any categories */}
                 {categories.length > 0 && (
-                    <div className="col-12 col-lg-auto text-end  my-auto">
-                        <div className="btn shadow-0 btn-animate my-auto btn-outline-success mx-1 px-3">
+                <div className="col my-3">
+                        <div className="btn shadow-0 btn-animate my-auto btn-outline-success ms-1 me-1 px-3">
                             <i className="far fa-square-plus fa-lg"></i>
+
                         </div>
                         <div className="btn shadow-0 btn-animate my-auto btn-outline-dark mx-1 px-3">
                             <i className="fas fa-pen"></i>
@@ -77,9 +65,20 @@ function Categories({ establishmentId, onFinishDish }) {
                         <div className="btn shadow-0 btn-animate my-auto btn-outline-danger mx-1 px-3">
                             <i className="fas fa-trash fa-lg"></i>
                         </div>
-                    </div>
+                </div>
                 )}
+            </h2>
+            <div class="btn-group shadow-0" role="group" aria-label="Basic example">
+            {categories.map(category => (
+              <button type="button" class="btn btn-outline-secondary btn-animate" data-mdb-color="dark"
+              key={category.id} style={{ '--mdb-btn-hover-bg': '#ff9753', '--mdb-btn-active-bg': '#FD7014'}}
+                        onClick={() => handleCategoryClick(category)}>{category.name}</button>
+              ))}
             </div>
+
+
+
+
             {/* Conditionally render Subcategories component based on the selected category */}
             {selectedCategory && (
                 <Subcategories categoryId={selectedCategory.id} />

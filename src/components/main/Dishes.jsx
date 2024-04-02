@@ -34,39 +34,72 @@ function Dishes({ subcategoryId }) {
     }
 
     return (
-        <div className="container my-5">
+        <div className="container my-5 px-0">
             {/* show this block if user has not any categories */}
-            <h2 className="my-3">Подкатегории
-                {dishes.length === 0 && (
-                    <div className="btn shadow-0 btn-outline-success btn-rounded btn-animate px-2 mx-2">
-                        <i className="far fa-square-plus me-2"></i>
-                        Добавить  Блюдо
+            <h2 className="my-3">Блюда
+                    <div className="btn shadow-0 btn-outline-success btn-animate px-3 mx-2">
+                        <i className="far fa-square-plus"></i>
                     </div>
-                )}
             </h2>
-            <ul className="list-group">
-                {dishes.map(dish => (
-                    <li className="list-group-item" key={dish.id}>
-                        {dish.name}
-                    </li>
-                ))}
-            </ul>
-            <div className="row my-3">
-                {/* show this block if user have any categories */}
-                {dishes.length > 0 && (
-                    <div className="col-12 col-lg-auto text-end  my-auto">
-                        <div className="btn shadow-0 btn-animate my-auto btn-outline-success mx-1 px-3">
-                            <i className="far fa-square-plus fa-lg"></i>
-                        </div>
-                        <div className="btn shadow-0 btn-animate my-auto btn-outline-dark mx-1 px-3">
-                            <i className="fas fa-pen"></i>
-                        </div>
-                        <div className="btn shadow-0 btn-animate my-auto btn-outline-danger mx-1 px-3">
-                            <i className="fas fa-trash fa-lg"></i>
+{dishes.map(dish => (
+            <div className="card mx-auto my-3 shadow-lg" style={{ width: '300px' }}>
+                        <div className="card-body px-0 py-0">
+
+                                <>
+                                    {/* Render establishment data from backend */}
+                                    <div className="row">
+                                    <div className="col-6">
+                                        <img className="card-img px-0" src={dish.image} style={{ maxWidth: '300px' }}></img>
+                                    </div>
+                                    <div className="col-6 my-auto ps-0">
+                                        <h5 className="card-title mx-0 px-0 my-auto" key={dish.id}>{dish.name}</h5>
+                                    </div>
+                                    </div>
+
+
+                                    {/* Button to open DetailEstablishment component */}
+                                    <p className="my-2 ms-3 fs-6 text-muted">{dish.description}</p>
+{/*                                      <input type="file" class="form-control" id="inputGroupFile01"/> */}
+                                    <hr className="px-0 my-0"/>
+                                    <div className="row mx-0">
+                                        <div className="col-4">
+                                       <del><p className="my-1 ms-3 fs-6">{dish.old_price} 1000 ₸</p></del>
+                                        <p className="my-1 ms-3 fs-6 fw-bold">{dish.actual_price} ₸</p>
+                                        </div>
+                                        <div className="col-4">
+                                        <p className="my-1 ms-3 fs-6"><i class="fas fa-check text-success"></i> <i class="fas fa-xmark text-danger"></i>{dish.stop} <i class="fas fa-hand"></i></p>
+                                        <p className="my-1 ms-3 fs-6"><i class="fas fa-check text-success"></i> <i class="fas fa-xmark text-danger"></i>{dish.stop} <i class="fas fa-star" style={{'color': 'gold'}}></i></p>
+                                        </div>
+                                        <div className="col-4">
+                                        <p className="my-1 ms-3 fs-6"><i class="fas fa-check text-success"></i> <i class="fas fa-xmark text-danger"></i>{dish.stop} <i class="fas fa-pepper-hot text-danger"></i></p>
+                                        <p className="my-1 ms-3 fs-6"><i class="fas fa-check text-success"></i> <i class="fas fa-xmark text-danger"></i>{dish.stop} <i class="fas fa-seedling text-success"></i></p>
+                                        </div>
+                                    </div>
+
+                                    {/* <p className="card-text text-muted">{establishments[key].address}</p> */}
+                                    <small className="card-text"></small>
+                                    {/* <img src={establishments[key].logo}/> */}
+                                    <hr className="my-0"/>
+                                    <div className="d-flex flex-wrap justify-content-evenly text-center my-1">
+                                        {/* Render action buttons */}
+                                        {/* Button to redirect on yaem.kz menu */}
+
+                                        {/* Button to open Dishes component */}
+                                        <div className="btn btn-animate btn-outline-dark my-1" style={{ width: '70px' }}>
+                                            <i className="fas fa-pen fa-lg"></i>
+                                        </div>
+
+                                        {/* Button to trigger deletion confirmation */}
+                                        <div className="btn btn-animate btn-outline-danger my-1" style={{ width: '70px' }}>
+                                            <i className="fas fa-trash fa-lg"></i>
+                                        </div>
+                                    </div>
+                                </>
                         </div>
                     </div>
-                )}
-            </div>
+  ))}
+
+
         </div>
     );
 }

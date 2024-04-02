@@ -51,14 +51,16 @@ function Main() {
       <div className="container-fluid">
         <div className="row">
           {/* Sidebar menu */}
-          <div className="col-2 col-sm-3 py-4 border-end px-1" style={{ minHeight: '860px' }}>
+          <div className="col-2 col-sm-3 py-4 border-end px-1" style={{ maxWidth: '300px' }}>
+          <div className='d-flex mb-auto flex-column' style={{ minHeight: '800px' }}>
             <img className="mx-auto my-4 text-center d-block d-sm-none" style={{ maxHeight: '40px' }} src={favicon} alt="YAEM logo" />
             <img className="mx-auto mb-4 text-center d-none d-sm-block" style={{ maxHeight: '50px' }} src={logo} alt="YAEM logo" />
             <hr />
-            <ul className="list-group list-group-light my-3">
+            <ul className="list-group list-group-light my-3" style={{ '--mdb-list-group-light-active-bg': '#ff9753', '--mdb-list-group-light-active-color': 'black' }}>
               {/* Profile tab */}
               {/* Handle profile tab change */}
-              <li className={`disabled list-group-item d-flex justify-content-center btn-animate ${activeTab === 'profile' && 'active'}`} onClick={() => handleTabChange('profile')}>
+              <li className={`disabled list-group-item d-flex justify-content-center btn-animate ${activeTab === 'profile' && 'active'}`} onClick={() => handleTabChange('profile')}
+              >
                 <div className="d-flex">
                   <i className="fas fa-user mx-auto my-auto"></i>
                   <p className="mb-0 fw-bold d-none d-sm-block mx-2"><strong>Профиль</strong></p>
@@ -90,7 +92,7 @@ function Main() {
               </li>
               {/* Logout tab */}
               {/* Handle logout tab change */}
-              <li className={`list-group-item d-flex justify-content-center btn-animate ${activeTab === 'logout' && 'active'}`} onClick={() => handleTabChange('logout')}>
+              <li className={`list-group-item d-flex justify-content-center btn-animate mb-auto ${activeTab === 'logout' && 'active'}`} onClick={() => handleTabChange('logout')}>
                 <div className="d-flex">
                   <i className="fas fa-right-from-bracket mx-auto my-auto text-danger"></i>
                   <p className="mb-0 text-danger d-none d-sm-block mx-2"><strong>Выйти</strong></p>
@@ -98,14 +100,10 @@ function Main() {
               </li>
 
               {/* Contacts block */}
-              <div className="d-flex justify-content-center flex-wrap my-5">
-                <a className="" target="_blank"
-                  href="mailto:yaem.menu@gmail.com?subject=Ваше заведение">
-                  <div
-                    className="btn btn-primary text-white btn-floating mt-1 mx-1">
-                    <i className="far fa-envelope fa-2x"></i>
-                  </div>
-                </a>
+
+            </ul>
+
+            <div className="d-flex justify-content-center flex-wrap mt-auto">
 
                 <a className="" target="_blank"
                   href="https://wa.me/77713581356?text=Здравствуйте, ">
@@ -120,20 +118,8 @@ function Main() {
                     <i className="fab fa-instagram fa-2x"></i>
                   </div>
                 </a>
-
-                <a className="" target="_blank"
-                  href="https://wa.me/77713581356?text=Здравствуйте, прошу внести изменения в меню: %0a
-Моё имя, должность: %0a
-Заведение: %0a
-Изменения: %0a
-">
-                  <div
-                    className="btn btn-warning text-white btn-floating mt-1 mx-1">
-                    <i className="fas fa-screwdriver-wrench fa-2x text-dark"></i>
-                  </div>
-                </a>
+                </div>
               </div>
-            </ul>
           </div>
           {/* Content block, render a specific component depending on the active tab */}
 

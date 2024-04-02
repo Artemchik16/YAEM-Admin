@@ -22,7 +22,7 @@ function CreateEstablishmentForm({ onClose, updateEstablishments }) {
         'Authorization': `Bearer ${token}`
       }
     })
-      // Set cities 
+      // Set cities
       .then(response => {
         setCities(response.data);
       })
@@ -93,12 +93,13 @@ function CreateEstablishmentForm({ onClose, updateEstablishments }) {
         <div className="btn shadow-0 btn-animate my-auto btn-outline-dark" onClick={onClose}>
           <i className="fas fa-arrow-left-long fa-lg"></i>
         </div>
-        <h2>Добавить заведение</h2>
+        <h2 className="ms-4 my-3">Добавить заведение</h2>
         {/* Add establishment form */}
-        <form className="my-4" onSubmit={handleSubmit}>
+        <h6>Основная информация (*Обязательно к заполнению)</h6>
+        <form className="my-1" onSubmit={handleSubmit}>
           {/* establishment name */}
           <div className="input-group mb-3">
-            <span className="input-group-text"><i className="fas fa-font fa-xs text-muted"></i></span>
+            <span className="input-group-text"><i className="fas fa-font fa-xs"></i></span>
             {/* handle input */}
             <input
               type="text"
@@ -111,7 +112,7 @@ function CreateEstablishmentForm({ onClose, updateEstablishments }) {
           </div>
           {/* establishment url */}
           <div className="input-group mb-3">
-            <span className="input-group-text"><i className="fas fa-link fa-xs text-muted"></i></span>
+            <span className="input-group-text"><i className="fas fa-link fa-xs"></i></span>
             <span className="input-group-text text-muted fst-" id="basic-addon2">yaem.kz/</span>
             {/* handle input */}
             <input
@@ -129,7 +130,7 @@ function CreateEstablishmentForm({ onClose, updateEstablishments }) {
           <select
             value={city}
             onChange={(e) => setCity(e.target.value)}
-            className="select"
+            className="form-select"
             required
           >
             <option value="">Выберите город</option>
@@ -137,11 +138,115 @@ function CreateEstablishmentForm({ onClose, updateEstablishments }) {
               <option key={city.id} value={city.id}>{city.name}</option>
             ))}
           </select>
+          <h6 className="mt-5 fst-cyrillic">Дополнительно (*Необазятельно к заполнению)</h6>
+
+{/*            DESCRIPTION*/}
+           <div className="input-group mb-3">
+            <span className="input-group-text"><i className="fas fa-font fa-xs"></i></span>
+            <textarea
+              type="text"
+              className="form-control"
+              placeholder="Описание заведения">
+            </textarea>
+          </div>
+
+{/*  LOGO*/}
+          <div class="input-group">
+          <label class="input-group-text" for="inputGroupFile01">Логотип</label>
+          <input type="file" class="form-control" id="inputGroupFile04" aria-describedby="inputGroupFileAddon04" aria-label="Upload" />
+        </div>
+
+{/*          Address*/}
+        <div className="input-group my-3">
+            <span className="input-group-text"><i class="fas fa-location-dot"></i></span>
+            <input
+              type="text"
+              className="form-control"
+              placeholder="Адрес заведения"
+            />
+          </div>
+
+
+{/*          Phone*/}
+        <div className="input-group mt-3">
+            <span className="input-group-text"><i class="fas fa-phone"></i></span>
+            <input
+              type="phone"
+              className="form-control"
+              placeholder="АРТЁМ ПИДОР"
+            />
+        </div>
+        <em><label className="my-0 text-muted ms-3">Телефон для связи / заказов WhatsApp</label></em>
+
+        {/*          Instagram*/}
+        <div className="input-group mt-3">
+            <span className="input-group-text"><i class="fab fa-instagram"></i></span>
+            <input
+              type="phone"
+              className="form-control"
+              placeholder="Ссылка на Instagram"
+            />
+        </div>
+        <em><label className="my-0 text-muted ms-3">Пример - https://www.instagram.com/yaem_qr/</label></em>
+
+        {/*          2gis*/}
+        <div className="input-group mt-3">
+            <span className="input-group-text"><i class="fas fa-map-location-dot"></i></span>
+            <input
+              type="phone"
+              className="form-control"
+              placeholder="Ссылка на 2Gis"
+            />
+        </div>
+        <em><label className="my-0 text-muted ms-3">Пример - https://go.2gis.com/d9pf44</label></em>
+
+        {/*          Outside / Delivery*/}
+        <div class="input-group my-3">
+          <div class="form-check">
+              <input class="form-check-input" type="checkbox" value="" id="flexCheckDefault1" />
+              <label class="form-check-label" for="flexCheckDefault1">Самовывоз</label>
+          </div>
+           <div class="form-check mx-3">
+              <input class="form-check-input" type="checkbox" value="" id="flexCheckDefault2" />
+              <label class="form-check-label" for="flexCheckDefault2">Доставка</label>
+          </div>
+        </div>
+
+
+   {/*          Service % Fee*/}
+        <div className="input-group mt-3">
+            <span className="input-group-text"><i class="fas fa-percent"></i></span>
+            <input
+              type="phone"
+              className="form-control"
+              placeholder="АРТЁМ ПИДОР 2"
+            />
+        </div>
+        <em><label className="my-0 text-muted ms-3">Процент обслуживания для отображения в корзине гостя</label></em>
+
+ {/*          WiFi % Password*/}
+        <div class="input-group my-3">
+          <span class="input-group-text">Wi-Fi</span>
+          <span className="input-group-text"><i class="fas fa-wifi"></i></span>
+          <input type="text" aria-label="First name" class="form-control" />
+          <span className="input-group-text"><i class="fas fa-lock"></i></span>
+          <input type="text" aria-label="Last name" class="form-control" />
+        </div>
+
+         {/*          WiFi % Password*/}
+        <div class="input-group my-3">
+          <span class="input-group-text">Рабочеее время</span>
+          <span className="input-group-text">Начало дня</span>
+          <input type="text" aria-label="First name" class="form-control" />
+          <span className="input-group-text">Конец дня</span>
+          <input type="text" aria-label="Last name" class="form-control" />
+        </div>
 
           {/* Submit handler */}
           <div className="d-flex justify-content-center">
             <button type="submit" className="btn btn-success my-3 me-2">Добавить</button>
           </div>
+
         </form>
       </div>
     </div>

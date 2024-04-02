@@ -34,38 +34,27 @@ function Subcategories({ categoryId }) {
     };
 
     if (loading) {
-        return <div className="spinner-border text-warning" role="status">
+        return <div className="spinner-border text-warning my-5" role="status">
             <span className="visually-hidden">Loading...</span>
         </div>;
     }
 
     return (
-        <div className="container my-5">
+        <div className="container my-5 px-0">
             {/* show this block if user has not any categories */}
-            <h2 className="my-3">Подкатегории
+            <h2 className="my-3">Категории
                 {subcategories.length === 0 && (
-                    <div className="btn shadow-0 btn-outline-success btn-rounded btn-animate px-2 mx-2">
+                    <div className="btn shadow-0 btn-outline-success btn-animate px-2 mx-2">
                         <i className="far fa-square-plus me-2"></i>
-                        Добавить Подкатегорию
+                        Добавить категорию
                     </div>
                 )}
-            </h2>
-            <ul className="list-group">
-                {subcategories.map(subcategory => (
-                    <li
-                        className="list-group-item"
-                        key={subcategory.id}
-                        onClick={() => handleSubcategoryClick(subcategory)}
-                    >
-                        {subcategory.name}
-                    </li>
-                ))}
-            </ul>
-            <div className="row my-3">
                 {/* show this block if user have any categories */}
-                {subcategories.length > 0 && (
-                    <div className="col-12 col-lg-auto text-end  my-auto">
-                        <div className="btn shadow-0 btn-animate my-auto btn-outline-success mx-1 px-3">
+
+            </h2>
+            {subcategories.length > 0 && (
+                <div className="col">
+                        <div className="btn shadow-0 btn-animate my-auto btn-outline-success ms-1 me-1 px-3">
                             <i className="far fa-square-plus fa-lg"></i>
                         </div>
                         <div className="btn shadow-0 btn-animate my-auto btn-outline-dark mx-1 px-3">
@@ -74,9 +63,19 @@ function Subcategories({ categoryId }) {
                         <div className="btn shadow-0 btn-animate my-auto btn-outline-danger mx-1 px-3">
                             <i className="fas fa-trash fa-lg"></i>
                         </div>
-                    </div>
+                </div>
                 )}
+            <div class="btn-group shadow-0 my-4" role="group" aria-label="Basic example">
+            {subcategories.map(subcategory => (
+              <button type="button" class="btn btn-outline-secondary btn-animate" data-mdb-color="dark"
+              key={subcategory.id} style={{ '--mdb-btn-hover-bg': '#ff9753', '--mdb-btn-active-bg': '#FD7014'}}
+                        onClick={() => handleSubcategoryClick(subcategory)}>{subcategory.name}</button>
+              ))}
             </div>
+
+
+
+
             {/* Conditionally render Dishes component based on the selected subcategory */}
             {selectedSubcategory && (
                 <Dishes subcategoryId={selectedSubcategory.id} />

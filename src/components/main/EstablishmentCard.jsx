@@ -60,7 +60,7 @@ function EstablishmentCard({ establishments, onEdit, onEditDishes, updateEstabli
                     !deletedEstablishments.includes(key) &&
                     // delete animation
                     <div key={key} className={`card mx-2 my-2${deletedEstablishments.includes(key) ? '' : ''}`} style={{ width: '400px' }}>
-                        <div className="card-body">
+                        <div className="card-body px-0 py-0">
                             {/* Check if deletion confirmation is active */}
                             {confirmDelete === key ? (
                                 <div className="container">
@@ -76,12 +76,19 @@ function EstablishmentCard({ establishments, onEdit, onEditDishes, updateEstabli
                             ) : (
                                 <>
                                     {/* Render establishment data from backend */}
-                                    <h5 className="card-title">{establishments[key].name}</h5>
+                                    <img className="card-img-top px-0" src={establishments[key].logo} style={{ maxWidth: '400px' }}></img>
+                                    <h5 className="card-title mx-3">{establishments[key].name}
+                                    {/* Button to open DetailEstablishment component */}
+                                        <div className="btn btn-animate my-1 shadow-0 px-2 py-1" onClick={() => handleEdit(establishments[key].id)}>
+                                            <i className="fas fa-pen fa-lg"></i>
+                                        </div>
+                                        <p className="my-3 fs-6">г.{establishments[key].city}</p>
+                                    </h5>
                                     {/* <p className="card-text text-muted">{establishments[key].address}</p> */}
                                     <small className="card-text">{establishments[key].description}</small>
                                     {/* <img src={establishments[key].logo}/> */}
                                     <hr />
-                                    <div className="d-flex flex-wrap justify-content-evenly text-center">
+                                    <div className="d-flex flex-wrap justify-content-evenly text-center my-3">
                                         {/* Render action buttons */}
                                         {/* Button to redirect on yaem.kz menu */}
                                         <a href={`http://127.0.0.1:8000/${establishments[key].url_name}/menu`} target="_blank">
@@ -93,10 +100,7 @@ function EstablishmentCard({ establishments, onEdit, onEditDishes, updateEstabli
                                         <div className="btn btn-animate my-1" style={{ width: '70px' }} onClick={() => handleEditDish(establishments[key].id)}>
                                             <i className="fas fa-book-open fa-lg"></i>
                                         </div>
-                                        {/* Button to open DetailEstablishment component */}
-                                        <div className="btn btn-animate my-1" style={{ width: '70px' }} onClick={() => handleEdit(establishments[key].id)}>
-                                            <i className="fas fa-pen fa-lg"></i>
-                                        </div>
+
                                         {/* Button to trigger deletion confirmation */}
                                         <div className="btn btn-animate btn-outline-danger my-1" style={{ width: '70px' }}
                                             onClick={() => setConfirmDelete(key)}>

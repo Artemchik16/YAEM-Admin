@@ -129,17 +129,18 @@ function Payment() {
   };
 
   return (
-    <div className="col-10 col-sm-9 py-4">
-      <h1 className="ms-4 mb-4">Оплата</h1>
-      <div className="card-group">
+    <div className="col-10 col-sm-8 py-4 mx-auto">
+      <h1 className="ms-4 mb-4">Оплата <a href="//yaem.kz/partner" target="_blank"><span className="btn shadow-0 btn-outline-success btn-animate btn-sm px-1 my-1 mx-2"><i class="far fa-circle-question"></i> Подробнее</span></a></h1>
+      <div className="card-group justify-content-center">
 
         {/* Bronze card */}
-        <div className={`card mx-1 cardStyle ${activeTarifTab === 'bronze' ? '' : 'btn-animate'}`}
+        <div className={`card mx-auto cardStyle ${activeTarifTab === 'bronze' ? '' : 'btn-animate'}`}
           style={{
-            boxShadow: activeTarifTab === 'bronze' ? '0 0 10px 3px rgba(59, 113, 260, 0.5)' : '',
+            boxShadow: activeTarifTab === 'bronze' ? '0 0 10px 3px rgb(253,112,20)' : '',
             transform: activeTarifTab === 'bronze' ? 'scale(1.05)' : '',
             zIndex: activeTarifTab === 'bronze' ? 1 : 0,
-            cursor: 'pointer'
+            cursor: 'pointer',
+            maxWidth: '300px'
           }}
           onClick={() => handleTarifTabChange('bronze')}>
           <div className="card-body px-3">
@@ -152,12 +153,13 @@ function Payment() {
         </div>
 
         {/* Silver card */}
-        <div className={`card mx-1 cardStyle2 ${activeTarifTab === 'silver' ? '' : 'btn-animate'}`}
+        <div className={`card mx-auto cardStyle2 ${activeTarifTab === 'silver' ? '' : 'btn-animate'}`}
           style={{
-            boxShadow: activeTarifTab === 'silver' ? '0 0 10px 3px rgba(59, 113, 260, 0.5)' : '',
+            boxShadow: activeTarifTab === 'silver' ? '0 0 10px 3px rgb(253,112,20)' : '',
             transform: activeTarifTab === 'silver' ? 'scale(1.05)' : '',
             zIndex: activeTarifTab === 'silver' ? 1 : 0,
-            cursor: 'pointer'
+            cursor: 'pointer',
+            maxWidth: '300px'
           }}
           onClick={() => handleTarifTabChange('silver')}>
           <div className="card-body px-3">
@@ -175,12 +177,13 @@ function Payment() {
         </div>
 
         {/* Gold card */}
-        <div className={`card mx-1 cardStyle3 ${activeTarifTab === 'gold' ? '' : 'btn-animate'}`}
+        <div className={`card mx-auto cardStyle3 ${activeTarifTab === 'gold' ? '' : 'btn-animate'}`}
           style={{
-            boxShadow: activeTarifTab === 'gold' ? '0 0 10px 3px rgba(59, 113, 260, 0.5)' : '',
+            boxShadow: activeTarifTab === 'gold' ? '0 0 10px 3px rgb(253,112,20)' : '',
             transform: activeTarifTab === 'gold' ? 'scale(1.05)' : '',
             zIndex: activeTarifTab === 'gold' ? 1 : 0,
-            cursor: 'pointer'
+            cursor: 'pointer',
+            maxWidth: '300px'
           }}
           onClick={() => handleTarifTabChange('gold')}>
           <div className="card-body px-2">
@@ -198,7 +201,9 @@ function Payment() {
 
       {/* Handle month change if active tab 'GOLD', temporaly show this block */}
       {activeTarifTab === 'gold' ? (
-        <p className="text-center">Нет доступных мест</p>
+        <div className="container my-5">
+            <p className="text-center fs-5 fw-bold">К сожалению, на данный тариф не осталось доступных мест</p>
+        </div>
       ) : (
         <>
           {/* Get tarif title */}
@@ -228,7 +233,7 @@ function Payment() {
             value={kaspiNumber}
             onChange={handleKaspiNumberChange}
           />
-          <small className="fst-italic text-secondary"> <i className="fas fa-tag"></i> При оплате за 12 месяцев 2 месяца в подарок, и скидка (20%)</small>
+          <small className="fst-italic text-secondary"> <i className="fas fa-tag"></i> При оплате за 12 месяцев 2 месяца в подарок (скидка 20%)</small>
           <div className="d-flex justify-content-between mt-3" style={{ maxWidth: '300px' }}>
             {/* Get tarif price */}
             <small>Сумма</small>
@@ -253,7 +258,7 @@ function Payment() {
           {/* Send message in telegram bot */}
           <div className="col-10 col-sm-9 py-4">
             {/* if the application has been successfully sent, turn off the button */}
-            <div className={`btn btn-rounded ${isSending ? 'btn-secondary disabled' : 'btn-danger btn-animate'}`}
+            <div className={`btn ${isSending ? 'btn-secondary disabled' : 'btn-danger btn-animate'}`}
               style={{ minWidth: '300px' }}
               onClick={handlePaymentClick}
             >
