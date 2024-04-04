@@ -37,7 +37,7 @@ function Login() {
             sessionStorage.setItem('refreshToken', refreshToken);
 
             // Save success message in session storage
-            sessionStorage.setItem('IsLoginSuccess', 'Добро пожаловать');
+            sessionStorage.setItem('IsLoginSuccess', 'Добро пожаловать.');
 
             // Navigate to menu page and reload page and save tokens in sessionStorage
             window.location.reload();
@@ -47,10 +47,10 @@ function Login() {
             // Check if the error is due to server unavailability or other technical issues
             if (!error.response) {
                 // Handle error when server is unavailable
-                toast.error('Технические неполадки. Пожалуйста, попробуйте позже.', { autoClose: 2000 });
+                toast.error('Технические неполадки. Пожалуйста, попробуйте позже.', { autoClose: 2000, pauseOnHover: false, position: "top-center" });
             } else {
                 // Handle other errors (e.g., invalid credentials)
-                toast.error('Неверный номер телефона или пароль', { autoClose: 2000 });
+                toast.error('Неверный номер телефона или пароль', { autoClose: 2000, pauseOnHover: false, position: "top-center" });
             }
         }
     };

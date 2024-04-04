@@ -17,12 +17,12 @@ function Payment() {
     // Base phone number validation and empty value validation
     const phoneNumberPattern = /^(\+7|8)\d{10}$/;
     if (!kaspiNumber || !phoneNumberPattern.test(kaspiNumber)) {
-      toast.error('Пожалуйста, укажите корректный номер Kaspi в формате (+77777777777)', { autoClose: 2000 });
+      toast.error('Пожалуйста, укажите корректный номер Kaspi', { autoClose: 2000, pauseOnHover: false, position: "top-center" });
       return;
     }
     // Months validation
-    if (!months){
-      toast.error('Пожалуйста, укажите количество месяцев', { autoClose: 2000 });
+    if (!months) {
+      toast.error('Пожалуйста, укажите количество месяцев', { autoClose: 2000, pauseOnHover: false, position: "top-center" });
       return;
     }
     // Post request on telegram API
@@ -48,21 +48,21 @@ function Payment() {
           Номер телефона: ${userPhoneNumber.data.phone_number}
           Номер каспи: ${kaspiNumber}
           Тариф: ${tarifTitle}
-          Количество месяцев: ${months}
+          Количество месяцев: ${months === 12 ? months + ' ' + '+ 2' : months}
           Итого: ${calculateTotalPrice().toLocaleString()} ₸`,
         }
       );
       // Set the blocking flag
       setIsSending(true)
       // Success block
-      toast.success('Заявка отправлена', { autoClose: 2000 });
+      toast.success('Заявка отправлена.', { autoClose: 2000, pauseOnHover: false, position: "top-center" });
       // Enable a delay for sending a new request after the current one has been successfully sent
-      setTimeout(() => { setIsSending(false); }, 10000);
+      setTimeout(() => { setIsSending(false); }, 15000);
       // Error block
     } catch (error) {
       // Set the blocking flag
       setIsSending(false)
-      toast.error('Ошибка при отправке сообщения', { autoClose: 2000 });
+      toast.error('Ошибка при отправке заявки.', { autoClose: 2000, pauseOnHover: false, position: "top-center" });
     }
   };
 
@@ -159,11 +159,15 @@ function Payment() {
             transform: activeTarifTab === 'silver' ? 'scale(1.05)' : '',
             zIndex: activeTarifTab === 'silver' ? 1 : 0,
             cursor: 'pointer',
-            maxWidth: '300px'
+            maxWidth: '300px',
+            position: 'relative'
           }}
           onClick={() => handleTarifTabChange('silver')}>
           <div className="card-body px-3">
             <h5 className="card-title text-center">Серебро</h5>
+            <div style={{ position: 'absolute', top: '0', right: '0', backgroundColor: 'red', color: '#fff', padding: '5px 10px', borderRadius: '5px 0 0 0' }}>
+            <i className="fab fa-hotjar"></i>
+            </div>
             <del className="text-center" style={{ color: '#fd7014' }}><p className="fw-bold fs-6 my-0" >15 000 ₸/мес </p></del>
             <p className="fw-bold fs-5 my-0 text-center mb-3" style={{ color: '#fd7014' }}>13 000 ₸/мес <span className="fs-6">(-15 %)</span></p>
             <small className="card-text d-block"><i className="fas fa-check text-success"></i> Онлайн меню с фото блюд</small>
@@ -202,7 +206,7 @@ function Payment() {
       {/* Handle month change if active tab 'GOLD', temporaly show this block */}
       {activeTarifTab === 'gold' ? (
         <div className="container my-5">
-            <p className="text-center fs-5 fw-bold">К сожалению, на данный тариф не осталось доступных мест</p>
+          <p className="text-center fs-5 fw-bold">К сожалению, на данный тариф не осталось доступных мест</p>
         </div>
       ) : (
         <>

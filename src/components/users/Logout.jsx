@@ -9,14 +9,12 @@ import 'react-toastify/dist/ReactToastify.css';
 function Logout() {
     // Logout function to remove tokens and redirect to login page
     const handleLogout = () => {
-        toast.info("Выход из аккаунта..", {
-            autoClose: 1000,
-        });
+        toast.warning("Выход из аккаунта..", { autoClose: 800, pauseOnHover: false, position: "top-center" });
         setTimeout(() => {
             sessionStorage.removeItem('accessToken'); // Remove access token
             sessionStorage.removeItem('refreshToken'); // Remove refresh token
             window.location.href = '/login'; // Redirect to login page
-        }, 1400);
+        }, 1100);
     };
 
     return (

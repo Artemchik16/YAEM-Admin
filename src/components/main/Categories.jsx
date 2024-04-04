@@ -8,6 +8,7 @@ function Categories({ establishmentId, onFinishDish }) {
     const [categories, setCategories] = useState([]);
     const [loading, setLoading] = useState(true);
     const [selectedCategory, setSelectedCategory] = useState(null);
+    const [selectedCategoryId, setSelectedCategoryId] = useState(null);
 
     useEffect(() => {
         const fetchCategories = async () => {
@@ -31,6 +32,35 @@ function Categories({ establishmentId, onFinishDish }) {
 
     const handleCategoryClick = (category) => {
         setSelectedCategory(category);
+        setSelectedCategoryId(category.id);
+    };
+
+    const deleteCategory = async () => {
+        try {
+            const token = sessionStorage.getItem('accessToken');
+            await axios.delete(`http://localhost:8000/api/v1/menu/categories/${selectedCategoryId}`, {
+                headers: {
+                    Authorization: `Bearer ${token}`
+                }
+            });
+            // Обновляем список категорий после успешного удаления
+            const updatedCategories = categories.filter(category => category.id !== selectedCategoryId);
+            setCategories(updatedCategories);
+            // Сбрасываем выбранную категорию
+            setSelectedCategory(null);
+            setSelectedCategoryId(null);
+            toast.success('Категория успешно удалена.', { autoClose: 2000, pauseOnHover: false, position: "top-center" });
+        } catch (error) {
+            toast.error('Ошибка при удалении категории.', { autoClose: 2000, pauseOnHover: false, position: "top-center" });
+        }
+    };
+
+    const updateCategory = async () => {
+        // 
+    };
+
+    const createCategory = async () => {
+        // 
     };
 
     if (loading) {
@@ -54,31 +84,33 @@ function Categories({ establishmentId, onFinishDish }) {
                 )}
                 {/* show this block if user have any categories */}
                 {categories.length > 0 && (
-                <div className="col my-3">
+                    <div className="col my-3">
                         <div className="btn shadow-0 btn-animate my-auto btn-outline-success ms-1 me-1 px-3">
                             <i className="far fa-square-plus fa-lg"></i>
-
                         </div>
                         <div className="btn shadow-0 btn-animate my-auto btn-outline-dark mx-1 px-3">
                             <i className="fas fa-pen"></i>
                         </div>
-                        <div className="btn shadow-0 btn-animate my-auto btn-outline-danger mx-1 px-3">
+                        <div className="btn shadow-0 btn-animate my-auto btn-outline-danger mx-1 px-3" onClick={deleteCategory}>
                             <i className="fas fa-trash fa-lg"></i>
                         </div>
-                </div>
+                    </div>
                 )}
             </h2>
-            <div class="btn-group shadow-0" role="group" aria-label="Basic example">
-            {categories.map(category => (
-              <button type="button" class="btn btn-outline-secondary btn-animate" data-mdb-color="dark"
-              key={category.id} style={{ '--mdb-btn-hover-bg': '#ff9753', '--mdb-btn-active-bg': '#FD7014'}}
-                        onClick={() => handleCategoryClick(category)}>{category.name}</button>
-              ))}
+            <div className="btn-group shadow-0" role="group" aria-label="Basic example">
+                {categories.map(category => (
+                    <button
+                        key={category.id}
+                        type="button"
+                        className={`btn btn-outline-secondary btn-animate ${category.id === selectedCategoryId ? 'active' : ''}`}
+                        data-mdb-color="dark"
+                        onClick={() => handleCategoryClick(category)}
+                        style={{ '--mdb-btn-hover-bg': '#ff9753', '--mdb-btn-active-bg': '#FD7014' }}
+                    >
+                        {category.name}
+                    </button>
+                ))}
             </div>
-
-
-
-
             {/* Conditionally render Subcategories component based on the selected category */}
             {selectedCategory && (
                 <Subcategories categoryId={selectedCategory.id} />
