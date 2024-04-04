@@ -3,12 +3,33 @@ import axios from 'axios';
 import { toast } from 'react-toastify';
 import 'react-toastify/dist/ReactToastify.css';
 import Subcategories from './Subcategories';
+import {
+  MDBBtn,
+  MDBModal,
+  MDBModalDialog,
+  MDBModalContent,
+  MDBModalHeader,
+  MDBModalTitle,
+  MDBModalBody,
+  MDBModalFooter,
+  MDBValidation,
+  MDBValidationItem,
+  MDBInput,
+  MDBInputGroup,
+  MDBCheckbox,
+} from 'mdb-react-ui-kit';
+
+
 
 function Categories({ establishmentId, onFinishDish }) {
     const [categories, setCategories] = useState([]);
     const [loading, setLoading] = useState(true);
     const [selectedCategory, setSelectedCategory] = useState(null);
     const [selectedCategoryId, setSelectedCategoryId] = useState(null);
+    const [AddModal, setAddModal] = useState(false);
+    const toggleOpenAdd = () => setAddModal(!AddModal);
+    const [EditModal, setEditModal] = useState(false);
+    const toggleOpenEdit = () => setEditModal(!EditModal);
 
     useEffect(() => {
         const fetchCategories = async () => {
@@ -70,7 +91,78 @@ function Categories({ establishmentId, onFinishDish }) {
     }
 
     return (
-        <div>
+        <div className="container">
+
+{/*  MODAL ADD*/}
+          <MDBModal open={AddModal} setOpen={setAddModal} tabIndex='-1'>
+            <MDBModalDialog>
+              <MDBModalContent>
+                <MDBModalHeader>
+                  <MDBModalTitle>Добавить раздел</MDBModalTitle>
+                  <MDBBtn className='btn-close' color='none' onClick={toggleOpenAdd}></MDBBtn>
+                </MDBModalHeader>
+                <MDBModalBody>
+                    <div className="container">
+                    {/* NAME */}
+                        <MDBInput label='Наименование категории' id='form1' type='text' />
+{/*                        BG*/}
+                      <div class="input-group my-3">
+                        <label class="input-group-text" for="inputGroupFile01">Фон</label>
+                        <input type="file" class="form-control" id="inputGroupFile04" aria-describedby="inputGroupFileAddon04" aria-label="Upload" />
+                      </div>
+                    {/*          Num*/}
+                      <MDBInput label='Порядковый номер' id='form1' type='number' />
+                      {/*          Visibility*/}
+                      <div class="form-check form-switch mx-3 my-3">
+                         <input class="form-check-input" type="checkbox" role="switch" id="flexSwitchCheckDefault" />
+                         <label class="form-check-label" for="flexSwitchCheckDefault">Видимость</label>
+                      </div>
+                  </div>
+                </MDBModalBody>
+
+                <MDBModalFooter>
+                <MDBBtn color="success">Сохранить</MDBBtn>
+                <MDBBtn color='danger' onClick={toggleOpenAdd}>Закрыть</MDBBtn>
+                </MDBModalFooter>
+              </MDBModalContent>
+            </MDBModalDialog>
+          </MDBModal>
+
+
+           <MDBModal open={EditModal} setOpen={setEditModal} tabIndex='-1'>
+            <MDBModalDialog>
+              <MDBModalContent>
+                <MDBModalHeader>
+                  <MDBModalTitle>Редактировать раздел</MDBModalTitle>
+                  <MDBBtn className='btn-close' color='none' onClick={toggleOpenEdit}></MDBBtn>
+                </MDBModalHeader>
+                <MDBModalBody>
+                    <div className="container">
+                    {/* NAME */}
+                        <MDBInput label='Наименование категории' id='form1' type='text' />
+{/*                        BG*/}
+                      <div class="input-group my-3">
+                        <label class="input-group-text" for="inputGroupFile01">Фон</label>
+                        <input type="file" class="form-control" id="inputGroupFile04" aria-describedby="inputGroupFileAddon04" aria-label="Upload" />
+                      </div>
+                    {/*          Num*/}
+                      <MDBInput label='Порядковый номер' id='form1' type='number' />
+                      {/*          Visibility*/}
+                      <div class="form-check form-switch mx-3 my-3">
+                         <input class="form-check-input" type="checkbox" role="switch" id="flexSwitchCheckDefault" />
+                         <label class="form-check-label" for="flexSwitchCheckDefault">Видимость</label>
+                      </div>
+                  </div>
+                </MDBModalBody>
+
+                <MDBModalFooter>
+                <MDBBtn color="success">Сохранить</MDBBtn>
+                <MDBBtn color='danger' onClick={toggleOpenEdit}>Закрыть</MDBBtn>
+                </MDBModalFooter>
+              </MDBModalContent>
+            </MDBModalDialog>
+          </MDBModal>
+
             <div className="btn shadow-0 btn-animate my-auto btn-outline-dark" onClick={onFinishDish}>
                 <i className="fas fa-arrow-left-long fa-lg"></i>
             </div>
@@ -85,10 +177,10 @@ function Categories({ establishmentId, onFinishDish }) {
                 {/* show this block if user have any categories */}
                 {categories.length > 0 && (
                     <div className="col my-3">
-                        <div className="btn shadow-0 btn-animate my-auto btn-outline-success ms-1 me-1 px-3">
+                        <div className="btn shadow-0 btn-animate my-auto btn-outline-success ms-1 me-1 px-3" onClick={toggleOpenAdd}>
                             <i className="far fa-square-plus fa-lg"></i>
                         </div>
-                        <div className="btn shadow-0 btn-animate my-auto btn-outline-dark mx-1 px-3">
+                        <div className="btn shadow-0 btn-animate my-auto btn-outline-dark mx-1 px-3" onClick={toggleOpenEdit}>
                             <i className="fas fa-pen"></i>
                         </div>
                         <div className="btn shadow-0 btn-animate my-auto btn-outline-danger mx-1 px-3" onClick={deleteCategory}>
@@ -105,7 +197,7 @@ function Categories({ establishmentId, onFinishDish }) {
                         className={`btn btn-outline-secondary btn-animate ${category.id === selectedCategoryId ? 'active' : ''}`}
                         data-mdb-color="dark"
                         onClick={() => handleCategoryClick(category)}
-                        style={{ '--mdb-btn-hover-bg': '#ff9753', '--mdb-btn-active-bg': '#FD7014' }}
+                        style={{ '--mdb-btn-hover-bg': '#ff9753', '--mdb-btn-active-bg': '#ff9753' }}
                     >
                         {category.name}
                     </button>
@@ -115,6 +207,8 @@ function Categories({ establishmentId, onFinishDish }) {
             {selectedCategory && (
                 <Subcategories categoryId={selectedCategory.id} />
             )}
+
+
         </div>
     );
 }

@@ -2,9 +2,13 @@
 import React from 'react';
 // routers import
 import { BrowserRouter as Router, Routes, Route, Navigate } from 'react-router-dom';
-
+import "mdb-ui-kit"
 // import main css file in all files
 import './assets/styles/main.css'
+
+// MDB
+import 'mdb-react-ui-kit/dist/css/mdb.min.css';
+import "@fortawesome/fontawesome-free/css/all.min.css";
 
 // import user components
 import Login from './components/users/Login.jsx';
@@ -12,6 +16,9 @@ import Registration from './components/users/Registration.jsx';
 
 // import main components
 import Menu from './components/main/Menu.jsx';
+
+
+
 
 
 function App() {
