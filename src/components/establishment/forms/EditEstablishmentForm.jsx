@@ -101,7 +101,7 @@ function EditEstablishmentForm({ establishmentId, onFinishEditing, updateEstabli
   const handleUpdate = async (e) => {
     e.preventDefault();
     try {
-      await axios.put(`http://localhost:8000/api/v1/menu/clients/${establishmentId}/`, {
+      await axios.patch(`http://localhost:8000/api/v1/menu/clients/${establishmentId}/`, {
         // Send updated data if data changed
         name: name || establishmentData.name,
         url_name: urlName || establishmentData.url_name,

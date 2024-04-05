@@ -1,43 +1,39 @@
+// Import react
 import React, { useState, useEffect } from 'react';
+// Import axios
 import axios from 'axios';
+// Import react-toastify
 import { toast } from 'react-toastify';
 import 'react-toastify/dist/ReactToastify.css';
+// Import components
 import Subcategories from './Subcategories';
-import {
-  MDBBtn,
-  MDBModal,
-  MDBModalDialog,
-  MDBModalContent,
-  MDBModalHeader,
-  MDBModalTitle,
-  MDBModalBody,
-  MDBModalFooter,
-  MDBValidation,
-  MDBValidationItem,
-  MDBInput,
-  MDBInputGroup,
-  MDBCheckbox,
-} from 'mdb-react-ui-kit';
-
-
+import AddCategoryModal from './modals/AddCategoryModal.jsx';
+import RemoveCategoryModal from './modals/RemoveCategoryModal.jsx';
+import EditCategoryModal from './modals/EditCategoryModal.jsx';
 
 function Categories({ establishmentId, onFinishDish }) {
+    // States and handlers
+    const userToken = sessionStorage.getItem('accessToken');
     const [categories, setCategories] = useState([]);
     const [loading, setLoading] = useState(true);
     const [selectedCategory, setSelectedCategory] = useState(null);
     const [selectedCategoryId, setSelectedCategoryId] = useState(null);
-    const [AddModal, setAddModal] = useState(false);
-    const toggleOpenAdd = () => setAddModal(!AddModal);
-    const [EditModal, setEditModal] = useState(false);
-    const toggleOpenEdit = () => setEditModal(!EditModal);
 
+    // Modals handlers
+    const [addModalOpen, setAddModalOpen] = useState(false);
+    const toggleAddModal = () => { setAddModalOpen(!addModalOpen); };
+    const [editModalOpen, setEditModalOpen] = useState(false);
+    const toggleEditModal = () => { setEditModalOpen(!editModalOpen); };
+    const [removeModalOpen, setRemoveModalOpen] = useState(false);
+    const toggleRemoveModal = () => { setRemoveModalOpen(!removeModalOpen); };
+
+    // Get request on backend, get all est categories
     useEffect(() => {
         const fetchCategories = async () => {
             try {
-                const token = sessionStorage.getItem('accessToken');
                 const categoriesResponse = await axios.get(`http://localhost:8000/api/v1/menu/categories?client_id=${establishmentId}`, {
                     headers: {
-                        Authorization: `Bearer ${token}`
+                        Authorization: `Bearer ${userToken}`
                     }
                 });
                 setCategories(categoriesResponse.data);
@@ -51,37 +47,10 @@ function Categories({ establishmentId, onFinishDish }) {
         fetchCategories();
     }, [establishmentId]);
 
+    // Handle clicked category
     const handleCategoryClick = (category) => {
         setSelectedCategory(category);
         setSelectedCategoryId(category.id);
-    };
-
-    const deleteCategory = async () => {
-        try {
-            const token = sessionStorage.getItem('accessToken');
-            await axios.delete(`http://localhost:8000/api/v1/menu/categories/${selectedCategoryId}`, {
-                headers: {
-                    Authorization: `Bearer ${token}`
-                }
-            });
-            // Обновляем список категорий после успешного удаления
-            const updatedCategories = categories.filter(category => category.id !== selectedCategoryId);
-            setCategories(updatedCategories);
-            // Сбрасываем выбранную категорию
-            setSelectedCategory(null);
-            setSelectedCategoryId(null);
-            toast.success('Категория успешно удалена.', { autoClose: 2000, pauseOnHover: false, position: "top-center" });
-        } catch (error) {
-            toast.error('Ошибка при удалении категории.', { autoClose: 2000, pauseOnHover: false, position: "top-center" });
-        }
-    };
-
-    const updateCategory = async () => {
-        // 
-    };
-
-    const createCategory = async () => {
-        // 
     };
 
     if (loading) {
@@ -92,84 +61,14 @@ function Categories({ establishmentId, onFinishDish }) {
 
     return (
         <div className="container">
-
-{/*  MODAL ADD*/}
-          <MDBModal open={AddModal} setOpen={setAddModal} tabIndex='-1'>
-            <MDBModalDialog>
-              <MDBModalContent>
-                <MDBModalHeader>
-                  <MDBModalTitle>Добавить раздел</MDBModalTitle>
-                  <MDBBtn className='btn-close' color='none' onClick={toggleOpenAdd}></MDBBtn>
-                </MDBModalHeader>
-                <MDBModalBody>
-                    <div className="container">
-                    {/* NAME */}
-                        <MDBInput label='Наименование категории' id='form1' type='text' />
-{/*                        BG*/}
-                      <div class="input-group my-3">
-                        <label class="input-group-text" for="inputGroupFile01">Фон</label>
-                        <input type="file" class="form-control" id="inputGroupFile04" aria-describedby="inputGroupFileAddon04" aria-label="Upload" />
-                      </div>
-                    {/*          Num*/}
-                      <MDBInput label='Порядковый номер' id='form1' type='number' />
-                      {/*          Visibility*/}
-                      <div class="form-check form-switch mx-3 my-3">
-                         <input class="form-check-input" type="checkbox" role="switch" id="flexSwitchCheckDefault" />
-                         <label class="form-check-label" for="flexSwitchCheckDefault">Видимость</label>
-                      </div>
-                  </div>
-                </MDBModalBody>
-
-                <MDBModalFooter>
-                <MDBBtn color="success">Сохранить</MDBBtn>
-                <MDBBtn color='danger' onClick={toggleOpenAdd}>Закрыть</MDBBtn>
-                </MDBModalFooter>
-              </MDBModalContent>
-            </MDBModalDialog>
-          </MDBModal>
-
-
-           <MDBModal open={EditModal} setOpen={setEditModal} tabIndex='-1'>
-            <MDBModalDialog>
-              <MDBModalContent>
-                <MDBModalHeader>
-                  <MDBModalTitle>Редактировать раздел</MDBModalTitle>
-                  <MDBBtn className='btn-close' color='none' onClick={toggleOpenEdit}></MDBBtn>
-                </MDBModalHeader>
-                <MDBModalBody>
-                    <div className="container">
-                    {/* NAME */}
-                        <MDBInput label='Наименование категории' id='form1' type='text' />
-{/*                        BG*/}
-                      <div class="input-group my-3">
-                        <label class="input-group-text" for="inputGroupFile01">Фон</label>
-                        <input type="file" class="form-control" id="inputGroupFile04" aria-describedby="inputGroupFileAddon04" aria-label="Upload" />
-                      </div>
-                    {/*          Num*/}
-                      <MDBInput label='Порядковый номер' id='form1' type='number' />
-                      {/*          Visibility*/}
-                      <div class="form-check form-switch mx-3 my-3">
-                         <input class="form-check-input" type="checkbox" role="switch" id="flexSwitchCheckDefault" />
-                         <label class="form-check-label" for="flexSwitchCheckDefault">Видимость</label>
-                      </div>
-                  </div>
-                </MDBModalBody>
-
-                <MDBModalFooter>
-                <MDBBtn color="success">Сохранить</MDBBtn>
-                <MDBBtn color='danger' onClick={toggleOpenEdit}>Закрыть</MDBBtn>
-                </MDBModalFooter>
-              </MDBModalContent>
-            </MDBModalDialog>
-          </MDBModal>
-
             <div className="btn shadow-0 btn-animate my-auto btn-outline-dark" onClick={onFinishDish}>
                 <i className="fas fa-arrow-left-long fa-lg"></i>
             </div>
             {/* show this block if user has not any categories */}
             <h2 className="my-3">Разделы
                 {categories.length === 0 && (
-                    <div className="btn shadow-0 btn-outline-success btn-animate px-2 mx-2">
+                    <div className="btn shadow-0 btn-outline-success btn-animate px-2 mx-2"
+                        onClick={toggleAddModal}>
                         <i className="far fa-square-plus me-2"></i>
                         Добавить Раздел
                     </div>
@@ -177,13 +76,16 @@ function Categories({ establishmentId, onFinishDish }) {
                 {/* show this block if user have any categories */}
                 {categories.length > 0 && (
                     <div className="col my-3">
-                        <div className="btn shadow-0 btn-animate my-auto btn-outline-success ms-1 me-1 px-3" onClick={toggleOpenAdd}>
+                        <div className="btn shadow-0 btn-animate my-auto btn-outline-success ms-1 me-1 px-3"
+                            onClick={toggleAddModal}>
                             <i className="far fa-square-plus fa-lg"></i>
                         </div>
-                        <div className="btn shadow-0 btn-animate my-auto btn-outline-dark mx-1 px-3" onClick={toggleOpenEdit}>
+                        <div className="btn shadow-0 btn-animate my-auto btn-outline-dark mx-1 px-3"
+                            onClick={toggleEditModal}>
                             <i className="fas fa-pen"></i>
                         </div>
-                        <div className="btn shadow-0 btn-animate my-auto btn-outline-danger mx-1 px-3" onClick={deleteCategory}>
+                        <div className="btn shadow-0 btn-animate my-auto btn-outline-danger mx-1 px-3"
+                            onClick={toggleRemoveModal}>
                             <i className="fas fa-trash fa-lg"></i>
                         </div>
                     </div>
@@ -207,8 +109,29 @@ function Categories({ establishmentId, onFinishDish }) {
             {selectedCategory && (
                 <Subcategories categoryId={selectedCategory.id} />
             )}
-
-
+            {/* Modals component block */}
+            <AddCategoryModal
+                open={addModalOpen}
+                setOpen={setAddModalOpen}
+                establishmentId={establishmentId}
+                updateCategories={setCategories}
+            />
+            <EditCategoryModal
+                open={editModalOpen}
+                setOpen={setEditModalOpen}
+                establishmentId={establishmentId}
+                categoryId={selectedCategory ? selectedCategory.id : null}
+                categoryName={selectedCategory ? selectedCategory.name : null}
+                updateCategories={setCategories}
+            />
+            <RemoveCategoryModal
+                open={removeModalOpen}
+                setOpen={setRemoveModalOpen}
+                establishmentId={establishmentId}
+                categoryId={selectedCategory ? selectedCategory.id : null}
+                categoryName={selectedCategory ? selectedCategory.name : null}
+                updateCategories={setCategories}
+            />
         </div>
     );
 }
