@@ -1,14 +1,16 @@
-// default imports
+// Import react
 import React, { useState } from "react";
-// Import redirect and navigation
+// Import react-router-dom
 import { Link, useNavigate } from 'react-router-dom';
 // Import image
 import logo from '../../assets/images/favicon.png';
-// HTTP import
+// Import axios
 import axios from "axios";
-// Import messages
+// Import react-toastify
 import { ToastContainer, toast } from 'react-toastify';
 import 'react-toastify/dist/ReactToastify.css';
+// Import MDB
+import {MDBInput} from 'mdb-react-ui-kit'
 
 
 function Registration() {
@@ -73,11 +75,9 @@ function Registration() {
                                             <div className="col-12">
                                                 <label htmlFor="phone" className="form-label">Номер телефона</label>
                                                 {/* handle input */}
-                                                <input
+                                                <MDBInput
                                                     type="text"
-                                                    className="form-control"
-                                                    id="phone"
-                                                    placeholder="Введите номер телефона"
+                                                    label="Введите номер телефона"
                                                     value={phone}
                                                     onChange={(e) => setPhone(e.target.value)}
                                                     required
@@ -86,11 +86,9 @@ function Registration() {
                                             <div className="col-12">
                                                 <label htmlFor="password" className="form-label">Пароль</label>
                                                 {/* handle input */}
-                                                <input
+                                                <MDBInput
                                                     type="password"
-                                                    className="form-control"
-                                                    id="password"
-                                                    placeholder="Введите пароль"
+                                                    label="Введите пароль"
                                                     value={password}
                                                     onChange={(e) => setPassword(e.target.value)}
                                                     required

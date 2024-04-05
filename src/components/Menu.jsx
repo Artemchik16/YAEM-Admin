@@ -1,16 +1,16 @@
-// Default imports
+// Import react
 import React, { useState, useEffect } from 'react';
 // Images import
-import favicon from '../../assets/images/favicon.png';
-import logo from '../../assets/images/logo.png';
-// Import messages library
+import favicon from '../assets/images/favicon.png';
+import logo from '../assets/images/logo.png';
+// Import react-toastify
 import { ToastContainer, toast } from 'react-toastify';
 import 'react-toastify/dist/ReactToastify.css';
 // Components import
-import Profile from '../users/Profile.jsx';
-import Establishments from './Establishments.jsx';
-import Payment from '../users/Payment.jsx';
-import Logout from '../users/Logout.jsx';
+import Profile from './auth/Profile.jsx';
+import Establishments from './establishment/Establishments.jsx';
+import Payment from './payment/Payment.jsx';
+import Logout from './auth/Logout.jsx';
 
 function Main() {
 

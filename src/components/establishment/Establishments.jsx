@@ -1,8 +1,8 @@
 // Default import
 import React, { useState, useEffect } from 'react';
 // Component import
-import CreateEstablishmentForm from './CreateEstablishmentForm.jsx';
-import EditEstablishmentForm from './EditEstablishmentForm.jsx';
+import CreateEstablishmentForm from './forms/CreateEstablishmentForm.jsx';
+import EditEstablishmentForm from './forms/EditEstablishmentForm.jsx';
 import EstablishmentCard from './EstablishmentCard.jsx';
 import Categories from './Categories.jsx';
 // Import messages library
