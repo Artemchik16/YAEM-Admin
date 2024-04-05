@@ -5,7 +5,8 @@ import axios from 'axios';
 // Import messages library
 import { toast } from 'react-toastify';
 import 'react-toastify/dist/ReactToastify.css';
-
+// Import MDB
+import { MDBInput } from "mdb-react-ui-kit";
 
 
 function Payment() {
@@ -166,7 +167,7 @@ function Payment() {
           <div className="card-body px-3">
             <h5 className="card-title text-center">Серебро</h5>
             <div style={{ position: 'absolute', top: '0', right: '0', backgroundColor: 'red', color: '#fff', padding: '5px 10px', borderRadius: '5px 0 0 0' }}>
-            <i className="fab fa-hotjar"></i>
+              <i className="fab fa-hotjar"></i>
             </div>
             <del className="text-center" style={{ color: '#fd7014' }}><p className="fw-bold fs-6 my-0" >15 000 ₸/мес </p></del>
             <p className="fw-bold fs-5 my-0 text-center mb-3" style={{ color: '#fd7014' }}>13 000 ₸/мес <span className="fs-6">(-15 %)</span></p>
@@ -212,27 +213,20 @@ function Payment() {
         <>
           {/* Get tarif title */}
           <h5 className="my-4">Купить тариф {tarifTitle}</h5>
-          {/* Handle input */}
-          <input
+          {/* Month input */}
+          <MDBInput
             type="number"
-            className="form-control"
-            placeholder="Количество месяцев"
-            aria-label="months"
-            aria-describedby="basic-addon1"
-            style={{ maxWidth: '300px' }}
+            label="Количество месяцев"
             min={1}
             max={12}
             value={months}
             onChange={handleMonthChange}
           />
-          {/* Handle input */}
-          <input
+          {/* Kaspi number input */}
+          <MDBInput
             type="tel"
             className="form-control mt-3"
-            placeholder="Номер Kaspi"
-            aria-label="phone"
-            aria-describedby="basic-addon1"
-            style={{ maxWidth: '300px' }}
+            label="Номер Kaspi"
             max={15}
             value={kaspiNumber}
             onChange={handleKaspiNumberChange}
@@ -260,10 +254,10 @@ function Payment() {
             <p> {calculateTotalPrice().toLocaleString()} ₸</p>
           </div>
           {/* Send message in telegram bot */}
-          <div className="col-10 col-sm-9 py-4">
+          <div className="col-10 col-sm-8 py-2">
             {/* if the application has been successfully sent, turn off the button */}
             <div className={`btn ${isSending ? 'btn-secondary disabled' : 'btn-danger btn-animate'}`}
-              style={{ minWidth: '300px' }}
+              style={{ minWidth: '250px' }}
               onClick={handlePaymentClick}
             >
               Выставить счёт на Kaspi
