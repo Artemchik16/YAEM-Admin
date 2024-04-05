@@ -27,8 +27,8 @@ function CreateEstablishmentForm({ onClose, updateEstablishments }) {
   const [phone, setPhone] = useState("");
   const [instagramLink, setInstagramLink] = useState("");
   const [twogisLink, setTwogisLink] = useState("");
-  const [outside, setOutside] = useState(true);
-  const [delivery, setDelivery] = useState(true);
+  const [outside, setOutside] = useState(false);
+  const [delivery, setDelivery] = useState(false);
   const [service, setService] = useState("");
   const [wifiName, setWifiName] = useState("");
   const [wifiPassword, setWifiPassword] = useState("");
@@ -41,7 +41,6 @@ function CreateEstablishmentForm({ onClose, updateEstablishments }) {
       // Send token on backend
       headers: {
         'Authorization': `Bearer ${userToken}`,
-        'Content-Type': 'multipart/form-data'
       }
     })
       // Set cities
@@ -179,8 +178,8 @@ function CreateEstablishmentForm({ onClose, updateEstablishments }) {
           <i className="fas fa-arrow-left-long fa-lg"></i>
         </div>
         <h2 className="ms-4 my-3">Добавить заведение</h2>
-        {/* Add establishment form */}
         <h6>Основная информация (*Обязательно к заполнению)</h6>
+        {/* Add establishment form */}
         {/* Form handler */}
         <form className="my-1" onSubmit={handleSubmit}>
           <div className="input-group mb-3">
