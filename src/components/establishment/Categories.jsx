@@ -112,7 +112,7 @@ function Categories({ establishmentId, onFinishDish }) {
                 ))}
             </div>
             {/* Conditionally render Subcategories component based on the selected category */}
-            {selectedCategory && categories.length > 0 &&(
+            {selectedCategory && categories.length > 0 && (
                 <Subcategories categoryId={selectedCategory.id} />
             )}
             {/* Modals component block */}

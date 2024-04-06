@@ -8,30 +8,31 @@ import axios from 'axios';
 import { toast } from 'react-toastify';
 
 
-function AddSubcategoryModal({ open, setOpen, categoryId, updateSubcategories }) {
+function AddDishModal({ open, setOpen, subcategoryId, updateDishes }) {
 
     // Handlers
     const userToken = sessionStorage.getItem('accessToken');
-    const [subcategoryName, setSubcategoryName] = useState('');
+    const [dishName, setDishName] = useState('');
 
-    // Post request on backend, create category
-    const handleAddSubcategory = async () => {
+    // Post request on backend, create dish
+    const handleAddDish = async () => {
         try {
-            await axios.post('http://localhost:8000/api/v1/menu/subcategories/', {
-                category_id: categoryId,
-                name: subcategoryName,
+            await axios.post('http://localhost:8000/api/v1/menu/dishes/', {
+                food_type_id: subcategoryId,
+                name: dishName,
+                actual_price: 100,
             }, {
                 headers: {
                     Authorization: `Bearer ${userToken}`
                 }
             });
             // Update displayed categories list
-            const updateSubcategoriesResponse = await axios.get(`http://localhost:8000/api/v1/menu/subcategories?category_id=${categoryId}`, {
+            const updateDishesResponse = await axios.get(`http://localhost:8000/api/v1/menu/dishes?subcategory_id=${subcategoryId}`, {
                 headers: {
                     Authorization: `Bearer ${userToken}`
                 }
             });
-            updateSubcategories(updateSubcategoriesResponse.data)
+            updateDishes(updateDishesResponse.data)
             setOpen(false);
             toast.success('Категория успешно добавлена.', { autoClose: 2000, pauseOnHover: false, position: "top-center" });
         } catch (error) {
@@ -52,7 +53,7 @@ function AddSubcategoryModal({ open, setOpen, categoryId, updateSubcategories })
             <MDBModalDialog>
                 <MDBModalContent>
                     <MDBModalHeader>
-                        <MDBModalTitle>Добавить подкат</MDBModalTitle>
+                        <MDBModalTitle>Добавить блюдо</MDBModalTitle>
                         {/* Close handler */}
                         <MDBBtn className='btn-close'
                             color='none'
@@ -64,14 +65,14 @@ function AddSubcategoryModal({ open, setOpen, categoryId, updateSubcategories })
                         <MDBInput
                             label='Наименование категории'
                             type='text'
-                            value={subcategoryName}
-                            onChange={(e) => setSubcategoryName(e.target.value)}
+                            value={dishName}
+                            onChange={(e) => setDishName(e.target.value)}
                             required
                         />
                     </MDBModalBody>
                     <MDBModalFooter>
                         {/* Success, close handlers */}
-                        <MDBBtn color="success" onClick={handleAddSubcategory}>Сохранить</MDBBtn>
+                        <MDBBtn color="success" onClick={handleAddDish}>Сохранить</MDBBtn>
                         <MDBBtn color='danger' onClick={() => setOpen(false)}>Закрыть</MDBBtn>
                     </MDBModalFooter>
                 </MDBModalContent>
@@ -80,4 +81,4 @@ function AddSubcategoryModal({ open, setOpen, categoryId, updateSubcategories })
     );
 }
 
-export default AddSubcategoryModal;
+export default AddDishModal;

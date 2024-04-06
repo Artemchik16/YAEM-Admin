@@ -24,7 +24,7 @@
 /* tarif cards */
 .cardStyle {
     -webkit-box-shadow: 0 0 10px #000;
-    box-shadow: 0 0 10px 3px rgb(255,218,194);
+    box-shadow: 0 0 10px 3px rgb(255, 218, 194);
 }
 
 .cardStyle2 {
@@ -44,11 +44,5 @@
 .yaem-color {
     color: #FD7014;
 }
-
-
-
-
-
-
 
 
