@@ -1,12 +1,19 @@
-import React from 'react';
-import { MDBBtn, MDBModal, MDBModalDialog, MDBModalContent, MDBModalHeader, MDBModalTitle, MDBModalFooter, MDBModalBody } from 'mdb-react-ui-kit';
+// Import react
+import React, { useState } from 'react';
+// Import MDB
+import { MDBBtn, MDBModal, MDBModalDialog, MDBModalContent, MDBModalHeader, MDBModalTitle, MDBModalBody, MDBModalFooter, MDBInput } from 'mdb-react-ui-kit';
+// Import axios
 import axios from 'axios';
+// Import react-toastify
 import { toast } from 'react-toastify';
+
 
 function RemoveCategoryModal({ open, setOpen, categoryId, categoryName, updateCategories, establishmentId }) {
 
+    // Handlers
     const userToken = sessionStorage.getItem('accessToken');
 
+    // Delete request on backend, delete category
     const handleDeleteCategory = async () => {
         try {
             await axios.delete(`http://localhost:8000/api/v1/menu/categories/${categoryId}`, {
@@ -14,31 +21,35 @@ function RemoveCategoryModal({ open, setOpen, categoryId, categoryName, updateCa
                     Authorization: `Bearer ${userToken}`
                 }
             });
+            // Update displayed categories list
             const updateCategoriesResponse = await axios.get(`http://localhost:8000/api/v1/menu/categories?client_id=${establishmentId}`, {
                 headers: {
                     Authorization: `Bearer ${userToken}`
                 }
             });
             updateCategories(updateCategoriesResponse.data)
-            toast.success('Категория успешно удалена.', { autoClose: 2000, pauseOnHover: false, position: "top-center" });
             setOpen(false);
+            toast.success('Категория успешно удалена.', { autoClose: 2000, pauseOnHover: false, position: "top-center" });
         } catch (error) {
             toast.error('Ошибка при удалении категории.', { autoClose: 2000, pauseOnHover: false, position: "top-center" });
         }
     };
 
     return (
+        // Modal handlers
         <MDBModal open={open} setOpen={setOpen} tabIndex='-1'>
             <MDBModalDialog>
                 <MDBModalContent>
                     <MDBModalHeader>
                         <MDBModalTitle>Удалить раздел</MDBModalTitle>
+                        {/* Close handlers */}
                         <MDBBtn className='btn-close' color='none' onClick={() => setOpen(false)} />
                     </MDBModalHeader>
                     <MDBModalBody>
                         Вы уверены, что хотите удалить категорию <strong>{categoryName}</strong>?
                     </MDBModalBody>
                     <MDBModalFooter>
+                        {/* Success, close handlers */}
                         <MDBBtn color="danger" onClick={handleDeleteCategory}>Удалить</MDBBtn>
                         <MDBBtn color='secondary' onClick={() => setOpen(false)}>Отмена</MDBBtn>
                     </MDBModalFooter>

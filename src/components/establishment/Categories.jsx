@@ -7,18 +7,19 @@ import { toast } from 'react-toastify';
 import 'react-toastify/dist/ReactToastify.css';
 // Import components
 import Subcategories from './Subcategories';
-import AddCategoryModal from './modals/AddCategoryModal.jsx';
-import RemoveCategoryModal from './modals/RemoveCategoryModal.jsx';
-import EditCategoryModal from './modals/EditCategoryModal.jsx';
+import AddCategoryModal from './modals/categories/AddCategoryModal.jsx';
+import RemoveCategoryModal from './modals/categories/RemoveCategoryModal.jsx';
+import EditCategoryModal from './modals/categories/EditCategoryModal.jsx';
+
 
 function Categories({ establishmentId, onFinishDish }) {
+
     // States and handlers
     const userToken = sessionStorage.getItem('accessToken');
     const [categories, setCategories] = useState([]);
     const [loading, setLoading] = useState(true);
     const [selectedCategory, setSelectedCategory] = useState(null);
     const [selectedCategoryId, setSelectedCategoryId] = useState(null);
-
     // Modals handlers
     const [addModalOpen, setAddModalOpen] = useState(false);
     const toggleAddModal = () => { setAddModalOpen(!addModalOpen); };
@@ -67,6 +68,7 @@ function Categories({ establishmentId, onFinishDish }) {
             {/* show this block if user has not any categories */}
             <h2 className="my-3">Разделы
                 {categories.length === 0 && (
+                    // Handle add modal
                     <div className="btn shadow-0 btn-outline-success btn-animate px-2 mx-2"
                         onClick={toggleAddModal}>
                         <i className="far fa-square-plus me-2"></i>
@@ -76,14 +78,17 @@ function Categories({ establishmentId, onFinishDish }) {
                 {/* show this block if user have any categories */}
                 {categories.length > 0 && (
                     <div className="col my-3">
+                        {/* Handle add modal */}
                         <div className="btn shadow-0 btn-animate my-auto btn-outline-success ms-1 me-1 px-3"
                             onClick={toggleAddModal}>
                             <i className="far fa-square-plus fa-lg"></i>
                         </div>
+                        {/* Handle edit modal */}
                         <div className="btn shadow-0 btn-animate my-auto btn-outline-dark mx-1 px-3"
                             onClick={toggleEditModal}>
                             <i className="fas fa-pen"></i>
                         </div>
+                        {/* Handle remove modal */}
                         <div className="btn shadow-0 btn-animate my-auto btn-outline-danger mx-1 px-3"
                             onClick={toggleRemoveModal}>
                             <i className="fas fa-trash fa-lg"></i>
@@ -92,6 +97,7 @@ function Categories({ establishmentId, onFinishDish }) {
                 )}
             </h2>
             <div className="btn-group shadow-0" role="group" aria-label="Basic example">
+                {/* For loop, display categories and handle click */}
                 {categories.map(category => (
                     <button
                         key={category.id}
@@ -106,7 +112,7 @@ function Categories({ establishmentId, onFinishDish }) {
                 ))}
             </div>
             {/* Conditionally render Subcategories component based on the selected category */}
-            {selectedCategory && (
+            {selectedCategory && categories.length > 0 &&(
                 <Subcategories categoryId={selectedCategory.id} />
             )}
             {/* Modals component block */}
