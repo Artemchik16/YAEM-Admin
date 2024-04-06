@@ -1,7 +1,7 @@
 // Import react
 import React, { useState } from 'react';
 // Import MDB
-import { MDBBtn, MDBModal, MDBModalDialog, MDBModalContent, MDBModalHeader, MDBModalTitle, MDBModalBody, MDBModalFooter, MDBInput } from 'mdb-react-ui-kit';
+import { MDBSwitch, MDBBtn, MDBModal, MDBModalDialog, MDBModalContent, MDBModalHeader, MDBModalTitle, MDBModalBody, MDBModalFooter, MDBInput } from 'mdb-react-ui-kit';
 // Import axios
 import axios from 'axios';
 // Import react-toastify
@@ -27,7 +27,7 @@ function AddDishModal({ open, setOpen, subcategoryId, updateDishes }) {
                 }
             });
             // Update displayed categories list
-            const updateDishesResponse = await axios.get(`http://localhost:8000/api/v1/menu/dishes?subcategory_id=${subcategoryId}`, {
+            const updateDishesResponse = await axios.get(`http://localhost:8000/api/v1/menu/dishes?food_type_id=${subcategoryId}`, {
                 headers: {
                     Authorization: `Bearer ${userToken}`
                 }
@@ -63,12 +63,23 @@ function AddDishModal({ open, setOpen, subcategoryId, updateDishes }) {
                     <MDBModalBody>
                         {/* Name handler */}
                         <MDBInput
+                            className="mb-3"
                             label='Наименование категории'
                             type='text'
                             value={dishName}
                             onChange={(e) => setDishName(e.target.value)}
                             required
                         />
+                        <MDBInput
+                            className="mb-3"
+                            label='Цена'
+                            type='number'
+                            required
+                        />
+                        <MDBSwitch
+                            label='Стоп лист'
+                        />
+                        <button className="btn btn-outline-secondary my-3 btn-animate">Необязательные поля <i class="fas fa-circle-chevron-down ms-1"></i></button>
                     </MDBModalBody>
                     <MDBModalFooter>
                         {/* Success, close handlers */}

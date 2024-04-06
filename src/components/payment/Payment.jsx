@@ -6,7 +6,7 @@ import axios from 'axios';
 import { toast } from 'react-toastify';
 import 'react-toastify/dist/ReactToastify.css';
 // Import MDB
-import { MDBInput } from "mdb-react-ui-kit";
+import { MDBBadge, MDBBtn, MDBTable, MDBTableHead, MDBTableBody, MDBInput } from 'mdb-react-ui-kit';
 
 
 function Payment() {
@@ -210,7 +210,7 @@ function Payment() {
           <p className="text-center fs-5 fw-bold">К сожалению, на данный тариф не осталось доступных мест</p>
         </div>
       ) : (
-        <>
+        <div className="container" style={{ maxWidth: '300px' }}>
           {/* Get tarif title */}
           <h5 className="my-4">Купить тариф {tarifTitle}</h5>
           {/* Month input */}
@@ -263,8 +263,48 @@ function Payment() {
               Выставить счёт на Kaspi
             </div>
           </div>
-        </>
+        </div>
       )}
+
+      <MDBTable responsive hover small align='middle'>
+      <MDBTableHead>
+        <tr>
+          <th scope='col'>ID #</th>
+          <th scope='col'>Тариф</th>
+          <th scope='col'>Кол-во месяцев</th>
+          <th scope='col'>Kaspi номер</th>
+          <th scope='col'>Дата</th>
+          <th scope='col'>Статус</th>
+        </tr>
+      </MDBTableHead>
+      <MDBTableBody>
+{/*        КЛАДИ ЦИКЛ СЮДЫ*/}
+        <tr>
+          <td className='fw-bold'>1234</td>
+          <td>Серебро / Бронза</td>
+          <td>18</td>
+          <td>+77015302812</td>
+          <td>01/01/2024</td>
+          <td>
+
+            <MDBBadge color='secondary fs-6' pill>
+              В обработке
+            </MDBBadge>
+
+            <MDBBadge color='success fs-6' pill>
+              Оплачено
+            </MDBBadge>
+
+            <MDBBadge color='danger fs-6' pill>
+              Отменено
+            </MDBBadge>
+
+          </td>
+        </tr>
+{/*        КЛАДИ ЦИКЛ СЮДЫ*/}
+      </MDBTableBody>
+    </MDBTable>
+
     </div>
 
   );

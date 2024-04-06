@@ -72,9 +72,9 @@ function Login() {
                                 </div>
                                 <div className="card mb-3">
                                     <div className="card-body">
-                                        <div className="pt-4 pb-2">
-                                            <h5 className="card-title text-center pb-0 fs-4">Войти в аккаунт</h5>
-                                            <p className="text-center small">Введите номер телефона и пароль для входа</p>
+                                        <div className="my-4">
+                                            <h5 className="card-title text-center fs-4">Войти в аккаунт</h5>
+{/*                                             <p className="text-center small">Введите номер телефона и пароль для входа</p> */}
                                         </div>
 
                                         {/* Form logic and handlers */}
@@ -82,7 +82,7 @@ function Login() {
                                             <div className="col-12">
                                                 
                                                 {/* phone input */}
-                                                <label htmlFor="phone" className="form-label">Номер телефона</label>
+{/*                                                 <label htmlFor="phone" className="form-label">Номер телефона</label> */}
                                                 <MDBInput
                                                     type="text"
                                                     label="Введите номер телефона"
@@ -93,7 +93,7 @@ function Login() {
                                             </div>
                                             <div className="col-12">
                                                 {/* psw input */}
-                                                <label htmlFor="phone" className="form-label">Пароль</label>
+{/*                                                 <label htmlFor="phone" className="form-label">Пароль</label> */}
                                                 <MDBInput
                                                     type="password"
                                                     label="Введите пароль"
@@ -103,7 +103,7 @@ function Login() {
                                                 />
                                             </div>
                                             <div className="col-12">
-                                                <button className="btn btn-primary w-100 btn-animate" type="submit">Войти</button>
+                                                <button className="btn btn-success w-100 btn-animate" type="submit">Войти</button>
                                             </div>
 
                                             {/* Messages on this page */}
@@ -111,14 +111,14 @@ function Login() {
 
                                             {/* Redirect to registration page */}
                                             <div className="col-12">
-                                                <span>Нет аккаунта?</span> <Link to='/registration'>Зарегистрируйтесь!</Link>
+                                                <span>Нет аккаунта?</span> <Link to='/registration'>Зарегистрируйтесь</Link>
                                             </div>
                                         </form>
                                     </div>
                                 </div>
 
-                                <div className="credits">
-                                    Designed by <a className="fw-bold" style={{ color: "#FD7014" }}>YAEM.KZ</a>
+                                <div className="credits user-select-none">
+                                     <a className="text-dark">Copyright © 2023-2024 <span className="yaem-color fw-bold">YAEM</span> Kazakhstan <i class="flag flag-kazakhstan"></i></a>
                                 </div>
                             </div>
                         </div>

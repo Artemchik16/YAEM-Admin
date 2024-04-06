@@ -53,8 +53,10 @@ function Dishes({ subcategoryId }) {
                     <i className="far fa-square-plus"></i>
                 </div>
             </h2>
+            <div className='row'>
             {dishes.map(dish => (
-                <div className="card mx-auto my-3 shadow-lg" style={{ width: '300px' }}>
+                <div className='col-auto'>
+                <div className="card my-3 shadow-lg" style={{ width: '300px' }}>
                     <div className="card-body px-0 py-0">
                         <>
                             {/* Render dish data from backend */}
@@ -110,7 +112,12 @@ function Dishes({ subcategoryId }) {
                         </>
                     </div>
                 </div>
-            ))}
+
+
+                </div>
+                ))}
+            </div>
+
             {/* Modals component block */}
             <AddDishModal
                 open={addModalOpen}

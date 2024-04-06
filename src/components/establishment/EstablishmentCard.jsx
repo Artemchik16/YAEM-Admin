@@ -76,7 +76,7 @@ function EstablishmentCard({ establishments, onEdit, onEditDishes, updateEstabli
                             ) : (
                                 <>
                                     {/* Render establishment data from backend */}
-                                    <img className="card-img-top px-0" src={establishments[key].logo} style={{ maxWidth: '400px' }}></img>
+                                    <img className="card-img-top px-0" loading="lazy" src={establishments[key].logo} style={{ maxWidth: '400px' }}></img>
                                     <h5 className="card-title mx-3">{establishments[key].name}
                                     {/* Button to open DetailEstablishment component */}
                                         <div className="btn btn-animate my-1 shadow-0 px-2 py-1" onClick={() => handleEdit(establishments[key].id)}>

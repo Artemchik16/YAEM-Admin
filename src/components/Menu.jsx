@@ -51,8 +51,8 @@ function Main() {
       <div className="container-fluid">
         <div className="row">
           {/* Sidebar menu */}
-          <div className="col-2 col-sm-3 py-4 border-end px-1" style={{ maxWidth: '300px' }}>
-            <div className='d-flex mb-auto flex-column' style={{ minHeight: '800px' }}>
+          <div className="navbar col-2 col-sm-3 py-0 border-end px-1 my-0" style={{ maxWidth: '300px' }}>
+            <div className='d-flex mb-auto flex-column sticky-top' style={{ minHeight: '800px' }}>
               <img className="mx-auto my-4 text-center d-block d-sm-none" style={{ maxHeight: '40px' }} src={favicon} alt="YAEM logo" />
               <img className="mx-auto mb-4 text-center d-none d-sm-block" style={{ maxHeight: '50px' }} src={logo} alt="YAEM logo" />
               <hr />
@@ -118,6 +118,9 @@ function Main() {
                     <i className="fab fa-instagram fa-2x"></i>
                   </div>
                 </a>
+                <div className="credits user-select-none text-center my-3 d-none d-sm-block">
+                     <a className="text-dark">Copyright © 2023-2024 <span className="yaem-color fw-bold">YAEM.KZ</span> Kazakhstan <i class="flag flag-kazakhstan"></i></a>
+                </div>
               </div>
             </div>
           </div>

@@ -63,17 +63,16 @@ function Registration() {
                                         <span className="fs-3 fw-bold yaem-color mx-2">YAEM.KZ</span>
                                     </div>
                                 </div>
-                                <div className="card mb-3">
+                               <div className="card mb-3">
                                     <div className="card-body">
-                                        <div className="pt-4 pb-2">
-                                            <h5 className="card-title text-center pb-0 fs-4">Регистрация</h5>
-                                            <p className="text-center small">Введите номер телефона и пароль для регистрации</p>
+                                        <div className="my-4">
+                                            <h5 className="card-title text-center fs-4">Регистрация</h5>
                                         </div>
 
                                         {/* Form logic and handlers */}
                                         <form className="row g-3 needs-validation" onSubmit={handleSubmit}>
                                             <div className="col-12">
-                                                <label htmlFor="phone" className="form-label">Номер телефона</label>
+
                                                 {/* handle input */}
                                                 <MDBInput
                                                     type="text"
@@ -84,7 +83,6 @@ function Registration() {
                                                 />
                                             </div>
                                             <div className="col-12">
-                                                <label htmlFor="password" className="form-label">Пароль</label>
                                                 {/* handle input */}
                                                 <MDBInput
                                                     type="password"
@@ -95,7 +93,7 @@ function Registration() {
                                                 />
                                             </div>
                                             <div className="col-12">
-                                                <button className="btn btn-primary w-100 btn-animate" type="submit">Зарегистрироваться</button>
+                                                <button className="btn btn-success w-100 btn-animate" type="submit">Зарегистрироваться</button>
                                             </div>
 
                                             {/* Messages on this page */}
@@ -103,14 +101,14 @@ function Registration() {
 
                                             {/* Redirect to login page */}
                                             <div className="col-12">
-                                                <Link to='/login'>Уже есть аккаунт?</Link>
+                                                Уже есть аккаунт?<Link to='/login'> Войти</Link>
                                             </div>
                                         </form>
                                     </div>
                                 </div>
 
-                                <div className="credits">
-                                    Designed by <a className="fw-bold" style={{ color: "#FD7014" }}>YAEM.KZ</a>
+                                <div className="credits user-select-none">
+                                     <a className="text-dark">Copyright © 2023-2024 <span className="yaem-color fw-bold">YAEM</span> Kazakhstan <i class="flag flag-kazakhstan"></i></a>
                                 </div>
                             </div>
                         </div>

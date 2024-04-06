@@ -10,7 +10,7 @@ import Dishes from './Dishes';
 import AddSubcategoryModal from './modals/subcategories/AddSubcategoryModal.jsx';
 import RemoveSubcategoryModal from './modals/subcategories/RemoveSubcategoryModal.jsx';
 import EditSubcategoryModal from './modals/subcategories/EditSubcategoryModal.jsx';
-
+import { MDBTable, MDBBadge, MDBTableHead, MDBTableBody } from 'mdb-react-ui-kit';
 
 function Subcategories({ categoryId }) {
 
@@ -55,25 +55,16 @@ function Subcategories({ categoryId }) {
     };
 
     return (
-        <div className="container my-5 px-0">
+        <div className="container my-3 px-0">
             {/* show this block if user has not any categories */}
             <h2 className="my-3">Категории
-                {subcategories.length === 0 && (
-                    <div className="btn shadow-0 btn-outline-success btn-animate px-2 mx-2"
-                        onClick={toggleAddModal}>
-                        <i className="far fa-square-plus me-2"></i>
-                        Добавить категорию
-                    </div>
-                )}
+                <div className="btn shadow-0 btn-outline-success btn-animate mx-1 px-3"
+                    onClick={toggleAddModal}>
+                    <i className="far fa-square-plus"></i>
+                </div>
                 {/* show this block if user have any categories */}
-            </h2>
-            {subcategories.length > 0 && (
-                <div className="col">
-                    {/* Handle add modal */}
-                    <div className="btn shadow-0 btn-animate my-auto btn-outline-success ms-1 me-1 px-3"
-                        onClick={toggleAddModal}>
-                        <i className="far fa-square-plus fa-lg"></i>
-                    </div>
+                {subcategories.length > 0 && (
+                <div className="d-inline">
                     {/* Handle edit modal */}
                     <div className="btn shadow-0 btn-animate my-auto btn-outline-dark mx-1 px-3"
                         onClick={toggleEditModal}>
@@ -85,22 +76,31 @@ function Subcategories({ categoryId }) {
                         <i className="fas fa-trash fa-lg"></i>
                     </div>
                 </div>
-            )}
+                )}
+            </h2>
+
             {/* For loop, display subcategories and handle click */}
-            <div class="btn-group shadow-0 my-4" role="group" aria-label="Basic example">
-                {subcategories.map(subcategory => (
-                    <button
-                        type="button"
-                        data-mdb-color="dark"
-                        className={`btn btn-outline-secondary btn-animate ${subcategory.id === selectedSubcategoryId ? 'active' : ''}`}
-                        key={subcategory.id}
-                        onClick={() => handleSubcategoryClick(subcategory)}
-                        style={{ '--mdb-btn-hover-bg': '#ff9753', '--mdb-btn-active-bg': '#ff9753' }}
-                    >
-                        {subcategory.name}
-                    </button>
-                ))}
-            </div>
+            <MDBTable responsive hover small align='middle' className="text-center">
+                <MDBTableHead>
+                    <tr>
+                    {subcategories.map(subcategory => (
+                      <th scope='col'>
+                        <button
+                            key={subcategory.id}
+                            type="button"
+                            className={`btn btn-outline-dark btn-animate ${subcategory.id === selectedSubcategoryId ? 'active' : ''}`}
+                            data-mdb-color="dark"
+                            onClick={() => handleSubcategoryClick(subcategory)}
+                            style={{ '--mdb-btn-hover-bg': '#ff9753', '--mdb-btn-active-bg': '#ff9753' }}
+                        >
+                            {subcategory.name}
+                        </button>
+                      </th>
+                    ))}
+                    </tr>
+                </MDBTableHead>
+            </MDBTable>
+
             {/* Conditionally render Dishes component based on the selected subcategory */}
             {selectedSubcategory && (
                 <Dishes subcategoryId={selectedSubcategory.id} />

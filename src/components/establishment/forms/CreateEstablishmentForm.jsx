@@ -218,15 +218,12 @@ function CreateEstablishmentForm({ onClose, updateEstablishments }) {
             ))}
           </select>
           {/* Button to open a block with additional information */}
-          <button type="button" className="btn btn-link mt-3" onClick={() => setIsAdditionalInfoVisible(!isAdditionalInfoVisible)}>
-            Дополнительно (*Необязательно к заполнению)
-          </button>
+          <button type="button" className="btn btn-outline-secondary mt-4 btn-animate" onClick={() => setIsAdditionalInfoVisible(!isAdditionalInfoVisible)}>Необязательные поля <i class="fas fa-circle-chevron-down ms-1"></i></button>
           {/* Show this block if button clicked */}
           {isAdditionalInfoVisible && (
             <>
-              <h6 className="mt-5 fst-cyrillic">Дополнительно (*Необазятельно к заполнению)</h6>
               {/* Establishment description */}
-              <div className="input-group mb-3">
+              <div className="input-group mt-4 mb-3">
                 <span className="input-group-text"><i className="fas fa-font fa-xs"></i></span>
                 <MDBTextArea
                   type="text"

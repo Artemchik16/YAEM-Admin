@@ -10,7 +10,7 @@ import Subcategories from './Subcategories';
 import AddCategoryModal from './modals/categories/AddCategoryModal.jsx';
 import RemoveCategoryModal from './modals/categories/RemoveCategoryModal.jsx';
 import EditCategoryModal from './modals/categories/EditCategoryModal.jsx';
-
+import { MDBTable, MDBBadge, MDBTableHead, MDBTableBody } from 'mdb-react-ui-kit';
 
 function Categories({ establishmentId, onFinishDish }) {
 
@@ -61,28 +61,31 @@ function Categories({ establishmentId, onFinishDish }) {
     }
 
     return (
-        <div className="container">
-            <div className="btn shadow-0 btn-animate my-auto btn-outline-dark" onClick={onFinishDish}>
-                <i className="fas fa-arrow-left-long fa-lg"></i>
+        <div className="container mx-0 px-0">
+
+            <div className="row">
+                <div className="col">
+                    <div className="btn shadow-0 btn-animate my-auto btn-outline-dark" onClick={onFinishDish}>
+                    <i className="fas fa-arrow-left-long fa-lg"></i>
+                    </div>
             </div>
+                <div className="col text-end">
+                    <div className="btn shadow-0 btn-animate my-auto btn-outline-success">В меню
+                    <i className="fas fa-arrow-right-long fa-lg mx-1"></i>
+                    </div>
+                </div>
+            </div>
+
+
             {/* show this block if user has not any categories */}
             <h2 className="my-3">Разделы
-                {categories.length === 0 && (
-                    // Handle add modal
-                    <div className="btn shadow-0 btn-outline-success btn-animate px-2 mx-2"
-                        onClick={toggleAddModal}>
-                        <i className="far fa-square-plus me-2"></i>
-                        Добавить Раздел
-                    </div>
-                )}
+                <div className="btn shadow-0 btn-outline-success btn-animate mx-1 px-3"
+                    onClick={toggleAddModal}>
+                    <i className="far fa-square-plus"></i>
+                </div>
                 {/* show this block if user have any categories */}
                 {categories.length > 0 && (
-                    <div className="col my-3">
-                        {/* Handle add modal */}
-                        <div className="btn shadow-0 btn-animate my-auto btn-outline-success ms-1 me-1 px-3"
-                            onClick={toggleAddModal}>
-                            <i className="far fa-square-plus fa-lg"></i>
-                        </div>
+                    <div className="d-inline">
                         {/* Handle edit modal */}
                         <div className="btn shadow-0 btn-animate my-auto btn-outline-dark mx-1 px-3"
                             onClick={toggleEditModal}>
@@ -96,21 +99,28 @@ function Categories({ establishmentId, onFinishDish }) {
                     </div>
                 )}
             </h2>
-            <div className="btn-group shadow-0" role="group" aria-label="Basic example">
-                {/* For loop, display categories and handle click */}
-                {categories.map(category => (
-                    <button
-                        key={category.id}
-                        type="button"
-                        className={`btn btn-outline-secondary btn-animate ${category.id === selectedCategoryId ? 'active' : ''}`}
-                        data-mdb-color="dark"
-                        onClick={() => handleCategoryClick(category)}
-                        style={{ '--mdb-btn-hover-bg': '#ff9753', '--mdb-btn-active-bg': '#ff9753' }}
-                    >
-                        {category.name}
-                    </button>
-                ))}
-            </div>
+
+            <MDBTable responsive hover small align='middle' className="text-center">
+                <MDBTableHead>
+                    <tr>
+                    {categories.map(category => (
+                      <th scope='col'>
+                        <button
+                            key={category.id}
+                            type="button"
+                            className={`btn btn-outline-dark btn-animate ${category.id === selectedCategoryId ? 'active' : ''}`}
+                            data-mdb-color="dark"
+                            onClick={() => handleCategoryClick(category)}
+                            style={{ '--mdb-btn-hover-bg': '#ff9753', '--mdb-btn-active-bg': '#ff9753' }}
+                        >
+                            {category.name}
+                        </button>
+                      </th>
+                    ))}
+                    </tr>
+                </MDBTableHead>
+            </MDBTable>
+
             {/* Conditionally render Subcategories component based on the selected category */}
             {selectedCategory && categories.length > 0 && (
                 <Subcategories categoryId={selectedCategory.id} />
