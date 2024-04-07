@@ -1,11 +1,7 @@
-// Import react
 import React, { useState, useEffect } from "react";
-// Import axios
 import axios from "axios";
-// Import react-toastify
 import { toast } from 'react-toastify';
 import 'react-toastify/dist/ReactToastify.css';
-// Import MDB
 import { MDBInput, MDBTextArea, MDBSwitch } from "mdb-react-ui-kit";
 
 
@@ -131,7 +127,6 @@ function CreateEstablishmentForm({ onClose, updateEstablishments }) {
           if (error.response.data.phone && error.response.data.phone[0] === 'Phone: correct format - "+7XXXXXXXXXX" or "8XXXXXXXXXX"') {
             toast.error('Неверный формат номера телефона', { autoClose: 2000, pauseOnHover: false, position: "top-center" });
           }
-
           if (error.response.data.inst && error.response.data.inst[0] === 'Instagram error: pattern - https://www.instagram.com/*') {
             toast.error('Гавно инста', { autoClose: 2000, pauseOnHover: false, position: "top-center" });
           }

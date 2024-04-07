@@ -31,17 +31,19 @@ function Subcategories({ categoryId }) {
     // Get request on backend, get all subcat categories
     useEffect(() => {
         const fetchSubcategories = async () => {
-            try {
-                const subcategoriesResponse = await axios.get(`http://localhost:8000/api/v1/menu/subcategories/?category_id=${categoryId}`, {
-                    headers: {
-                        Authorization: `Bearer ${userToken}`
-                    }
-                });
-                setSubcategories(subcategoriesResponse.data);
-                setLoading(false);
-            } catch (error) {
-                toast.error('Ошибка при получении подкатегорий.', { autoClose: 1000 });
-                setLoading(false);
+            if (categoryId) { // Проверяем, что categoryId не null или undefined
+                try {
+                    const subcategoriesResponse = await axios.get(`http://localhost:8000/api/v1/menu/subcategories/?category_id=${categoryId}`, {
+                        headers: {
+                            Authorization: `Bearer ${userToken}`
+                        }
+                    });
+                    setSubcategories(subcategoriesResponse.data);
+                    setLoading(false);
+                } catch (error) {
+                    toast.error('Ошибка при получении подкатегорий.', { autoClose: 1000 });
+                    setLoading(false);
+                }
             }
         };
 

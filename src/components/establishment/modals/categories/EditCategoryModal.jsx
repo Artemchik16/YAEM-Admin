@@ -1,21 +1,21 @@
-// Import react
-import React, { useState } from 'react';
-// Import MDB
+import React, { useState, useEffect } from 'react';
 import { MDBBtn, MDBModal, MDBModalDialog, MDBModalContent, MDBModalHeader, MDBModalTitle, MDBModalBody, MDBModalFooter, MDBInput } from 'mdb-react-ui-kit';
-// Import axios
 import axios from 'axios';
-// Import react-toastify
 import { toast } from 'react-toastify';
 
-
 function EditCategoryModal({ open, setOpen, categoryId, categoryName, updateCategories, establishmentId }) {
-
-    // Handlers
     const userToken = sessionStorage.getItem('accessToken');
     const [editedCategoryName, setEditedCategoryName] = useState(categoryName);
+    const [isSaving, setIsSaving] = useState(false);
 
-    // Patch request on backend, update category
-    const handleEditCategory = async () => {
+    // Сбрасывать значение editedCategoryName при изменении categoryName
+    useEffect(() => {
+        setEditedCategoryName(categoryName);
+    }, [categoryName]);
+
+    const handleEditCategory = async (e) => {
+        e.preventDefault();
+        setIsSaving(true);
         try {
             await axios.patch(`http://localhost:8000/api/v1/menu/categories/${categoryId}/`, {
                 name: editedCategoryName
@@ -24,14 +24,12 @@ function EditCategoryModal({ open, setOpen, categoryId, categoryName, updateCate
                     Authorization: `Bearer ${userToken}`
                 }
             });
-            // Update displayed categories list
             const updateCategoriesResponse = await axios.get(`http://localhost:8000/api/v1/menu/categories?client_id=${establishmentId}`, {
                 headers: {
                     Authorization: `Bearer ${userToken}`
                 }
             });
             updateCategories(updateCategoriesResponse.data)
-            setOpen(false);
             toast.success('Категория успешно обновлена.', { autoClose: 2000, pauseOnHover: false, position: "top-center" });
         } catch (error) {
             if (error.response && error.response.data) {
@@ -42,37 +40,41 @@ function EditCategoryModal({ open, setOpen, categoryId, categoryName, updateCate
                     toast.error('рус англ буквы', { autoClose: 2000, pauseOnHover: false, position: "top-center" });
                 }
             }
+        } finally {
+            setIsSaving(false);
+            setOpen(false);
         }
     };
 
+    const handleCloseModal = () => {
+        setEditedCategoryName(''); // Сбросить значение editedCategoryName при закрытии модального окна
+        setOpen(false);
+    };
+
     return (
-        // Modal handlers
         <MDBModal open={open} setOpen={setOpen} tabIndex='-1'>
             <MDBModalDialog>
                 <MDBModalContent>
-                    <MDBModalHeader>
-                        <MDBModalTitle>Редактировать раздел</MDBModalTitle>
-                        {/* Close handler */}
-                        <MDBBtn className='btn-close' 
-                        color='none' 
-                        onClick={() => setOpen(false)} />
-                    </MDBModalHeader>
-                    <MDBModalBody>
-                        <h1>{categoryName}</h1>
-                        {/* Name handler */}
-                        <MDBInput
-                            label='Наименование категории'
-                            id='categoryName'
-                            type='text'
-                            // defaultValue={editedCategoryName}
-                            value={editedCategoryName}
-                            onChange={(e) => setEditedCategoryName(e.target.value)} />
-                    </MDBModalBody>
-                    <MDBModalFooter>
-                        {/* Success, close handlers */}
-                        <MDBBtn color="danger" onClick={handleEditCategory}>Сохранить</MDBBtn>
-                        <MDBBtn color='secondary' onClick={() => setOpen(false)}>Отмена</MDBBtn>
-                    </MDBModalFooter>
+                    <form onSubmit={handleEditCategory}>
+                        <MDBModalHeader>
+                            <MDBModalTitle>Редактировать раздел</MDBModalTitle>
+                            <MDBBtn className='btn-close' color='none' onClick={handleCloseModal} />
+                        </MDBModalHeader>
+                        <MDBModalBody>
+                            <MDBInput
+                                label='Наименование категории'
+                                id='categoryName'
+                                type='text'
+                                defaultValue={categoryName}
+                                value={editedCategoryName}
+                                required
+                                onChange={(e) => setEditedCategoryName(e.target.value)} />
+                        </MDBModalBody>
+                        <MDBModalFooter>
+                            <MDBBtn type="submit" color="danger" disabled={isSaving}>Сохранить</MDBBtn>
+                            <MDBBtn color='secondary' onClick={handleCloseModal}>Отмена</MDBBtn>
+                        </MDBModalFooter>
+                    </form>
                 </MDBModalContent>
             </MDBModalDialog>
         </MDBModal>

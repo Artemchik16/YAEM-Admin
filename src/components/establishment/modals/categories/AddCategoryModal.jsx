@@ -1,21 +1,16 @@
-// Import react
 import React, { useState } from 'react';
-// Import MDB
 import { MDBBtn, MDBModal, MDBModalDialog, MDBModalContent, MDBModalHeader, MDBModalTitle, MDBModalBody, MDBModalFooter, MDBInput } from 'mdb-react-ui-kit';
-// Import axios
 import axios from 'axios';
-// Import react-toastify
 import { toast } from 'react-toastify';
 
-
 function AddCategoryModal({ open, setOpen, establishmentId, updateCategories }) {
-
-    // Handlers
     const userToken = sessionStorage.getItem('accessToken');
     const [categoryName, setCategoryName] = useState('');
+    const [isSaving, setIsSaving] = useState(false);
 
-    // Post request on backend, create category
-    const handleAddCategory = async () => {
+    const handleAddCategory = async (e) => {
+        e.preventDefault();
+        setIsSaving(true);
         try {
             await axios.post('http://localhost:8000/api/v1/menu/categories/', {
                 client_id: establishmentId,
@@ -25,13 +20,12 @@ function AddCategoryModal({ open, setOpen, establishmentId, updateCategories }) 
                     Authorization: `Bearer ${userToken}`
                 }
             });
-            // Update displayed categories list
             const updateCategoriesResponse = await axios.get(`http://localhost:8000/api/v1/menu/categories?client_id=${establishmentId}`, {
                 headers: {
                     Authorization: `Bearer ${userToken}`
                 }
             });
-            updateCategories(updateCategoriesResponse.data)
+            updateCategories(updateCategoriesResponse.data);
             setOpen(false);
             toast.success('Категория успешно добавлена.', { autoClose: 2000, pauseOnHover: false, position: "top-center" });
         } catch (error) {
@@ -43,37 +37,39 @@ function AddCategoryModal({ open, setOpen, establishmentId, updateCategories }) 
                     toast.error('рус англ буквы', { autoClose: 2000, pauseOnHover: false, position: "top-center" });
                 }
             }
+        } finally {
+            setIsSaving(false); // Включить кнопку "Сохранить"
         }
     };
 
+    const handleCloseModal = () => {
+        setCategoryName(''); // Сбросить значение categoryName при закрытии модального окна
+        setOpen(false);
+    };
+
     return (
-        // Modal handlers
         <MDBModal open={open} setOpen={setOpen} tabIndex='-1'>
             <MDBModalDialog>
                 <MDBModalContent>
-                    <MDBModalHeader>
-                        <MDBModalTitle>Добавить раздел</MDBModalTitle>
-                        {/* Close handler */}
-                        <MDBBtn className='btn-close'
-                            color='none'
-                            onClick={() => setOpen(false)}>
-                        </MDBBtn>
-                    </MDBModalHeader>
-                    <MDBModalBody>
-                        {/* Name handler */}
-                        <MDBInput
-                            label='Наименование категории'
-                            type='text'
-                            value={categoryName}
-                            onChange={(e) => setCategoryName(e.target.value)}
-                            required
-                        />
-                    </MDBModalBody>
-                    <MDBModalFooter>
-                        {/* Success, close handlers */}
-                        <MDBBtn color="success" onClick={handleAddCategory}>Сохранить</MDBBtn>
-                        <MDBBtn color='danger' onClick={() => setOpen(false)}>Закрыть</MDBBtn>
-                    </MDBModalFooter>
+                    <form onSubmit={handleAddCategory}>
+                        <MDBModalHeader>
+                            <MDBModalTitle>Добавить раздел</MDBModalTitle>
+                            <MDBBtn className='btn-close' color='none' onClick={handleCloseModal} />
+                        </MDBModalHeader>
+                        <MDBModalBody>
+                            <MDBInput
+                                label='Наименование категории'
+                                type='text'
+                                value={categoryName}
+                                onChange={(e) => setCategoryName(e.target.value)}
+                                required
+                            />
+                        </MDBModalBody>
+                        <MDBModalFooter>
+                            <MDBBtn type="submit" color="success" disabled={isSaving}>Сохранить</MDBBtn>
+                            <MDBBtn color='danger' onClick={handleCloseModal}>Закрыть</MDBBtn>
+                        </MDBModalFooter>
+                    </form>
                 </MDBModalContent>
             </MDBModalDialog>
         </MDBModal>

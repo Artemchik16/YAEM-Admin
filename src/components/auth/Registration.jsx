@@ -1,58 +1,91 @@
-// Import react
-import React, { useState } from "react";
-// Import react-router-dom
+import React, { useState, useEffect } from "react";
 import { Link, useNavigate } from 'react-router-dom';
-// Import image
 import logo from '../../assets/images/favicon.png';
-// Import axios
 import axios from "axios";
-// Import react-toastify
 import { ToastContainer, toast } from 'react-toastify';
 import 'react-toastify/dist/ReactToastify.css';
-// Import MDB
-import {MDBInput} from 'mdb-react-ui-kit'
+import { MDBInput } from 'mdb-react-ui-kit'
 
 
 function Registration() {
 
-    const [phone, setPhone] = useState(''); // Phone number
-    const [password, setPassword] = useState(''); // Password
-    const navigate = useNavigate(); // Navigation
+    // Set handlers and values
+    const [phone, setPhone] = useState('');
+    const [password, setPassword] = useState('');
+    const [isSaveButtonClicked, setIsSaveButtonClicked] = useState(false);
+    const [isLoading, setIsLoading] = useState(true);
+    const phoneNumberPattern = /^(\+7|8)\d{10}$/;
+    const navigate = useNavigate();
 
-    // Submit handler for registration form
-    const handleSubmit = async (e) => {
+    // Register handler for registration form
+    const handleRegistration = async (e) => {
+        // Prevent default form behavior
         e.preventDefault();
-        // Send post request to backend and create user in DB
+        // Check is number format correct
+        if (!phoneNumberPattern.test(phone)) {
+            // Disabled save button button and set disabled time
+            setIsSaveButtonClicked(true)
+            setTimeout(() => { setIsSaveButtonClicked(false); }, 2000);
+            // Display message
+            toast.error('Пожалуйста, укажите корректный номер.', { autoClose: 1300, pauseOnHover: false, position: "top-center" });
+            return;
+        }
+        // Post request to backend and create user in DB
         try {
-            const response = await axios.post('http://127.0.0.1:8000/api/v1/auth/create', {
-                // send user info
+            // Disabled save button and set disabled time
+            setIsSaveButtonClicked(true)
+            setTimeout(() => { setIsSaveButtonClicked(false); }, 2200);
+            // Send request
+            await axios.post('http://127.0.0.1:8000/api/v1/auth/create', {
                 phone_number: phone,
                 password: password,
             });
-            // success block
-            toast.success('Аккаунт создан. Перенаправление', { autoClose: 1000, pauseOnHover: false, position: "top-center" });
-            setTimeout(() => {
-                navigate('/login'); // Redirect to login page
-            }, 1400);
-
-            // error block
+            // Redirect user to login page
+            navigate('/login');
         } catch (error) {
+            // Handle error when server is unavailable
             if (!error.response) {
                 toast.error('Технические неполадки. Пожалуйста, попробуйте позже.', { autoClose: 2000, pauseOnHover: false, position: "top-center" });
-            } else {
-                if (error.response.data.phone_number[0] === 'Пользователь с таким Номер телефона уже существует.') {
-                    toast.error('Номер телефона уже существует.', { autoClose: 2000, pauseOnHover: false, position: "top-center" });
-                }
-                if (error.response.data.phone_number[0] === 'Введен некорректный номер телефона.') {
-                    toast.error('Введите корректный номер телефона.', { autoClose: 2000, pauseOnHover: false, position: "top-center" });
-                }
             }
+            // Check if phone is exists
+            if (error.response.data.phone_number && error.response.data.phone_number[0] === 'Пользователь с таким Номер телефона уже существует.') {
+                toast.error('Номер телефона уже существует.', { autoClose: 2000, pauseOnHover: false, position: "top-center" });
+            }
+            // Check is number format correct
+            if (error.response.data.phone_number && error.response.data.phone_number[0] === 'Введен некорректный номер телефона.') {
+                toast.error('Пожалуйста, укажите корректный номер.', { autoClose: 2000, pauseOnHover: false, position: "top-center" });
+            }
+            // Check is number format correct
+            if (error.response.data.password && error.response.data.password[0] === 'Введённый пароль слишком короткий. Он должен содержать как минимум 8 символов.') {
+                toast.error('Введённый пароль слишком короткий.', { autoClose: 2000, pauseOnHover: false, position: "top-center" });
+            }
+            // Check is number format correct
+            if (error.response.data.password && error.response.data.password[0] === 'Введённый пароль слишком широко распространён.') {
+                toast.error('Введённый пароль слишком широко распространён.', { autoClose: 2000, pauseOnHover: false, position: "top-center" });
+            }
+
         }
     };
+    // Adding a mask display when loading a component
+    useEffect(() => {
+        const timeout = setTimeout(() => { setIsLoading(false); }, 1000);
+        return () => clearTimeout(timeout);
+    }, []);
 
     return (
         <main>
             <div className="container-fluid background">
+                {/* Darkened background and animation only during loading */}
+                {isLoading && (
+                    <div className="overlay"></div>
+                )}
+                <div className="d-flex justify-content-center">
+                    {isLoading && (
+                        <div className="animation-container">
+                            <img src={logo} alt="YAEM.KZ Logo" className="yaem-logo-animation" />
+                        </div>
+                    )}
+                </div>
                 <section className="section register min-vh-100 d-flex flex-column align-items-center justify-content-center py-4">
                     <div className="container">
                         <div className="row justify-content-center">
@@ -63,17 +96,16 @@ function Registration() {
                                         <span className="fs-3 fw-bold yaem-color mx-2">YAEM.KZ</span>
                                     </div>
                                 </div>
-                               <div className="card mb-3">
+                                <div className="card mb-3">
                                     <div className="card-body">
                                         <div className="my-4">
                                             <h5 className="card-title text-center fs-4">Регистрация</h5>
                                         </div>
 
-                                        {/* Form logic and handlers */}
-                                        <form className="row g-3 needs-validation" onSubmit={handleSubmit}>
+                                        {/* handleRegistration actions */}
+                                        <form className="row g-3 needs-validation" onSubmit={handleRegistration}>
                                             <div className="col-12">
-
-                                                {/* handle input */}
+                                                {/* Phine handler */}
                                                 <MDBInput
                                                     type="text"
                                                     label="Введите номер телефона"
@@ -83,7 +115,7 @@ function Registration() {
                                                 />
                                             </div>
                                             <div className="col-12">
-                                                {/* handle input */}
+                                                {/* Password handler */}
                                                 <MDBInput
                                                     type="password"
                                                     label="Введите пароль"
@@ -92,13 +124,18 @@ function Registration() {
                                                     required
                                                 />
                                             </div>
+                                            {/* Save button handler */}
                                             <div className="col-12">
-                                                <button className="btn btn-success w-100 btn-animate" type="submit">Зарегистрироваться</button>
+                                                <button
+                                                    className="btn btn-success w-100 btn-animate"
+                                                    type="submit"
+                                                    disabled={isSaveButtonClicked}>
+                                                    Зарегистрироваться
+                                                </button>
                                             </div>
 
-                                            {/* Messages on this page */}
+                                            {/* Messages block */}
                                             <ToastContainer></ToastContainer>
-
                                             {/* Redirect to login page */}
                                             <div className="col-12">
                                                 Уже есть аккаунт?<Link to='/login'> Войти</Link>
@@ -106,9 +143,8 @@ function Registration() {
                                         </form>
                                     </div>
                                 </div>
-
                                 <div className="credits user-select-none">
-                                     <a className="text-dark">Copyright © 2023-2024 <span className="yaem-color fw-bold">YAEM</span> Kazakhstan <i class="flag flag-kazakhstan"></i></a>
+                                    <a className="text-dark">Copyright © 2023-2024 <span className="yaem-color fw-bold">YAEM</span> Kazakhstan <i class="flag flag-kazakhstan"></i></a>
                                 </div>
                             </div>
                         </div>

@@ -46,3 +46,55 @@
 }
 
 
+/* yaem mask animations */
+@keyframes fadeIn {
+    0% {
+        opacity: 0;
+    }
+
+    100% {
+        opacity: 1;
+    }
+}
+
+@keyframes fadeOut {
+    0% {
+        opacity: 1;
+    }
+
+    100% {
+        opacity: 0;
+    }
+}
+
+.overlay {
+    position: fixed;
+    top: 0;
+    left: 0;
+    width: 100%;
+    height: 100%;
+    background-color: rgba(0, 0, 0, 0.755);
+    z-index: 9999;
+    animation: fadeIn 0.5s ease-in forwards;
+}
+
+.yaem-logo-animation {
+    width: 60px;
+    height: auto;
+    position: fixed;
+    top: 50%;
+    left: 50%;
+    z-index: 10000;
+    animation: rotateLogo 2s ease-in-out forwards;
+}
+
+@keyframes rotateLogo {
+    0% {
+        transform: translate(-50%, -50%) rotateY(0deg);
+    }
+
+    50% {
+        transform: translate(-50%, -50%) rotateY(360deg);
+    }
+}
+

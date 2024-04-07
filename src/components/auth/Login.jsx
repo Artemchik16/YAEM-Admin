@@ -1,65 +1,87 @@
-// Import react
-import React, { useState } from "react";
-// Import image
+import React, { useState, useEffect } from "react";
 import logo from '../../assets/images/favicon.png';
-// Import react-router-dom
 import { Link, useNavigate } from 'react-router-dom';
-// Import axios
 import axios from "axios";
-// Import react-toastify
 import { ToastContainer, toast } from 'react-toastify';
 import 'react-toastify/dist/ReactToastify.css';
-// Import MDB
-import {MDBInput} from 'mdb-react-ui-kit'
+import { MDBInput } from 'mdb-react-ui-kit'
 
 
-function Login() {
+export default function Login() {
 
-    const [phone, setPhone] = useState(''); // Phone number
-    const [password, setPassword] = useState(''); // Password
-    const navigate = useNavigate(); // Navigation
+    // Set handlers and values
+    const [phone, setPhone] = useState('');
+    const [password, setPassword] = useState('');
+    const [isSaveButtonClicked, setIsSaveButtonClicked] = useState(false);
+    const [isLoading, setIsLoading] = useState(true);
+    const phoneNumberPattern = /^(\+7|8)\d{10}$/;
+    const navigate = useNavigate();
 
-    // Submit handler for login form
-    const handleSubmit = async (e) => {
+    // Login handler for login form, validations
+    const handleLogin = async (e) => {
+        // Prevent default form behavior
         e.preventDefault();
-        // Send post request to backend and get JWT tokens
+        // Check is number format correct
+        if (!phoneNumberPattern.test(phone)) {
+            // Disabled save button button and set disabled time
+            setIsSaveButtonClicked(true)
+            setTimeout(() => { setIsSaveButtonClicked(false); }, 2000);
+            // Display message
+            toast.error('Пожалуйста, укажите корректный номер.', { autoClose: 1300, pauseOnHover: false, position: "top-center" });
+            return;
+        }
+        // Post request to backend and get JWT tokens
         try {
+            // Disabled save button and set disabled time
+            setIsSaveButtonClicked(true)
+            setTimeout(() => { setIsSaveButtonClicked(false); }, 2200);
+            // Send request and get response
             const response = await axios.post('http://localhost:8000/api/v1/auth/jwt/create/', {
-                // send user info
                 phone_number: phone,
                 password: password,
             });
-
-            // Get tokens from response
+            // Get tokens from response and save this in sessionStorage
             const accessToken = response.data.access;
             const refreshToken = response.data.refresh;
-
-            // Save tokens in sessionStorage
             sessionStorage.setItem('accessToken', accessToken);
             sessionStorage.setItem('refreshToken', refreshToken);
-
-            // Save success message in session storage
+            // Save success message in session storage, display on menu page
             sessionStorage.setItem('IsLoginSuccess', 'Добро пожаловать.');
-
             // Navigate to menu page and reload page and save tokens in sessionStorage
             window.location.reload();
             navigate('/menu');
-
         } catch (error) {
-            // Check if the error is due to server unavailability or other technical issues
+            // Handle error when server is unavailable
             if (!error.response) {
-                // Handle error when server is unavailable
-                toast.error('Технические неполадки. Пожалуйста, попробуйте позже.', { autoClose: 2000, pauseOnHover: false, position: "top-center" });
-            } else {
-                // Handle other errors (e.g., invalid credentials)
-                toast.error('Неверный номер телефона или пароль', { autoClose: 2000, pauseOnHover: false, position: "top-center" });
+                toast.error('Ошибка, пожалуйста, попробуйте позже.', { autoClose: 1300, pauseOnHover: false, position: "top-center" });
+            }
+            // Check if user does not exists
+            if (error.response.data.detail == 'No active account found with the given credentials' || error.response.status == 401) {
+                toast.error('Неверный номер телефона или пароль.', { autoClose: 1300, pauseOnHover: false, position: "top-center" });
             }
         }
     };
+    // Adding a mask display when loading a component
+    useEffect(() => {
+        const timeout = setTimeout(() => { setIsLoading(false); }, 1000);
+        return () => clearTimeout(timeout);
+    }, []);
 
+    // BLOCK HTML
     return (
         <main>
             <div className="container-fluid background">
+                {/* Darkened background and animation only during loading */}
+                {isLoading && (
+                    <div className="overlay"></div>
+                )}
+                <div className="d-flex justify-content-center">
+                    {isLoading && (
+                        <div className="animation-container">
+                            <img src={logo} alt="YAEM.KZ Logo" className="yaem-logo-animation" />
+                        </div>
+                    )}
+                </div>
                 <section className="section register min-vh-100 d-flex flex-column align-items-center justify-content-center py-4">
                     <div className="container">
                         <div className="row justify-content-center">
@@ -74,15 +96,11 @@ function Login() {
                                     <div className="card-body">
                                         <div className="my-4">
                                             <h5 className="card-title text-center fs-4">Войти в аккаунт</h5>
-{/*                                             <p className="text-center small">Введите номер телефона и пароль для входа</p> */}
                                         </div>
-
-                                        {/* Form logic and handlers */}
-                                        <form className="row g-3 needs-validation" onSubmit={handleSubmit}>
+                                        {/* handleLogin actions */}
+                                        <form className="row g-3 needs-validation" onSubmit={handleLogin}>
                                             <div className="col-12">
-                                                
-                                                {/* phone input */}
-{/*                                                 <label htmlFor="phone" className="form-label">Номер телефона</label> */}
+                                                {/* Phone handler */}
                                                 <MDBInput
                                                     type="text"
                                                     label="Введите номер телефона"
@@ -92,8 +110,7 @@ function Login() {
                                                 />
                                             </div>
                                             <div className="col-12">
-                                                {/* psw input */}
-{/*                                                 <label htmlFor="phone" className="form-label">Пароль</label> */}
+                                                {/* Password handler */}
                                                 <MDBInput
                                                     type="password"
                                                     label="Введите пароль"
@@ -103,12 +120,16 @@ function Login() {
                                                 />
                                             </div>
                                             <div className="col-12">
-                                                <button className="btn btn-success w-100 btn-animate" type="submit">Войти</button>
+                                                {/* Save button handler */}
+                                                <button
+                                                    className="btn btn-success w-100 btn-animate"
+                                                    type="submit"
+                                                    disabled={isSaveButtonClicked}>
+                                                    Войти
+                                                </button>
                                             </div>
-
-                                            {/* Messages on this page */}
+                                            {/* Messages block */}
                                             <ToastContainer></ToastContainer>
-
                                             {/* Redirect to registration page */}
                                             <div className="col-12">
                                                 <span>Нет аккаунта?</span> <Link to='/registration'>Зарегистрируйтесь</Link>
@@ -116,9 +137,8 @@ function Login() {
                                         </form>
                                     </div>
                                 </div>
-
                                 <div className="credits user-select-none">
-                                     <a className="text-dark">Copyright © 2023-2024 <span className="yaem-color fw-bold">YAEM</span> Kazakhstan <i class="flag flag-kazakhstan"></i></a>
+                                    <a className="text-dark">Copyright © 2023-2024 <span className="yaem-color fw-bold">YAEM</span> Kazakhstan <i class="flag flag-kazakhstan"></i></a>
                                 </div>
                             </div>
                         </div>
@@ -128,5 +148,3 @@ function Login() {
         </main>
     );
 }
-
-export default Login;
