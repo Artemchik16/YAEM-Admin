@@ -4,13 +4,12 @@ import './assets/styles/main.css'
 import Login from './components/auth/Login.jsx';
 import Registration from './components/auth//Registration.jsx';
 import Menu from './components/Menu.jsx';
-import { getUserAccessToken } from './components/Utils.js';
 
 
 export default function App() {
   // Check is authenticated user, getting user token
-  const isAuthenticated = getUserAccessToken() !== null;
-  
+  const isAuthenticated = sessionStorage.getItem('accessToken') !== null;
+
   return (
     <Router>
       <Routes>

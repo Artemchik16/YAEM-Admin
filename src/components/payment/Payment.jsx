@@ -1,85 +1,54 @@
-// Default imports
-import React, { useState } from "react";
-// HTTP import
+import React, { useState, useEffect } from "react";
+import logo from '../../assets/images/favicon.png';
 import axios from 'axios';
-// Import messages library
 import { toast } from 'react-toastify';
 import 'react-toastify/dist/ReactToastify.css';
-// Import MDB
-import { MDBBadge, MDBBtn, MDBTable, MDBTableHead, MDBTableBody, MDBInput } from 'mdb-react-ui-kit';
+import { MDBBadge, MDBTable, MDBTableHead, MDBTableBody, MDBInput } from 'mdb-react-ui-kit';
 
 
-function Payment() {
-  // Let's add a state that will be responsible for blocking the submit button
+export default function Payment() {
+
+  // Set handlers and values
+  const userToken = sessionStorage.getItem('accessToken');
+  const [isLoading, setIsLoading] = useState(false);
   const [isSending, setIsSending] = useState(false);
-
-  // Handle payment button and get telegram message
-  const handlePaymentClick = async () => {
-    // Base phone number validation and empty value validation
-    const phoneNumberPattern = /^(\+7|8)\d{10}$/;
-    if (!kaspiNumber || !phoneNumberPattern.test(kaspiNumber)) {
-      toast.error('Пожалуйста, укажите корректный номер Kaspi', { autoClose: 2000, pauseOnHover: false, position: "top-center" });
-      return;
-    }
-    // Months validation
-    if (!months) {
-      toast.error('Пожалуйста, укажите количество месяцев', { autoClose: 2000, pauseOnHover: false, position: "top-center" });
-      return;
-    }
-    // Post request on telegram API
-    try {
-      // Get access token
-      const token = sessionStorage.getItem('accessToken');
-      // Get bot token
-      const telegramBotToken = '6540080500:AAESZ_bD2sPa0TKJfwPcDlbnSeukIw82Iw8';
-      // Chat bot id
-      const telegramCatID = '1913989114';
-      // Get user phone number
-      const userPhoneNumber = await axios.get('http://localhost:8000/api/v1/auth/phone-number', {
-        // Send token on backend
-        headers: {
-          'Authorization': `Bearer ${token}`
-        }
-      })
-      const response = await axios.post(
-        `https://api.telegram.org/bot${telegramBotToken}/sendMessage`,
-        {
-          chat_id: telegramCatID,
-          text: `Новая оплата:
-          Номер телефона: ${userPhoneNumber.data.phone_number}
-          Номер каспи: ${kaspiNumber}
-          Тариф: ${tarifTitle}
-          Количество месяцев: ${months === 12 ? months + ' ' + '+ 2' : months}
-          Итого: ${calculateTotalPrice().toLocaleString()} ₸`,
-        }
-      );
-      // Set the blocking flag
-      setIsSending(true)
-      // Success block
-      toast.success('Заявка отправлена.', { autoClose: 2000, pauseOnHover: false, position: "top-center" });
-      // Enable a delay for sending a new request after the current one has been successfully sent
-      setTimeout(() => { setIsSending(false); }, 15000);
-      // Error block
-    } catch (error) {
-      // Set the blocking flag
-      setIsSending(false)
-      toast.error('Ошибка при отправке заявки.', { autoClose: 2000, pauseOnHover: false, position: "top-center" });
-    }
-  };
-
-  // Set active tab, on default 'SILVER TARIF' tab
   const [activeTarifTab, setActiveTarifTab] = useState('silver');
-  // Set price, on default 13000 'SILVER TARIF'
   const [tarifPrice, setTarifPrice] = useState(13000);
-  // Set tarif title, on default 'Серебро'
   const [tarifTitle, setTarifTitle] = useState('Серебро');
-  // Number of months
+  const [tarifTitleID, setTarifTitleID] = useState(2);
   const [months, setMonths] = useState(1);
-  // Is there a discount applied
   const [isDiscountApplicable, setIsDiscountApplicable] = useState(false);
-  // Kaspi user number
   const [kaspiNumber, setKaspiNumber] = useState('');
+  const [payments, setPayments] = useState([]);
 
+  // When loading the component, pull out the number and information about the payments
+  useEffect(() => {
+    const fetchData = async () => {
+      try {
+        // Get the user's phone number
+        const userPhoneNumberResponse = await axios.get('http://localhost:8000/api/v1/auth/phone-number', {
+          headers: {
+            'Authorization': `Bearer ${userToken}`
+          }
+        });
+        const userPhoneNumber = userPhoneNumberResponse.data.phone_number;
+        // Receive payment data
+        const paymentResponse = await axios.get('http://localhost:8000/api/v1/auth/payment', {
+          headers: {
+            'Authorization': `Bearer ${userToken}`
+          }
+        });
+        const paymentData = paymentResponse.data;
+        setKaspiNumber(userPhoneNumber);
+        setPayments(paymentData);
+      } catch (error) {
+        console.error('Ошибка при получении данных:', error);
+      }
+    };
+    fetchData();
+  }, []);
+
+  // Month change handler and validation
   const handleMonthChange = (event) => {
     const value = parseInt(event.target.value);
     // Check if value is within the range 1-12 or if it's empty
@@ -95,7 +64,7 @@ function Payment() {
     }
   };
 
-  // Get discount and total price
+  // Calculate discounded? total price
   const calculateTotalPrice = () => {
     const basePrice = tarifPrice * months;
     const discount = isDiscountApplicable ? basePrice * 0.2 : 0;
@@ -107,6 +76,82 @@ function Payment() {
     setKaspiNumber(event.target.value);
   };
 
+  // Handle payment button and get telegram message
+  const handlePaymentClick = async () => {
+    // Base phone number validation and empty value validation
+    const phoneNumberPattern = /^(\+7|8)\d{10}$/;
+    if (!kaspiNumber || !phoneNumberPattern.test(kaspiNumber)) {
+      setIsSending(true)
+      toast.error('Пожалуйста, укажите корректный номер Kaspi', { autoClose: 1500, pauseOnHover: false, position: "top-center" });
+      setTimeout(() => { setIsSending(false); }, 2000);
+      return;
+    }
+    // Months validation
+    if (!months) {
+      setIsSending(true)
+      toast.error('Пожалуйста, укажите количество месяцев', { autoClose: 1500, pauseOnHover: false, position: "top-center" });
+      setTimeout(() => { setIsSending(false); }, 2000);
+      return;
+    }
+    // Requests
+    try {
+      // Sending a POST request to create an payment
+      await axios.post('http://localhost:8000/api/v1/auth/payment', {
+        tarif_number: tarifTitleID,
+        months: months,
+        phone: kaspiNumber,
+        status: "INPROCESSING"
+      }, {
+        headers: {
+          'Authorization': `Bearer ${userToken}`
+        }
+      });
+      // Another get request to receive an already created payment
+      const response = await axios.get('http://localhost:8000/api/v1/auth/payment', {
+        headers: {
+          'Authorization': `Bearer ${userToken}`
+        }
+      });
+      setPayments(response.data);
+    } catch (error) {
+      setIsSending(true)
+      setTimeout(() => { setIsSending(false); }, 15000);
+      if (error.response.data && error.response.data[0] === 'Payment: limit error'){
+        toast.error('Достигнут лимит заявок.', { autoClose: 2000, pauseOnHover: false, position: "top-center" });
+        return;
+      }
+    }
+    // Post request on telegram API
+    try {
+      // Get bot token
+      const telegramBotToken = '6540080500:AAESZ_bD2sPa0TKJfwPcDlbnSeukIw82Iw8';
+      // Chat bot id
+      const telegramCatID = '1913989114';
+      await axios.post(
+        `https://api.telegram.org/bot${telegramBotToken}/sendMessage`,
+        {
+          chat_id: telegramCatID,
+          text: `Новая оплата:
+          Номер каспи: ${kaspiNumber}
+          Тариф: ${tarifTitle}
+          Количество месяцев: ${months === 12 ? months + ' ' + '+ 2(Скидочный пакет)' : months}
+          Итого: ${calculateTotalPrice().toLocaleString()} ₸`,
+        }
+      );
+      // Set the flags
+      setIsSending(true)
+      setIsLoading(true)
+      setTimeout(() => { setIsLoading(false); }, 1000);
+      toast.success('Заявка отправлена.', { autoClose: 2000, pauseOnHover: false, position: "top-center" });
+      // Enable a delay for sending a new request after the current one has been successfully sent
+      setTimeout(() => { setIsSending(false); }, 15000);
+    } catch (error) {
+      // Set the blocking flag
+      setIsSending(false)
+      toast.error('Ошибка при отправке заявки.', { autoClose: 2000, pauseOnHover: false, position: "top-center" });
+    }
+  };
+
   // Set values and handle
   const handleTarifTabChange = (tab) => {
     setActiveTarifTab(tab);
@@ -114,27 +159,41 @@ function Payment() {
       case 'bronze':
         setTarifPrice(10000);
         setTarifTitle('Бронза');
+        setTarifTitleID(1);
         break;
       case 'silver':
         setTarifPrice(13000);
         setTarifTitle('Серебро');
+        setTarifTitleID(2);
         break;
       case 'gold':
         setTarifPrice(30000);
         setTarifTitle('Золото');
+        setTarifTitleID(3);
         break;
       default:
         setTarifPrice(13000);
         setTarifTitle('Серебро');
+        setTarifTitleID(2);
     }
   };
-
+  // HTML BLOCK 
   return (
     <div className="col-10 col-sm-8 py-4 mx-auto">
+      {/* Darkened background and animation only during loading */}
+      {isLoading && (
+        <div className="overlay"></div>
+      )}
+      <div className="d-flex justify-content-center">
+        {isLoading && (
+          <div className="animation-container">
+            <img src={logo} alt="YAEM.KZ Logo" className="yaem-logo-animation" />
+          </div>
+        )}
+      </div>
       <h1 className="ms-4 mb-4">Оплата <a href="//yaem.kz/partner" target="_blank"><span className="btn shadow-0 btn-outline-success btn-animate btn-sm px-1 my-1 mx-2"><i class="far fa-circle-question"></i> Подробнее</span></a></h1>
       <div className="card-group justify-content-center">
-
-        {/* Bronze card */}
+        {/* Bronze card handler and tab changer*/}
         <div className={`card mx-auto cardStyle ${activeTarifTab === 'bronze' ? '' : 'btn-animate'}`}
           style={{
             boxShadow: activeTarifTab === 'bronze' ? '0 0 10px 3px rgb(253,112,20)' : '',
@@ -153,7 +212,7 @@ function Payment() {
           </div>
         </div>
 
-        {/* Silver card */}
+        {/* Silver card handler and tab changer */}
         <div className={`card mx-auto cardStyle2 ${activeTarifTab === 'silver' ? '' : 'btn-animate'}`}
           style={{
             boxShadow: activeTarifTab === 'silver' ? '0 0 10px 3px rgb(253,112,20)' : '',
@@ -181,7 +240,7 @@ function Payment() {
           </div>
         </div>
 
-        {/* Gold card */}
+        {/* Gold card handler and tab changer */}
         <div className={`card mx-auto cardStyle3 ${activeTarifTab === 'gold' ? '' : 'btn-animate'}`}
           style={{
             boxShadow: activeTarifTab === 'gold' ? '0 0 10px 3px rgb(253,112,20)' : '',
@@ -256,59 +315,51 @@ function Payment() {
           {/* Send message in telegram bot */}
           <div className="col-10 col-sm-8 py-2">
             {/* if the application has been successfully sent, turn off the button */}
-            <div className={`btn ${isSending ? 'btn-secondary disabled' : 'btn-danger btn-animate'}`}
+            <button className='btn btn-danger btn-animate'
+              disabled={isSending}
               style={{ minWidth: '250px' }}
               onClick={handlePaymentClick}
             >
               Выставить счёт на Kaspi
-            </div>
+            </button>
           </div>
+
         </div>
       )}
-
-      <MDBTable responsive hover small align='middle'>
-      <MDBTableHead>
-        <tr>
-          <th scope='col'>ID #</th>
-          <th scope='col'>Тариф</th>
-          <th scope='col'>Кол-во месяцев</th>
-          <th scope='col'>Kaspi номер</th>
-          <th scope='col'>Дата</th>
-          <th scope='col'>Статус</th>
-        </tr>
-      </MDBTableHead>
-      <MDBTableBody>
-{/*        КЛАДИ ЦИКЛ СЮДЫ*/}
-        <tr>
-          <td className='fw-bold'>1234</td>
-          <td>Серебро / Бронза</td>
-          <td>18</td>
-          <td>+77015302812</td>
-          <td>01/01/2024</td>
-          <td>
-
-            <MDBBadge color='secondary fs-6' pill>
-              В обработке
-            </MDBBadge>
-
-            <MDBBadge color='success fs-6' pill>
-              Оплачено
-            </MDBBadge>
-
-            <MDBBadge color='danger fs-6' pill>
-              Отменено
-            </MDBBadge>
-
-          </td>
-        </tr>
-{/*        КЛАДИ ЦИКЛ СЮДЫ*/}
-      </MDBTableBody>
-    </MDBTable>
-
+      {/* Payment table handler */}
+      {activeTarifTab !== 'gold' && payments.length > 0 && (
+        <MDBTable responsive hover small align='middle'>
+          <MDBTableHead>
+            <tr>
+              <th scope='col'>ID #</th>
+              <th scope='col'>Тариф</th>
+              <th scope='col'>Кол-во месяцев</th>
+              <th scope='col'>Kaspi номер</th>
+              <th scope='col'>Дата</th>
+              <th scope='col'>Статус</th>
+            </tr>
+          </MDBTableHead>
+          <MDBTableBody>
+            {payments.map(payment => (
+              <tr key={payment.id}>
+                <td className='fw-bold'>{payment.id}</td>
+                <td>{payment.tarif_number === 1 ? 'БРОНЗА' : (payment.tarif_number === 2 ? 'СЕРЕБРО' : 'ЗОЛОТО')}</td>
+                <td>{payment.months}</td>
+                <td>{payment.phone}</td>
+                <td>{payment.created_at}</td>
+                <td>
+                  <MDBBadge color={payment.status === 'INPROCESSING' ? 'secondary' : (payment.status === 'PAID' ? 'success': 'danger' )} pill>
+                    {payment.status}
+                  </MDBBadge>
+                </td>
+              </tr>
+            ))}
+          </MDBTableBody>
+        </MDBTable>
+      )}
     </div>
-
   );
 }
 
 
-export default Payment;
+
