@@ -1,57 +1,33 @@
-// Default import
 import React, { useState, useEffect } from 'react';
-// Component import
+import Categories from './Categories.jsx';
+import { toast } from 'react-toastify';
+import 'react-toastify/dist/ReactToastify.css';
+import axios from "axios";
+import logo from '../../assets/images/favicon.png';
 import CreateEstablishmentForm from './forms/CreateEstablishmentForm.jsx';
 import EditEstablishmentForm from './forms/EditEstablishmentForm.jsx';
 import EstablishmentCard from './EstablishmentCard.jsx';
-import Categories from './Categories.jsx';
-// Import messages library
-import { toast } from 'react-toastify';
-import 'react-toastify/dist/ReactToastify.css';
-// Import HTTP library
-import axios from "axios";
 
 
 // base parent component, include CreateEstablishmentForm, EditEstablishmentForm, EstablishmentCard
 function Establishment() {
 
-  // EditEstablishmentForm handlers
-  // Status for the identifier of the establishment being edited
+  const [isLoading, setIsLoading] = useState(false);
   const [editingEstablishmentId, setEditingEstablishmentId] = useState(null);
-  // State for displaying a list of establishments
   const [showEstablishments, setShowEstablishments] = useState(true);
-  // Function for setting the identifier of the edited establishment and hiding the list of establishments
-  const handleEditEstablishment = (establishmentId) => {
-    setEditingEstablishmentId(establishmentId);
-    setShowEstablishments(false);
-  };
-  // Function for resetting the identifier of the edited establishment and displaying a list of establishments
-  const handleFinishEditing = () => {
-    setEditingEstablishmentId(null);
-    setShowEstablishments(true);
-  };
-
-  // Dishes handlers
-  // Status for the identifier of the dish being edited
   const [editingDishId, setEditingDishId] = useState(null);
-  // Function for setting the identifier of the edited dishes and hiding the list of establishments
-  const handleEditDishes = (establishmentId) => {
-    setEditingDishId(establishmentId);
-    setShowEstablishments(false);
-  };
-  // Function for resetting the identifier of the edited dishes and displaying a list of establishments
-  const handleFinishEditingDishes = () => {
-    setEditingDishId(null);
-    setShowEstablishments(true);
-  };
-
-  // CreateEstablishmentForm handlers
+  const [showCreateForm, setShowCreateForm] = useState(false);
   const handleCreateFormIsOpen = () => { setShowCreateForm(true); };
   const handleCreateFormIsClose = () => { setShowCreateForm(false); };
-  // State for displaying the establishment creation form
-  const [showCreateForm, setShowCreateForm] = useState(false);
-  // State for storing a list of establishments
   const [establishments, setEstablishments] = useState([]);
+  
+
+  // Adding a mask display when loading a component
+  useEffect(() => {
+    setIsLoading(true)
+    const timeout = setTimeout(() => { setIsLoading(false); }, 1000);
+    return () => clearTimeout(timeout);
+  }, []);
 
   // send get request on backend
   useEffect(() => {
@@ -78,10 +54,45 @@ function Establishment() {
     fetchEstablishments();
   }, []);
 
+  // Function for setting the identifier of the edited establishment and hiding the list of establishments
+  const handleEditEstablishment = (establishmentId) => {
+    setEditingEstablishmentId(establishmentId);
+    setShowEstablishments(false);
+  };
+
+  // Function for resetting the identifier of the edited establishment and displaying a list of establishments
+  const handleFinishEditing = () => {
+    setEditingEstablishmentId(null);
+    setShowEstablishments(true);
+  };
+
+  // Function for setting the identifier of the edited dishes and hiding the list of establishments
+  const handleEditDishes = (establishmentId) => {
+    setEditingDishId(establishmentId);
+    setShowEstablishments(false);
+  };
+
+  // Function for resetting the identifier of the edited dishes and displaying a list of establishments
+  const handleFinishEditingDishes = () => {
+    setEditingDishId(null);
+    setShowEstablishments(true);
+  };
+
   return (
     <>
       <div className="col-10 col-sm-9 py-4 mx-auto">
-
+        {/* Darkened background and animation only during loading */}
+        {isLoading && (
+          <div className="overlay"></div>
+        )}
+        <div className="d-flex justify-content-center">
+          {isLoading && (
+            <div className="animation-container">
+              <img src={logo} alt="YAEM.KZ Logo" className="yaem-logo-animation" />
+            </div>
+          )}
+        </div>
+        {/*  */}
         {showEstablishments && !showCreateForm && (
           <div className="container px-0">
             <h1 className="ms-4 mb-3">Заведения
@@ -114,7 +125,6 @@ function Establishment() {
         {showCreateForm && (
           <CreateEstablishmentForm onClose={handleCreateFormIsClose} updateEstablishments={setEstablishments} />
         )}
-
         {/* If editingEstablishmentId is set, render EditEstablishmentForm component, send establishmentId and close handler, and update state */}
         {editingEstablishmentId && (
           <EditEstablishmentForm establishmentId={editingEstablishmentId} onFinishEditing={handleFinishEditing} updateEstablishments={setEstablishments} />
@@ -123,9 +133,6 @@ function Establishment() {
         {editingDishId && (
           <Categories establishmentId={editingDishId} onFinishDish={handleFinishEditingDishes} />
         )}
-
-
-
       </div>
     </>
   );

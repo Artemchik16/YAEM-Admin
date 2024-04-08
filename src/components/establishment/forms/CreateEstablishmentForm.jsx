@@ -71,8 +71,8 @@ function CreateEstablishmentForm({ onClose, updateEstablishments }) {
       if (service !== '') requestData.service = service;
       if (wifiName !== '') requestData.wifi = wifiName;
       if (wifiPassword !== '') requestData.wifi_password = wifiPassword;
-      if (workTimeStart !== '00:00') requestData.work_time_start = workTimeStart;
-      if (workTimeEnd !== '00:00') requestData.work_time_end = workTimeEnd;
+      if (workTimeStart && workTimeStart !== '00:00') requestData.work_time_start = workTimeStart;
+      if (workTimeEnd && workTimeEnd !== '00:00') requestData.work_time_end = workTimeEnd;
       // Post request on backend
       await axios.post("http://127.0.0.1:8000/api/v1/menu/clients/", requestData, {
         // Send token on backend
@@ -99,13 +99,16 @@ function CreateEstablishmentForm({ onClose, updateEstablishments }) {
         if (error.response.data[0] === "Establishment: limit error") {
           toast.error('Вы превысили лимит на количество созданных заведений', { autoClose: 2000, pauseOnHover: false, position: "top-center" });
         } else {
-          if (error.response.data.name && error.response.data.name[0] === 'Name: only ru/en characters') {
-            toast.error('Имя может содержать только русские/английские буквы', { autoClose: 2000, pauseOnHover: false, position: "top-center" });
+          if (error.response.data.name && error.response.data.name[0] === 'Name: only ru/en/num characters') {
+            toast.error('Имя может содержать только русские/английские/численные символы', { autoClose: 2000, pauseOnHover: false, position: "top-center" });
           }
           if (error.response.data.name && error.response.data.name[0] === 'Убедитесь, что это значение содержит не более 20 символов.') {
             toast.error('Название не может содержать больше 20 символов', { autoClose: 2000, pauseOnHover: false, position: "top-center" });
           }
-          if (error.response.data.url_name && error.response.data.url_name[0] === 'URL name: only latin characters') {
+          if (error.response.data.url_name && error.response.data.url_name[0] === 'Убедитесь, что это значение содержит не более 30 символов.') {
+            toast.error('URL не может содержать больше 30 символов', { autoClose: 2000, pauseOnHover: false, position: "top-center" });
+          }
+          if (error.response.data.url_name && error.response.data.url_name[0] === 'The URL name can only contain Latin characters') {
             toast.error('URL может содержать только английские буквы', { autoClose: 2000, pauseOnHover: false, position: "top-center" });
           }
           if (error.response.data.url_name && error.response.data.url_name[0] === 'Заведение с таким /url уже существует.') {
@@ -117,9 +120,8 @@ function CreateEstablishmentForm({ onClose, updateEstablishments }) {
           if (error.response.data.logo && error.response.data.logo[0] === 'Загруженный файл не является корректным файлом.') {
             toast.error('Загруженный файл не является корректным файлом', { autoClose: 2000, pauseOnHover: false, position: "top-center" });
           }
-
           if (error.response.data.address && error.response.data.address[0] === 'Убедитесь, что это значение содержит не более 50 символов.') {
-            toast.error('Адрес не может содержать больше 200 символов', { autoClose: 2000, pauseOnHover: false, position: "top-center" });
+            toast.error('Адрес не может содержать больше 50 символов', { autoClose: 2000, pauseOnHover: false, position: "top-center" });
           }
           if (error.response.data.phone && error.response.data.phone[0] === 'Требуется численное значение.') {
             toast.error('Неверный формат номера телефона', { autoClose: 2000, pauseOnHover: false, position: "top-center" });
@@ -128,34 +130,34 @@ function CreateEstablishmentForm({ onClose, updateEstablishments }) {
             toast.error('Неверный формат номера телефона', { autoClose: 2000, pauseOnHover: false, position: "top-center" });
           }
           if (error.response.data.inst && error.response.data.inst[0] === 'Instagram error: pattern - https://www.instagram.com/*') {
-            toast.error('Гавно инста', { autoClose: 2000, pauseOnHover: false, position: "top-center" });
+            toast.error('Не корректный формат ссылки Instagram', { autoClose: 2000, pauseOnHover: false, position: "top-center" });
           }
           if (error.response.data.inst && error.response.data.inst[0] === 'Убедитесь, что это значение содержит не более 100 символов.') {
-            toast.error('Много букв инста', { autoClose: 2000, pauseOnHover: false, position: "top-center" });
+            toast.error('Instagram не может содержать больше 100 символов.', { autoClose: 2000, pauseOnHover: false, position: "top-center" });
           }
           if (error.response.data.two_gis && error.response.data.two_gis[0] === 'Two gis error: pattern - https://2gis/*/*') {
-            toast.error('Гавно два гис', { autoClose: 2000, pauseOnHover: false, position: "top-center" });
+            toast.error('Не корректный формат ссылки Two gis', { autoClose: 2000, pauseOnHover: false, position: "top-center" });
           }
           if (error.response.data.two_gis && error.response.data.two_gis[0] === 'Убедитесь, что это значение содержит не более 150 символов.') {
-            toast.error('Много букв два гис', { autoClose: 2000, pauseOnHover: false, position: "top-center" });
+            toast.error('Two gis не может содержать больше 150 символов.', { autoClose: 2000, pauseOnHover: false, position: "top-center" });
           }
           if (error.response.data.service && error.response.data.service[0] === 'Введите правильное число.') {
-            toast.error('Процент обсулживания должен быть числом', { autoClose: 2000, pauseOnHover: false, position: "top-center" });
+            toast.error('Процент обсулживания должен быть числом.', { autoClose: 2000, pauseOnHover: false, position: "top-center" });
           }
           if (error.response.data.service && error.response.data.service[0] === 'Service: only range(1, 100)') {
-            toast.error('Недопустимое значение процент обсуживания (1-100)', { autoClose: 2000, pauseOnHover: false, position: "top-center" });
+            toast.error('Процент обсулживания должен быть не более 100.', { autoClose: 2000, pauseOnHover: false, position: "top-center" });
           }
           if (error.response.data.wifi && error.response.data.wifi[0] === 'Убедитесь, что это значение содержит не более 30 символов.') {
-            toast.error('Много букв вифи', { autoClose: 2000, pauseOnHover: false, position: "top-center" });
+            toast.error('WIFI не может содержать больше 30 символов.', { autoClose: 2000, pauseOnHover: false, position: "top-center" });
           }
           if (error.response.data.wifi_password && error.response.data.wifi_password[0] === 'Убедитесь, что это значение содержит не более 30 символов.') {
-            toast.error('Много букв пароль вифи', { autoClose: 2000, pauseOnHover: false, position: "top-center" });
+            toast.error('WIFI-Пароль не может содержать больше 30 символов.', { autoClose: 2000, pauseOnHover: false, position: "top-center" });
           }
           if (error.response.data.work_time_start && error.response.data.work_time_start[0] === 'Неправильный формат времени. Используйте один из этих форматов: hh:mm[:ss[.uuuuuu]].') {
-            toast.error('Гавно время начало', { autoClose: 2000, pauseOnHover: false, position: "top-center" });
+            toast.error('Неправильный формат времени(hh:mm).', { autoClose: 2000, pauseOnHover: false, position: "top-center" });
           }
           if (error.response.data.work_time_end && error.response.data.work_time_end[0] === 'Неправильный формат времени. Используйте один из этих форматов: hh:mm[:ss[.uuuuuu]].') {
-            toast.error('Гавно время конец', { autoClose: 2000, pauseOnHover: false, position: "top-center" });
+            toast.error('Неправильный формат времени(hh:mm).', { autoClose: 2000, pauseOnHover: false, position: "top-center" });
           }
         }
       } else {

@@ -43,7 +43,7 @@ function EstablishmentCard({ establishments, onEdit, onEditDishes, updateEstabli
             });
             updateEstablishments(updatedEstablishmentsResponse.data);
             // Update the list of deleted establishments
-            setDeletedEstablishments([...deletedEstablishments, key]);
+            // setDeletedEstablishments([...deletedEstablishments, key]);
             // Error block
         } catch (error) {
             // Notify user about deletion error

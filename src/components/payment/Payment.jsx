@@ -21,6 +21,13 @@ export default function Payment() {
   const [kaspiNumber, setKaspiNumber] = useState('');
   const [payments, setPayments] = useState([]);
 
+  // Adding a mask display when loading a component
+  useEffect(() => {
+    setIsLoading(true)
+    const timeout = setTimeout(() => { setIsLoading(false); }, 1000);
+    return () => clearTimeout(timeout);
+  }, []);
+
   // When loading the component, pull out the number and information about the payments
   useEffect(() => {
     const fetchData = async () => {
@@ -112,11 +119,13 @@ export default function Payment() {
           'Authorization': `Bearer ${userToken}`
         }
       });
-      setPayments(response.data);
+      setIsSending(true)
+      setTimeout(() => { setIsSending(false); }, 15000);
+      setTimeout(() => { setPayments(response.data); }, 1000);
     } catch (error) {
       setIsSending(true)
       setTimeout(() => { setIsSending(false); }, 15000);
-      if (error.response.data && error.response.data[0] === 'Payment: limit error'){
+      if (error.response.data && error.response.data[0] === 'Payment: limit error') {
         toast.error('Достигнут лимит заявок.', { autoClose: 2000, pauseOnHover: false, position: "top-center" });
         return;
       }
@@ -142,7 +151,6 @@ export default function Payment() {
       setIsSending(true)
       setIsLoading(true)
       setTimeout(() => { setIsLoading(false); }, 1000);
-      toast.success('Заявка отправлена.', { autoClose: 2000, pauseOnHover: false, position: "top-center" });
       // Enable a delay for sending a new request after the current one has been successfully sent
       setTimeout(() => { setIsSending(false); }, 15000);
     } catch (error) {
@@ -348,7 +356,7 @@ export default function Payment() {
                 <td>{payment.phone}</td>
                 <td>{payment.created_at}</td>
                 <td>
-                  <MDBBadge color={payment.status === 'INPROCESSING' ? 'secondary' : (payment.status === 'PAID' ? 'success': 'danger' )} pill>
+                  <MDBBadge color={payment.status === 'INPROCESSING' ? 'secondary' : (payment.status === 'PAID' ? 'success' : 'danger')} pill>
                     {payment.status}
                   </MDBBadge>
                 </td>
