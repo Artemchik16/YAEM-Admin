@@ -57,9 +57,9 @@ function Subcategories({ categoryId }) {
     };
 
     return (
-        <div className="container my-3 px-0">
+        <div className="container px-0">
             {/* show this block if user has not any categories */}
-            <h2 className="my-3">Категории
+            <h2 className="mt-2 mb-2">Категории
                 <div className="btn shadow-0 btn-outline-success btn-animate mx-1 px-3"
                     onClick={toggleAddModal}>
                     <i className="far fa-square-plus"></i>
@@ -86,11 +86,11 @@ function Subcategories({ categoryId }) {
                 <MDBTableHead>
                     <tr>
                     {subcategories.map(subcategory => (
-                      <th scope='col'>
+                      <th className="mx-0 px-1" scope='col'>
                         <button
                             key={subcategory.id}
                             type="button"
-                            className={`btn btn-outline-dark btn-animate ${subcategory.id === selectedSubcategoryId ? 'active' : ''}`}
+                            className={`btn btn-outline-dark btn-animate text-nowrap btn-sm ${subcategory.id === selectedSubcategoryId ? 'active' : ''}`}
                             data-mdb-color="dark"
                             onClick={() => handleSubcategoryClick(subcategory)}
                             style={{ '--mdb-btn-hover-bg': '#ff9753', '--mdb-btn-active-bg': '#ff9753' }}

@@ -66,6 +66,12 @@ function EditCategoryModal({ open, setOpen, categoryId, categoryName, updateCate
                                 value={editedCategoryName}
                                 required
                                 onChange={(e) => setEditedCategoryName(e.target.value)} />
+                            <MDBInput
+                                className="my-3"
+                                label='Порядок отображения'
+                                placeholder="1-2-3-4-5"
+                                type='number'
+                            />
                         </MDBModalBody>
                         <MDBModalFooter>
                             <MDBBtn type="submit" color="danger" disabled={isSaving}>Сохранить</MDBBtn>

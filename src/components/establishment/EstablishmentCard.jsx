@@ -19,8 +19,10 @@ function EstablishmentCard({ establishments, onEdit, onEditDishes, updateEstabli
     const [confirmDelete, setConfirmDelete] = useState(null);
     const [showQRModal, setShowQRModal] = useState(false);
     const [selectedEstablishmentUrl, setSelectedEstablishmentUrl] = useState('');
-    const handleQRButtonClick = (establishmentUrl) => {
+    const [selectedEstablishmentName, setSelectedEstablishmentName] = useState('');
+    const handleQRButtonClick = (establishmentUrl, establishmentName) => {
         setSelectedEstablishmentUrl(establishmentUrl);
+        setSelectedEstablishmentName(establishmentName);
         setShowQRModal(true);
     };
     // Function to handle establishment deletion on establishment ID
@@ -92,16 +94,26 @@ function EstablishmentCard({ establishments, onEdit, onEditDishes, updateEstabli
                                         <p className="my-3 fs-6">г.{establishments[key].city}</p>
                                     </h5>
                                     {/* <p className="card-text text-muted">{establishments[key].address}</p> */}
-                                    <small className="card-text">{establishments[key].description}</small>
+{/*                                     <small className="card-text ms-3">{establishments[key].description}</small> */}
                                     {/* <img src={establishments[key].logo}/> */}
+                                    <hr />
+                                    <div className="note note-info mx-3">
+                                        <span class="badge badge-primary d-block">Пробный период</span>
+                                        <span class="badge badge-warning d-block">Тариф Бронза</span>
+                                        <span class="badge badge-light d-block">Тариф Серебро</span>
+                                        <span class="badge badge-danger d-block">Тариф не оплачен</span>
+                                        <p className="text-center fw-bold my-0"><small>Действует до 24/04/24</small></p>
+                                    </div>
+
+
                                     <hr />
                                     <div className="d-flex flex-wrap justify-content-evenly text-center my-3">
                                         {/* Render action buttons */}
                                         {/* Button to open QR code */}
-                                        <div className="btn btn-animate my-1" style={{ width: '70px' }} onClick={() => handleQRButtonClick(establishments[key].url_name)}>
+                                        <div className="btn btn-animate my-1" style={{ width: '70px' }} onClick={() => handleQRButtonClick(establishments[key].url_name, establishments[key].name)}>
                                             <i className="fas fa-qrcode fa-lg"></i>
                                         </div>
-                                        {showQRModal && <QRModal open={showQRModal} establishmentUrl={selectedEstablishmentUrl} onClose={() => setShowQRModal(false)} />}
+                                        {showQRModal && <QRModal open={showQRModal} establishmentUrl={selectedEstablishmentUrl} establishmentName={selectedEstablishmentName} onClose={() => setShowQRModal(false)} />}
                                         {/* Button to open Dishes component */}
                                         <div className="btn btn-animate my-1" style={{ width: '70px' }} onClick={() => handleEditDish(establishments[key].id)}>
                                             <i className="fas fa-book-open fa-lg"></i>

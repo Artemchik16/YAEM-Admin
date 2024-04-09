@@ -26,9 +26,9 @@ function EditEstablishmentForm({ establishmentId, onFinishEditing, updateEstabli
   const [city, setCity] = useState('');
   const [cities, setCities] = useState([]);
   const [description, setDescription] = useState('');
-  // const [logo, setLogo] = useState("");
-  // const formData = new FormData();
-  // formData.append('logo', logo);
+//   const [logo, setLogo] = useState("");
+//   const formData = new FormData();
+//   formData.append('logo', logo);
   const [address, setAddress] = useState("");
   const [phone, setPhone] = useState("");
   const [instagramLink, setInstagramLink] = useState("");
@@ -59,7 +59,7 @@ function EditEstablishmentForm({ establishmentId, onFinishEditing, updateEstabli
         setUrlName(response.data.url_name);
         setCity(response.data.city);
         setDescription(response.data.description);
-        // setLogo(response.data.logo);
+//         setLogo(response.data.logo);
         setAddress(response.data.address);
         setPhone(response.data.phone);
         setInstagramLink(response.data.inst);
@@ -107,6 +107,7 @@ function EditEstablishmentForm({ establishmentId, onFinishEditing, updateEstabli
         city: city || establishmentData.city,
         description: description || establishmentData.description,
         address: address || establishmentData.address,
+//         logo: logo || establishmentData.logo,
         phone: phone || establishmentData.phone,
         inst: instagramLink || establishmentData.inst,
         two_gis: twogisLink || establishmentData.two_gis,
@@ -208,6 +209,7 @@ function EditEstablishmentForm({ establishmentId, onFinishEditing, updateEstabli
       urlName !== establishmentData?.url_name ||
       city !== establishmentData?.city ||
       description !== establishmentData?.description ||
+//       logo !== establishmentData?.logo ||
       address !== establishmentData?.address ||
       phone !== establishmentData?.phone ||
       instagramLink !== establishmentData?.inst ||
@@ -240,7 +242,7 @@ function EditEstablishmentForm({ establishmentId, onFinishEditing, updateEstabli
       <div className="btn shadow-0 btn-animate my-auto btn-outline-dark" onClick={onFinishEditing}>
         <i className="fas fa-arrow-left-long fa-lg"></i>
       </div>
-      <h2>Редактирование заведения - {establishmentData.name}</h2>
+      <h2 className="my-3">Редактирование заведения - {establishmentData.name}</h2>
       {/* Edit establishment form */}
       {/* Form handler */}
       <form className="my-4" onSubmit={handleUpdate}>
@@ -275,17 +277,14 @@ function EditEstablishmentForm({ establishmentId, onFinishEditing, updateEstabli
         >
           <option value="">Выберите город</option>
           {cities.map(city => (
-            <option key={city.id} value={city.id}>{city.name}</option>
+          <option key={city.id} value={city.id}>{city.name}</option>
           ))}
         </select>
         {/* Button to open a block with additional information */}
-        <button type="button" className="btn btn-link mt-3" onClick={() => setIsAdditionalInfoVisible(!isAdditionalInfoVisible)}>
-          Дополнительно (*Необязательно к заполнению)
-        </button>
+        <button type="button" className="btn btn-outline-secondary my-4 btn-animate" onClick={() => setIsAdditionalInfoVisible(!isAdditionalInfoVisible)}>Показать дополнительные поля <i class="fas fa-circle-chevron-down ms-1"></i></button>
         {/* Show this block if button clicked */}
         {isAdditionalInfoVisible && (
           <>
-            <h6 className="mt-5 fst-cyrillic">Дополнительно (*Необазятельно к заполнению)</h6>
             {/* Establishment description */}
             <div className="input-group mb-3">
               <span className="input-group-text"><i className="fas fa-font fa-xs"></i></span>
@@ -299,16 +298,15 @@ function EditEstablishmentForm({ establishmentId, onFinishEditing, updateEstabli
               />
             </div>
             {/* Establishment logo */}
-            {/* <div class="input-group">
-              <label class="input-group-text" for="inputGroupFile01">Логотип</label>
-              <input
-                type="file"
-                class="form-control"
-                id="inputGroupFile04"
-                defaultValue={establishmentData.logo}
-                onChange={(e) => setLogo(e.target.files[0])}
-              />
-            </div> */}
+{/*             <div class="input-group"> */}
+{/*               <label class="input-group-text" for="inputGroupFile01">Логотип</label> */}
+{/*               <input */}
+{/*                 type="file" */}
+{/*                 class="form-control" */}
+{/*                 id="inputGroupFile04" */}
+{/*                 onChange={(e) => setLogo(e.target.files[0])} */}
+{/*               /> */}
+{/*             </div> */}
             {/* Establishment address*/}
             <div className="input-group my-3">
               <span className="input-group-text"><i class="fas fa-location-dot"></i></span>
@@ -326,6 +324,7 @@ function EditEstablishmentForm({ establishmentId, onFinishEditing, updateEstabli
               <MDBInput
                 type="text"
                 label="Телефон для связи / заказов WhatsApp"
+                placeholder="+7"
                 defaultValue={establishmentData.phone}
                 value={phone}
                 onChange={(e) => setPhone(e.target.value)}
@@ -336,7 +335,8 @@ function EditEstablishmentForm({ establishmentId, onFinishEditing, updateEstabli
               <span className="input-group-text"><i class="fab fa-instagram"></i></span>
               <MDBInput
                 type="text"
-                label="Ссылка на Instagram: Пример - https://www.instagram.com/yaem_qr/"
+                label="Ссылка на Instagram"
+                placeholder="instagram.com/yaem_qr/"
                 defaultValue={establishmentData.inst}
                 value={instagramLink}
                 onChange={(e) => setInstagramLink(e.target.value)}
@@ -347,7 +347,8 @@ function EditEstablishmentForm({ establishmentId, onFinishEditing, updateEstabli
               <span className="input-group-text"><i class="fas fa-map-location-dot"></i></span>
               <MDBInput
                 type="text"
-                label="Ссылка на 2Gis: Пример - https://go.2gis.com/d9pf44"
+                label="Ссылка на 2Gis"
+                placeholder="go.2gis.com/d9pf44"
                 defaultValue={establishmentData.two_gis}
                 value={twogisLink}
                 onChange={(e) => setTwogisLink(e.target.value)}
@@ -375,7 +376,7 @@ function EditEstablishmentForm({ establishmentId, onFinishEditing, updateEstabli
               <span className="input-group-text"><i class="fas fa-percent"></i></span>
               <MDBInput
                 type="phone"
-                label="Процент обслуживания для отображения в корзине гостя"
+                label="Процент обслуживания"
                 defaultValue={establishmentData.service}
                 value={service}
                 onChange={(e) => setService(e.target.value)}
@@ -383,11 +384,10 @@ function EditEstablishmentForm({ establishmentId, onFinishEditing, updateEstabli
             </div>
             {/* Establishment WiFi/Password */}
             <div class="input-group my-3">
-              <span class="input-group-text">Wi-Fi</span>
               <span className="input-group-text"><i class="fas fa-wifi"></i></span>
               <MDBInput
                 type="text"
-                label='Название'
+                label='Wi-Fi'
                 defaultValue={establishmentData.wifi}
                 value={wifiName}
                 onChange={(e) => setWifiName(e.target.value)}

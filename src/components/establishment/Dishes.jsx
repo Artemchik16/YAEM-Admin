@@ -46,8 +46,8 @@ function Dishes({ subcategoryId }) {
     }
 
     return (
-        <div className="container my-5 px-0">
-            <h2 className="my-3">Блюда
+        <div className="container my-2 px-0">
+            <h2 className="">Блюда
                 <div className="btn shadow-0 btn-outline-success btn-animate px-3 mx-2"
                     onClick={toggleAddModal}>
                     <i className="far fa-square-plus"></i>
@@ -56,7 +56,7 @@ function Dishes({ subcategoryId }) {
             <div className='row'>
             {dishes.map(dish => (
                 <div className='col-auto'>
-                <div className="card my-3 shadow-lg" style={{ width: '300px' }}>
+                <div className="card my-1 shadow-lg" style={{ width: '288px' }}>
                     <div className="card-body px-0 py-0">
                         <>
                             {/* Render dish data from backend */}

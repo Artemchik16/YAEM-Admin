@@ -40,7 +40,7 @@ function Registration() {
                 password: password,
             });
             // Mesaage
-            toast.success('Аккаунт создан.', { autoClose: 1000, pauseOnHover: false, position: "top-center" });
+            toast.success('Аккаунт создан. Вы можете войти в аккаунт', { autoClose: 1000, pauseOnHover: false, position: "top-center" });
             // Redirect user to login page
             setTimeout(() => { navigate('/login'); }, 1500)
         } catch (error) {
@@ -81,7 +81,7 @@ function Registration() {
                                         <span className="fs-3 fw-bold yaem-color mx-2">YAEM.KZ</span>
                                     </div>
                                 </div>
-                                <div className="card mb-3">
+                                <div className="card mb-3 shadow-lg">
                                     <div className="card-body">
                                         <div className="my-4">
                                             <h5 className="card-title text-center fs-4">Регистрация</h5>

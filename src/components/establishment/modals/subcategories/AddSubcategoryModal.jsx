@@ -52,7 +52,7 @@ function AddSubcategoryModal({ open, setOpen, categoryId, updateSubcategories })
             <MDBModalDialog>
                 <MDBModalContent>
                     <MDBModalHeader>
-                        <MDBModalTitle>Добавить подкат</MDBModalTitle>
+                        <MDBModalTitle>Добавить категорию</MDBModalTitle>
                         {/* Close handler */}
                         <MDBBtn className='btn-close'
                             color='none'
@@ -67,6 +67,12 @@ function AddSubcategoryModal({ open, setOpen, categoryId, updateSubcategories })
                             value={subcategoryName}
                             onChange={(e) => setSubcategoryName(e.target.value)}
                             required
+                        />
+                        <MDBInput
+                            className="my-3"
+                            label='Порядок отображения'
+                            placeholder="1-2-3-4-5"
+                            type='number'
                         />
                     </MDBModalBody>
                     <MDBModalFooter>

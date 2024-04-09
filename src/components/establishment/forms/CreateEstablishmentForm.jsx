@@ -175,7 +175,7 @@ function CreateEstablishmentForm({ onClose, updateEstablishments }) {
           <i className="fas fa-arrow-left-long fa-lg"></i>
         </div>
         <h2 className="ms-4 my-3">Добавить заведение</h2>
-        <h6>Основная информация (*Обязательно к заполнению)</h6>
+        <h6 className="my-3">Основная информация </h6>
         {/* Add establishment form */}
         {/* Form handler */}
         <form className="my-1" onSubmit={handleSubmit}>
@@ -203,6 +203,7 @@ function CreateEstablishmentForm({ onClose, updateEstablishments }) {
             />
           </div>
           {/* Establishment city */}
+
           <select
             value={city}
             onChange={(e) => setCity(e.target.value)}
@@ -211,11 +212,11 @@ function CreateEstablishmentForm({ onClose, updateEstablishments }) {
           >
             <option value="">Выберите город</option>
             {cities.map(city => (
-              <option key={city.id} value={city.id}>{city.name}</option>
+            <option key={city.id} value={city.id}>{city.name}</option>
             ))}
           </select>
           {/* Button to open a block with additional information */}
-          <button type="button" className="btn btn-outline-secondary mt-4 btn-animate" onClick={() => setIsAdditionalInfoVisible(!isAdditionalInfoVisible)}>Необязательные поля <i class="fas fa-circle-chevron-down ms-1"></i></button>
+          <button type="button" className="btn btn-outline-secondary mt-4 btn-animate" onClick={() => setIsAdditionalInfoVisible(!isAdditionalInfoVisible)}>Показать дополнительные поля <i class="fas fa-circle-chevron-down ms-1"></i></button>
           {/* Show this block if button clicked */}
           {isAdditionalInfoVisible && (
             <>
@@ -258,6 +259,7 @@ function CreateEstablishmentForm({ onClose, updateEstablishments }) {
                 <MDBInput
                   type="text"
                   label="Телефон для связи / заказов WhatsApp"
+                  placeholder="+7"
                   value={phone}
                   onChange={(e) => setPhone(e.target.value)}
                 />
@@ -267,7 +269,8 @@ function CreateEstablishmentForm({ onClose, updateEstablishments }) {
                 <span className="input-group-text"><i class="fab fa-instagram"></i></span>
                 <MDBInput
                   type="text"
-                  label="Ссылка на Instagram: Пример - https://www.instagram.com/yaem_qr/"
+                  label="Ссылка на Instagram"
+                  placeholder="instagram.com/yaem_qr/"
                   value={instagramLink}
                   onChange={(e) => setInstagramLink(e.target.value)}
                 />
@@ -277,7 +280,8 @@ function CreateEstablishmentForm({ onClose, updateEstablishments }) {
                 <span className="input-group-text"><i class="fas fa-map-location-dot"></i></span>
                 <MDBInput
                   type="text"
-                  label="Ссылка на 2Gis: Пример - https://go.2gis.com/d9pf44"
+                  label="Ссылка на 2Gis"
+                  placeholder="go.2gis.com/d9pf44"
                   value={twogisLink}
                   onChange={(e) => setTwogisLink(e.target.value)}
                 />
@@ -304,18 +308,17 @@ function CreateEstablishmentForm({ onClose, updateEstablishments }) {
                 <span className="input-group-text"><i class="fas fa-percent"></i></span>
                 <MDBInput
                   type="phone"
-                  label="Процент обслуживания для отображения в корзине гостя"
+                  label="Процент обслуживания"
                   value={service}
                   onChange={(e) => setService(e.target.value)}
                 />
               </div>
               {/* Establishment WiFi/Password */}
               <div class="input-group my-3">
-                <span class="input-group-text">Wi-Fi</span>
                 <span className="input-group-text"><i class="fas fa-wifi"></i></span>
                 <MDBInput
                   type="text"
-                  label='Название'
+                  label='Wi-Fi'
                   value={wifiName}
                   onChange={(e) => setWifiName(e.target.value)}
                 />

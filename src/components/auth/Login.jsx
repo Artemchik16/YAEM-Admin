@@ -7,6 +7,7 @@ import 'react-toastify/dist/ReactToastify.css';
 import { MDBInput } from 'mdb-react-ui-kit'
 
 
+
 export default function Login() {
 
     // Set handlers and values
@@ -15,6 +16,7 @@ export default function Login() {
     const [isSaveButtonClicked, setIsSaveButtonClicked] = useState(false);
     const phoneNumberPattern = /^(\+7|8)\d{10}$/;
     const navigate = useNavigate();
+
 
     // Login handler for login form, validations
     const handleLogin = async (e) => {
@@ -75,8 +77,8 @@ export default function Login() {
                                         <span className="fs-3 fw-bold yaem-color mx-2">YAEM.KZ</span>
                                     </div>
                                 </div>
-                                <div className="card mb-3">
-                                    <div className="card-body">
+                                <div className="card mb-3 shadow-lg">
+                                    <div className="card-body" >
                                         <div className="my-4">
                                             <h5 className="card-title text-center fs-4">Войти в аккаунт</h5>
                                         </div>
@@ -89,9 +91,12 @@ export default function Login() {
                                                     label="Введите номер телефона"
                                                     value={phone}
                                                     onChange={(e) => setPhone(e.target.value)}
+                                                    placeholder="+7"
+                                                    data-mdb-input-mask="+48 999-999-999"
                                                     required
                                                 />
                                             </div>
+
                                             <div className="col-12">
                                                 {/* Password handler */}
                                                 <MDBInput

@@ -60,16 +60,27 @@ function Categories({ establishmentId, onFinishDish }) {
                     </div>
                 </div>
                 <div className="col text-end">
-                    <div className="btn shadow-0 btn-animate my-auto btn-outline-success">В меню
+                    <div className="btn shadow-0 btn-animate my-auto btn-outline-dark text-nowrap">В меню
                         <i className="fas fa-arrow-right-long fa-lg mx-1"></i>
                     </div>
                 </div>
             </div>
+            <hr className="mt-2"/>
 
-            <h2 className="my-3">Разделы
+            <h2 className="mt-3 mb-2">Разделы
                 <div className="btn shadow-0 btn-outline-success btn-animate mx-1 px-3" onClick={toggleAddModal}>
                     <i className="far fa-square-plus"></i>
                 </div>
+                            {selectedCategoryId && categories.length > 0 && (
+                <div className="d-inline">
+                    <div className="btn shadow-0 btn-animate my-auto btn-outline-dark mx-1 px-3" onClick={toggleEditModal}>
+                        <i className="fas fa-pen"></i>
+                    </div>
+                    <div className="btn shadow-0 btn-animate my-auto btn-outline-danger mx-1 px-3" onClick={toggleRemoveModal}>
+                        <i className="fas fa-trash fa-lg"></i>
+                    </div>
+                </div>
+            )}
             </h2>
 
             <MDBTable responsive hover small align='middle' className="text-center">
@@ -79,7 +90,7 @@ function Categories({ establishmentId, onFinishDish }) {
                             <th scope='col' key={category.id}>
                                 <button
                                     type="button"
-                                    className={`btn btn-outline-dark btn-animate ${category.id === selectedCategoryId ? 'active' : ''}`}
+                                    className={`btn btn-outline-dark btn-animate text-nowrap ${category.id === selectedCategoryId ? 'active' : ''}`}
                                     onClick={() => handleCategoryClick(category)}
                                     style={{ '--mdb-btn-hover-bg': '#ff9753', '--mdb-btn-active-bg': '#ff9753' }}
                                 >
@@ -91,16 +102,7 @@ function Categories({ establishmentId, onFinishDish }) {
                 </MDBTableHead>
             </MDBTable>
 
-            {selectedCategoryId && categories.length > 0 && (
-                <div className="d-inline">
-                    <div className="btn shadow-0 btn-animate my-auto btn-outline-dark mx-1 px-3" onClick={toggleEditModal}>
-                        <i className="fas fa-pen"></i>
-                    </div>
-                    <div className="btn shadow-0 btn-animate my-auto btn-outline-danger mx-1 px-3" onClick={toggleRemoveModal}>
-                        <i className="fas fa-trash fa-lg"></i>
-                    </div>
-                </div>
-            )}
+
             {selectedCategoryId && categories.length > 0 && (
                 <Subcategories categoryId={selectedCategoryId} />
             )}

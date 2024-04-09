@@ -1,4 +1,4 @@
-import React from 'react';
+import React, { useState, useEffect } from "react";
 import { BrowserRouter as Router, Routes, Route, Navigate } from 'react-router-dom';
 import './assets/styles/main.css'
 import Login from './components/auth/Login.jsx';
@@ -9,6 +9,7 @@ import Menu from './components/Menu.jsx';
 export default function App() {
   // Check is authenticated user, getting user token
   const isAuthenticated = sessionStorage.getItem('accessToken') !== null;
+
 
   return (
     <Router>

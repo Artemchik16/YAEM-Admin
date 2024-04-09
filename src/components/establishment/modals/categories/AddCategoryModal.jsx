@@ -62,12 +62,18 @@ function AddCategoryModal({ open, setOpen, establishmentId, updateCategories }) 
                                 type='text'
                                 value={categoryName}
                                 onChange={(e) => setCategoryName(e.target.value)}
-                                required
+
+                            />
+                            <MDBInput
+                                className="my-3"
+                                label='Порядок отображения'
+                                placeholder="1-2-3-4-5"
+                                type='number'
                             />
                         </MDBModalBody>
                         <MDBModalFooter>
-                            <MDBBtn type="submit" color="success" disabled={isSaving}>Сохранить</MDBBtn>
-                            <MDBBtn color='danger' onClick={handleCloseModal}>Закрыть</MDBBtn>
+                            <MDBBtn className="btn-animate" type="submit" color="success" disabled={isSaving}>Сохранить</MDBBtn>
+                            <MDBBtn className="btn-animate" color='danger' onClick={handleCloseModal}>Закрыть</MDBBtn>
                         </MDBModalFooter>
                     </form>
                 </MDBModalContent>

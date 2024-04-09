@@ -51,7 +51,7 @@ function EditSubcategoryModal({ open, setOpen, subcategoryId, subcategoryName, u
             <MDBModalDialog>
                 <MDBModalContent>
                     <MDBModalHeader>
-                        <MDBModalTitle>Редактировать подкат</MDBModalTitle>
+                        <MDBModalTitle>Редактировать категорию</MDBModalTitle>
                         {/* Close handler */}
                         <MDBBtn className='btn-close'
                             color='none'
@@ -67,6 +67,12 @@ function EditSubcategoryModal({ open, setOpen, subcategoryId, subcategoryName, u
                             // defaultValue={editedCategoryName}
                             value={editedSubcategoryName}
                             onChange={(e) => setEditedSubcategoryName(e.target.value)} />
+                        <MDBInput
+                            className="my-3"
+                            label='Порядок отображения'
+                            placeholder="1-2-3-4-5"
+                            type='number'
+                        />
                     </MDBModalBody>
                     <MDBModalFooter>
                         {/* Success, close handlers */}
