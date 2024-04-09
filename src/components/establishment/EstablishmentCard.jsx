@@ -5,6 +5,7 @@ import axios from "axios";
 // Messages import library
 import { toast } from 'react-toastify';
 import 'react-toastify/dist/ReactToastify.css';
+import QRModal from "./modals/establishments/QRModal";
 
 
 function EstablishmentCard({ establishments, onEdit, onEditDishes, updateEstablishments }) {
@@ -16,6 +17,12 @@ function EstablishmentCard({ establishments, onEdit, onEditDishes, updateEstabli
     // State for deleted establishments and confirmation of deletion
     const [deletedEstablishments, setDeletedEstablishments] = useState([]);
     const [confirmDelete, setConfirmDelete] = useState(null);
+    const [showQRModal, setShowQRModal] = useState(false);
+    const [selectedEstablishmentUrl, setSelectedEstablishmentUrl] = useState('');
+    const handleQRButtonClick = (establishmentUrl) => {
+        setSelectedEstablishmentUrl(establishmentUrl);
+        setShowQRModal(true);
+    };
     // Function to handle establishment deletion on establishment ID
     const handleDeleteEstablishment = async (EstablishmentID, key) => {
         try {
@@ -78,7 +85,7 @@ function EstablishmentCard({ establishments, onEdit, onEditDishes, updateEstabli
                                     {/* Render establishment data from backend */}
                                     <img className="card-img-top px-0" loading="lazy" src={establishments[key].logo} style={{ maxWidth: '400px' }}></img>
                                     <h5 className="card-title mx-3">{establishments[key].name}
-                                    {/* Button to open DetailEstablishment component */}
+                                        {/* Button to open DetailEstablishment component */}
                                         <div className="btn btn-animate my-1 shadow-0 px-2 py-1" onClick={() => handleEdit(establishments[key].id)}>
                                             <i className="fas fa-pen fa-lg"></i>
                                         </div>
@@ -90,12 +97,11 @@ function EstablishmentCard({ establishments, onEdit, onEditDishes, updateEstabli
                                     <hr />
                                     <div className="d-flex flex-wrap justify-content-evenly text-center my-3">
                                         {/* Render action buttons */}
-                                        {/* Button to redirect on yaem.kz menu */}
-                                        <a href={`http://127.0.0.1:8000/${establishments[key].url_name}/menu`} target="_blank">
-                                            <div className="btn btn-animate my-1" style={{ width: '70px' }}>
-                                                <i className="fas fa-qrcode fa-lg"></i>
-                                            </div>
-                                        </a>
+                                        {/* Button to open QR code */}
+                                        <div className="btn btn-animate my-1" style={{ width: '70px' }} onClick={() => handleQRButtonClick(establishments[key].url_name)}>
+                                            <i className="fas fa-qrcode fa-lg"></i>
+                                        </div>
+                                        {showQRModal && <QRModal open={showQRModal} establishmentUrl={selectedEstablishmentUrl} onClose={() => setShowQRModal(false)} />}
                                         {/* Button to open Dishes component */}
                                         <div className="btn btn-animate my-1" style={{ width: '70px' }} onClick={() => handleEditDish(establishments[key].id)}>
                                             <i className="fas fa-book-open fa-lg"></i>

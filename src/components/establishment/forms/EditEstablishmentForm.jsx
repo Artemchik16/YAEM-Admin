@@ -138,65 +138,65 @@ function EditEstablishmentForm({ establishmentId, onFinishEditing, updateEstabli
     } catch (error) {
       if (error.response && error.response.data) {
         if (error.response.data.name && error.response.data.name[0] === 'Name: only ru/en/num characters') {
-            toast.error('Имя может содержать только русские/английские/численные символы', { autoClose: 2000, pauseOnHover: false, position: "top-center" });
-          }
-          if (error.response.data.name && error.response.data.name[0] === 'Убедитесь, что это значение содержит не более 20 символов.') {
-            toast.error('Название не может содержать больше 20 символов', { autoClose: 2000, pauseOnHover: false, position: "top-center" });
-          }
-          if (error.response.data.url_name && error.response.data.url_name[0] === 'Убедитесь, что это значение содержит не более 30 символов.') {
-            toast.error('URL не может содержать больше 30 символов', { autoClose: 2000, pauseOnHover: false, position: "top-center" });
-          }
-          if (error.response.data.url_name && error.response.data.url_name[0] === 'The URL name can only contain Latin characters') {
-            toast.error('URL может содержать только английские буквы', { autoClose: 2000, pauseOnHover: false, position: "top-center" });
-          }
-          if (error.response.data.url_name && error.response.data.url_name[0] === 'Заведение с таким /url уже существует.') {
-            toast.error('URL уже занят', { autoClose: 2000, pauseOnHover: false, position: "top-center" });
-          }
-          if (error.response.data.description && error.response.data.description[0] === 'Убедитесь, что это значение содержит не более 200 символов.') {
-            toast.error('Описание не может содержать больше 200 символов', { autoClose: 2000, pauseOnHover: false, position: "top-center" });
-          }
-          if (error.response.data.logo && error.response.data.logo[0] === 'Загруженный файл не является корректным файлом.') {
-            toast.error('Загруженный файл не является корректным файлом', { autoClose: 2000, pauseOnHover: false, position: "top-center" });
-          }
-          if (error.response.data.address && error.response.data.address[0] === 'Убедитесь, что это значение содержит не более 50 символов.') {
-            toast.error('Адрес не может содержать больше 50 символов', { autoClose: 2000, pauseOnHover: false, position: "top-center" });
-          }
-          if (error.response.data.phone && error.response.data.phone[0] === 'Требуется численное значение.') {
-            toast.error('Неверный формат номера телефона', { autoClose: 2000, pauseOnHover: false, position: "top-center" });
-          }
-          if (error.response.data.phone && error.response.data.phone[0] === 'Phone: correct format - "+7XXXXXXXXXX" or "8XXXXXXXXXX"') {
-            toast.error('Неверный формат номера телефона', { autoClose: 2000, pauseOnHover: false, position: "top-center" });
-          }
-          if (error.response.data.inst && error.response.data.inst[0] === 'Instagram error: pattern - https://www.instagram.com/*') {
-            toast.error('Не корректный формат ссылки Instagram', { autoClose: 2000, pauseOnHover: false, position: "top-center" });
-          }
-          if (error.response.data.inst && error.response.data.inst[0] === 'Убедитесь, что это значение содержит не более 100 символов.') {
-            toast.error('Instagram не может содержать больше 100 символов.', { autoClose: 2000, pauseOnHover: false, position: "top-center" });
-          }
-          if (error.response.data.two_gis && error.response.data.two_gis[0] === 'Two gis error: pattern - https://2gis/*/*') {
-            toast.error('Не корректный формат ссылки Two gis', { autoClose: 2000, pauseOnHover: false, position: "top-center" });
-          }
-          if (error.response.data.two_gis && error.response.data.two_gis[0] === 'Убедитесь, что это значение содержит не более 150 символов.') {
-            toast.error('Two gis не может содержать больше 150 символов.', { autoClose: 2000, pauseOnHover: false, position: "top-center" });
-          }
-          if (error.response.data.service && error.response.data.service[0] === 'Введите правильное число.') {
-            toast.error('Процент обсулживания должен быть числом.', { autoClose: 2000, pauseOnHover: false, position: "top-center" });
-          }
-          if (error.response.data.service && error.response.data.service[0] === 'Service: only range(1, 100)') {
-            toast.error('Процент обсулживания должен быть не более 100.', { autoClose: 2000, pauseOnHover: false, position: "top-center" });
-          }
-          if (error.response.data.wifi && error.response.data.wifi[0] === 'Убедитесь, что это значение содержит не более 30 символов.') {
-            toast.error('WIFI не может содержать больше 30 символов.', { autoClose: 2000, pauseOnHover: false, position: "top-center" });
-          }
-          if (error.response.data.wifi_password && error.response.data.wifi_password[0] === 'Убедитесь, что это значение содержит не более 30 символов.') {
-            toast.error('WIFI-Пароль не может содержать больше 30 символов.', { autoClose: 2000, pauseOnHover: false, position: "top-center" });
-          }
-          if (error.response.data.work_time_start && error.response.data.work_time_start[0] === 'Неправильный формат времени. Используйте один из этих форматов: hh:mm[:ss[.uuuuuu]].') {
-            toast.error('Неправильный формат времени(hh:mm).', { autoClose: 2000, pauseOnHover: false, position: "top-center" });
-          }
-          if (error.response.data.work_time_end && error.response.data.work_time_end[0] === 'Неправильный формат времени. Используйте один из этих форматов: hh:mm[:ss[.uuuuuu]].') {
-            toast.error('Неправильный формат времени(hh:mm).', { autoClose: 2000, pauseOnHover: false, position: "top-center" });
-          }
+          toast.error('Имя может содержать только русские/английские/численные символы', { autoClose: 2000, pauseOnHover: false, position: "top-center" });
+        }
+        if (error.response.data.name && error.response.data.name[0] === 'Убедитесь, что это значение содержит не более 20 символов.') {
+          toast.error('Название не может содержать больше 20 символов', { autoClose: 2000, pauseOnHover: false, position: "top-center" });
+        }
+        if (error.response.data.url_name && error.response.data.url_name[0] === 'Убедитесь, что это значение содержит не более 30 символов.') {
+          toast.error('URL не может содержать больше 30 символов', { autoClose: 2000, pauseOnHover: false, position: "top-center" });
+        }
+        if (error.response.data.url_name && error.response.data.url_name[0] === 'The URL name can only contain Latin characters') {
+          toast.error('URL может содержать только английские буквы', { autoClose: 2000, pauseOnHover: false, position: "top-center" });
+        }
+        if (error.response.data.url_name && error.response.data.url_name[0] === 'Заведение с таким /url уже существует.') {
+          toast.error('URL уже занят', { autoClose: 2000, pauseOnHover: false, position: "top-center" });
+        }
+        if (error.response.data.description && error.response.data.description[0] === 'Убедитесь, что это значение содержит не более 200 символов.') {
+          toast.error('Описание не может содержать больше 200 символов', { autoClose: 2000, pauseOnHover: false, position: "top-center" });
+        }
+        if (error.response.data.logo && error.response.data.logo[0] === 'Загруженный файл не является корректным файлом.') {
+          toast.error('Загруженный файл не является корректным файлом', { autoClose: 2000, pauseOnHover: false, position: "top-center" });
+        }
+        if (error.response.data.address && error.response.data.address[0] === 'Убедитесь, что это значение содержит не более 50 символов.') {
+          toast.error('Адрес не может содержать больше 50 символов', { autoClose: 2000, pauseOnHover: false, position: "top-center" });
+        }
+        if (error.response.data.phone && error.response.data.phone[0] === 'Требуется численное значение.') {
+          toast.error('Неверный формат номера телефона', { autoClose: 2000, pauseOnHover: false, position: "top-center" });
+        }
+        if (error.response.data.phone && error.response.data.phone[0] === 'Phone: correct format - "+7XXXXXXXXXX" or "8XXXXXXXXXX"') {
+          toast.error('Неверный формат номера телефона', { autoClose: 2000, pauseOnHover: false, position: "top-center" });
+        }
+        if (error.response.data.inst && error.response.data.inst[0] === 'Instagram error: pattern - https://www.instagram.com/*') {
+          toast.error('Не корректный формат ссылки Instagram', { autoClose: 2000, pauseOnHover: false, position: "top-center" });
+        }
+        if (error.response.data.inst && error.response.data.inst[0] === 'Убедитесь, что это значение содержит не более 100 символов.') {
+          toast.error('Instagram не может содержать больше 100 символов.', { autoClose: 2000, pauseOnHover: false, position: "top-center" });
+        }
+        if (error.response.data.two_gis && error.response.data.two_gis[0] === 'Two gis error: pattern - https://2gis/*/*') {
+          toast.error('Не корректный формат ссылки Two gis', { autoClose: 2000, pauseOnHover: false, position: "top-center" });
+        }
+        if (error.response.data.two_gis && error.response.data.two_gis[0] === 'Убедитесь, что это значение содержит не более 150 символов.') {
+          toast.error('Two gis не может содержать больше 150 символов.', { autoClose: 2000, pauseOnHover: false, position: "top-center" });
+        }
+        if (error.response.data.service && error.response.data.service[0] === 'Введите правильное число.') {
+          toast.error('Процент обсулживания должен быть числом.', { autoClose: 2000, pauseOnHover: false, position: "top-center" });
+        }
+        if (error.response.data.service && error.response.data.service[0] === 'Service: only range(1, 100)') {
+          toast.error('Процент обсулживания должен быть не более 100.', { autoClose: 2000, pauseOnHover: false, position: "top-center" });
+        }
+        if (error.response.data.wifi && error.response.data.wifi[0] === 'Убедитесь, что это значение содержит не более 30 символов.') {
+          toast.error('WIFI не может содержать больше 30 символов.', { autoClose: 2000, pauseOnHover: false, position: "top-center" });
+        }
+        if (error.response.data.wifi_password && error.response.data.wifi_password[0] === 'Убедитесь, что это значение содержит не более 30 символов.') {
+          toast.error('WIFI-Пароль не может содержать больше 30 символов.', { autoClose: 2000, pauseOnHover: false, position: "top-center" });
+        }
+        if (error.response.data.work_time_start && error.response.data.work_time_start[0] === 'Неправильный формат времени. Используйте один из этих форматов: hh:mm[:ss[.uuuuuu]].') {
+          toast.error('Неправильный формат времени(hh:mm).', { autoClose: 2000, pauseOnHover: false, position: "top-center" });
+        }
+        if (error.response.data.work_time_end && error.response.data.work_time_end[0] === 'Неправильный формат времени. Используйте один из этих форматов: hh:mm[:ss[.uuuuuu]].') {
+          toast.error('Неправильный формат времени(hh:mm).', { autoClose: 2000, pauseOnHover: false, position: "top-center" });
+        }
       }
     }
   };
@@ -225,7 +225,11 @@ function EditEstablishmentForm({ establishmentId, onFinishEditing, updateEstabli
     wifiName, wifiPassword, workTimeStart, workTimeEnd]);
 
   if (loading) {
-    return <div>Перенаправление..</div>;
+    return <div class="d-flex justify-content-center display-middle">
+      <div class="spinner-border text-warning" role="status">
+        <span class="visually-hidden">Loading...</span>
+      </div>
+    </div>
   }
 
 

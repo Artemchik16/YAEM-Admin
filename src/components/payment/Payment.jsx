@@ -9,8 +9,8 @@ import { MDBBadge, MDBTable, MDBTableHead, MDBTableBody, MDBInput } from 'mdb-re
 export default function Payment() {
 
   // Set handlers and values
+  const [loading, setLoading] = useState(true);
   const userToken = sessionStorage.getItem('accessToken');
-  const [isLoading, setIsLoading] = useState(false);
   const [isSending, setIsSending] = useState(false);
   const [activeTarifTab, setActiveTarifTab] = useState('silver');
   const [tarifPrice, setTarifPrice] = useState(13000);
@@ -20,13 +20,6 @@ export default function Payment() {
   const [isDiscountApplicable, setIsDiscountApplicable] = useState(false);
   const [kaspiNumber, setKaspiNumber] = useState('');
   const [payments, setPayments] = useState([]);
-
-  // Adding a mask display when loading a component
-  useEffect(() => {
-    setIsLoading(true)
-    const timeout = setTimeout(() => { setIsLoading(false); }, 1000);
-    return () => clearTimeout(timeout);
-  }, []);
 
   // When loading the component, pull out the number and information about the payments
   useEffect(() => {
@@ -40,20 +33,36 @@ export default function Payment() {
         });
         const userPhoneNumber = userPhoneNumberResponse.data.phone_number;
         // Receive payment data
-        const paymentResponse = await axios.get('http://localhost:8000/api/v1/auth/payment', {
+        const paymentResponse = await axios.get('http://localhost:8000/api/v1/auth/payment/', {
           headers: {
             'Authorization': `Bearer ${userToken}`
           }
         });
         const paymentData = paymentResponse.data;
+        setTimeout(() => { setLoading(false); }, 100)
         setKaspiNumber(userPhoneNumber);
         setPayments(paymentData);
       } catch (error) {
+        setLoading(false);
         console.error('Ошибка при получении данных:', error);
       }
     };
     fetchData();
   }, []);
+
+  const handleDeletePayment = async (paymentId) => {
+    try {
+      const response = await axios.delete(`http://localhost:8000/api/v1/auth/payment/${paymentId}/`, {
+        headers: {
+          'Authorization': `Bearer ${userToken}`
+        }
+      });
+      toast.success('Заявка удалена.', { autoClose: 1500, pauseOnHover: false, position: "top-center" });
+      setPayments(payments.filter(payment => payment.id !== paymentId));
+    } catch (error) {
+      toast.error('Ошибка при удалении заявки.', { autoClose: 1500, pauseOnHover: false, position: "top-center" });
+    }
+  };
 
   // Month change handler and validation
   const handleMonthChange = (event) => {
@@ -103,7 +112,7 @@ export default function Payment() {
     // Requests
     try {
       // Sending a POST request to create an payment
-      await axios.post('http://localhost:8000/api/v1/auth/payment', {
+      await axios.post('http://localhost:8000/api/v1/auth/payment/', {
         tarif_number: tarifTitleID,
         months: months,
         phone: kaspiNumber,
@@ -114,18 +123,20 @@ export default function Payment() {
         }
       });
       // Another get request to receive an already created payment
-      const response = await axios.get('http://localhost:8000/api/v1/auth/payment', {
+      const response = await axios.get('http://localhost:8000/api/v1/auth/payment/', {
         headers: {
           'Authorization': `Bearer ${userToken}`
         }
       });
+      setLoading(false);
       setIsSending(true)
       setTimeout(() => { setIsSending(false); }, 15000);
-      setTimeout(() => { setPayments(response.data); }, 1000);
+      setPayments(response.data)
     } catch (error) {
       setIsSending(true)
       setTimeout(() => { setIsSending(false); }, 15000);
       if (error.response.data && error.response.data[0] === 'Payment: limit error') {
+        setLoading(false);
         toast.error('Достигнут лимит заявок.', { autoClose: 2000, pauseOnHover: false, position: "top-center" });
         return;
       }
@@ -149,8 +160,7 @@ export default function Payment() {
       );
       // Set the flags
       setIsSending(true)
-      setIsLoading(true)
-      setTimeout(() => { setIsLoading(false); }, 1000);
+      toast.success('Заявка отправлена.', { autoClose: 2000, pauseOnHover: false, position: "top-center" });
       // Enable a delay for sending a new request after the current one has been successfully sent
       setTimeout(() => { setIsSending(false); }, 15000);
     } catch (error) {
@@ -185,187 +195,190 @@ export default function Payment() {
         setTarifTitleID(2);
     }
   };
+
   // HTML BLOCK 
   return (
-    <div className="col-10 col-sm-8 py-4 mx-auto">
-      {/* Darkened background and animation only during loading */}
-      {isLoading && (
-        <div className="overlay"></div>
+    <>
+      {loading && (
+        <div class="d-flex justify-content-center display-middle">
+          <div class="spinner-border text-warning" role="status">
+            <span class="visually-hidden">Loading...</span>
+          </div>
+        </div>
       )}
-      <div className="d-flex justify-content-center">
-        {isLoading && (
-          <div className="animation-container">
-            <img src={logo} alt="YAEM.KZ Logo" className="yaem-logo-animation" />
-          </div>
-        )}
-      </div>
-      <h1 className="ms-4 mb-4">Оплата <a href="//yaem.kz/partner" target="_blank"><span className="btn shadow-0 btn-outline-success btn-animate btn-sm px-1 my-1 mx-2"><i class="far fa-circle-question"></i> Подробнее</span></a></h1>
-      <div className="card-group justify-content-center">
-        {/* Bronze card handler and tab changer*/}
-        <div className={`card mx-auto cardStyle ${activeTarifTab === 'bronze' ? '' : 'btn-animate'}`}
-          style={{
-            boxShadow: activeTarifTab === 'bronze' ? '0 0 10px 3px rgb(253,112,20)' : '',
-            transform: activeTarifTab === 'bronze' ? 'scale(1.05)' : '',
-            zIndex: activeTarifTab === 'bronze' ? 1 : 0,
-            cursor: 'pointer',
-            maxWidth: '300px'
-          }}
-          onClick={() => handleTarifTabChange('bronze')}>
-          <div className="card-body px-3">
-            <h5 className="card-title text-center">Бронза</h5>
-            <p className="fw-bold fs-5 my-0 text-center mb-3" style={{ color: '#fd7014' }}>10 000 ₸/мес </p>
-            <small className="card-text d-block"><i className="fas fa-check text-success"></i> Онлайн меню</small>
-            <small className="card-text d-block"><i className="fas fa-check text-success"></i> Базоый QR код</small>
-            <small className="card-text d-block"><i className="fas fa-check text-success"></i> Тех. поддержка</small>
-          </div>
-        </div>
-
-        {/* Silver card handler and tab changer */}
-        <div className={`card mx-auto cardStyle2 ${activeTarifTab === 'silver' ? '' : 'btn-animate'}`}
-          style={{
-            boxShadow: activeTarifTab === 'silver' ? '0 0 10px 3px rgb(253,112,20)' : '',
-            transform: activeTarifTab === 'silver' ? 'scale(1.05)' : '',
-            zIndex: activeTarifTab === 'silver' ? 1 : 0,
-            cursor: 'pointer',
-            maxWidth: '300px',
-            position: 'relative'
-          }}
-          onClick={() => handleTarifTabChange('silver')}>
-          <div className="card-body px-3">
-            <h5 className="card-title text-center">Серебро</h5>
-            <div style={{ position: 'absolute', top: '0', right: '0', backgroundColor: 'red', color: '#fff', padding: '5px 10px', borderRadius: '5px 0 0 0' }}>
-              <i className="fab fa-hotjar"></i>
-            </div>
-            <del className="text-center" style={{ color: '#fd7014' }}><p className="fw-bold fs-6 my-0" >15 000 ₸/мес </p></del>
-            <p className="fw-bold fs-5 my-0 text-center mb-3" style={{ color: '#fd7014' }}>13 000 ₸/мес <span className="fs-6">(-15 %)</span></p>
-            <small className="card-text d-block"><i className="fas fa-check text-success"></i> Онлайн меню с фото блюд</small>
-            <small className="card-text d-block"><i className="fas fa-check text-success"></i> Меню на 3х языках</small>
-            <small className="card-text d-block"><i className="fas fa-check text-success"></i> Продвинутый QR код</small>
-            <small className="card-text d-block"><i className="fas fa-check text-success"></i> Акции и метки</small>
-            <small className="card-text d-block"><i className="fas fa-check text-success"></i> Самовывоз / Доставка </small>
-            <small className="card-text d-block"><i className="fas fa-check text-success"></i> Блок с реквизитами</small>
-            <small className="card-text d-block"><i className="fas fa-check text-success"></i> Тех. поддержка</small>
-          </div>
-        </div>
-
-        {/* Gold card handler and tab changer */}
-        <div className={`card mx-auto cardStyle3 ${activeTarifTab === 'gold' ? '' : 'btn-animate'}`}
-          style={{
-            boxShadow: activeTarifTab === 'gold' ? '0 0 10px 3px rgb(253,112,20)' : '',
-            transform: activeTarifTab === 'gold' ? 'scale(1.05)' : '',
-            zIndex: activeTarifTab === 'gold' ? 1 : 0,
-            cursor: 'pointer',
-            maxWidth: '300px'
-          }}
-          onClick={() => handleTarifTabChange('gold')}>
-          <div className="card-body px-2">
-            <h5 className="card-title text-center">Золото</h5>
-            <p className="fw-bold fs-5 my-0 text-center mb-3" style={{ color: '#fd7014' }}>30 000 ₸/мес </p>
-            <small className="card-text d-block"><i className="fas fa-check text-success"></i> Тариф Серебро</small>
-            <small className="card-text d-block"><i className="fas fa-check text-success"></i> Проффессиональный QR код</small>
-            <small className="card-text d-block"><i className="fas fa-check text-success"></i> Эксклюзивный дизайн меню</small>
-            <small className="card-text d-block"><i className="fas fa-check text-success"></i> Онлайн оплата</small>
-            <small className="card-text d-block"><i className="fas fa-check text-success"></i> Аналитика Google, Yandex </small>
-            <small className="card-text d-block"><i className="fas fa-check text-success"></i> Заказы из зала iiko/WhatsApp</small>
-          </div>
-        </div>
-      </div>
-
-      {/* Handle month change if active tab 'GOLD', temporaly show this block */}
-      {activeTarifTab === 'gold' ? (
-        <div className="container my-5">
-          <p className="text-center fs-5 fw-bold">К сожалению, на данный тариф не осталось доступных мест</p>
-        </div>
-      ) : (
-        <div className="container" style={{ maxWidth: '300px' }}>
-          {/* Get tarif title */}
-          <h5 className="my-4">Купить тариф {tarifTitle}</h5>
-          {/* Month input */}
-          <MDBInput
-            type="number"
-            label="Количество месяцев"
-            min={1}
-            max={12}
-            value={months}
-            onChange={handleMonthChange}
-          />
-          {/* Kaspi number input */}
-          <MDBInput
-            type="tel"
-            className="form-control mt-3"
-            label="Номер Kaspi"
-            max={15}
-            value={kaspiNumber}
-            onChange={handleKaspiNumberChange}
-          />
-          <small className="fst-italic text-secondary"> <i className="fas fa-tag"></i> При оплате за 12 месяцев 2 месяца в подарок (скидка 20%)</small>
-          <div className="d-flex justify-content-between mt-3" style={{ maxWidth: '300px' }}>
-            {/* Get tarif price */}
-            <small>Сумма</small>
-            <small> {(tarifPrice * months).toLocaleString()} ₸</small>
-          </div>
-          {/* if month > 12, get discount and show this block */}
-          {isDiscountApplicable && (
-            <div>
-              <div className="d-flex justify-content-between" style={{ maxWidth: '300px' }}>
-                {/* Get discounded price */}
-                <small>Скидка (20%)</small>
-                <small> -{(tarifPrice * months * 0.2).toLocaleString()} ₸</small>
+      {!loading && (
+        <div className="col-10 col-sm-8 py-4 mx-auto">
+          <h1 className="ms-4 mb-4">Оплата <a href="//yaem.kz/partner" target="_blank"><span className="btn shadow-0 btn-outline-success btn-animate btn-sm px-1 my-1 mx-2"><i class="far fa-circle-question"></i> Подробнее</span></a></h1>
+          <div className="card-group justify-content-center">
+            {/* Bronze card handler and tab changer*/}
+            <div className={`card mx-auto cardStyle ${activeTarifTab === 'bronze' ? '' : 'btn-animate'}`}
+              style={{
+                boxShadow: activeTarifTab === 'bronze' ? '0 0 10px 3px rgb(253,112,20)' : '',
+                transform: activeTarifTab === 'bronze' ? 'scale(1.05)' : '',
+                zIndex: activeTarifTab === 'bronze' ? 1 : 0,
+                cursor: 'pointer',
+                maxWidth: '300px'
+              }}
+              onClick={() => handleTarifTabChange('bronze')}>
+              <div className="card-body px-3">
+                <h5 className="card-title text-center">Бронза</h5>
+                <p className="fw-bold fs-5 my-0 text-center mb-3" style={{ color: '#fd7014' }}>10 000 ₸/мес </p>
+                <small className="card-text d-block"><i className="fas fa-check text-success"></i> Онлайн меню</small>
+                <small className="card-text d-block"><i className="fas fa-check text-success"></i> Базоый QR код</small>
+                <small className="card-text d-block"><i className="fas fa-check text-success"></i> Тех. поддержка</small>
               </div>
             </div>
-          )}
-          <hr style={{ maxWidth: '300px' }} />
-          {/* Get total price */}
-          <div className="d-flex justify-content-between fw-bold" style={{ maxWidth: '300px', color: '#fd7014' }}>
-            <p>Итого</p>
-            <p> {calculateTotalPrice().toLocaleString()} ₸</p>
-          </div>
-          {/* Send message in telegram bot */}
-          <div className="col-10 col-sm-8 py-2">
-            {/* if the application has been successfully sent, turn off the button */}
-            <button className='btn btn-danger btn-animate'
-              disabled={isSending}
-              style={{ minWidth: '250px' }}
-              onClick={handlePaymentClick}
-            >
-              Выставить счёт на Kaspi
-            </button>
+            {/* Silver card handler and tab changer */}
+            <div className={`card mx-auto cardStyle2 ${activeTarifTab === 'silver' ? '' : 'btn-animate'}`}
+              style={{
+                boxShadow: activeTarifTab === 'silver' ? '0 0 10px 3px rgb(253,112,20)' : '',
+                transform: activeTarifTab === 'silver' ? 'scale(1.05)' : '',
+                zIndex: activeTarifTab === 'silver' ? 1 : 0,
+                cursor: 'pointer',
+                maxWidth: '300px',
+                position: 'relative'
+              }}
+              onClick={() => handleTarifTabChange('silver')}>
+              <div className="card-body px-3">
+                <h5 className="card-title text-center">Серебро</h5>
+                <div style={{ position: 'absolute', top: '0', right: '0', backgroundColor: 'red', color: '#fff', padding: '5px 10px', borderRadius: '5px 0 0 0' }}>
+                  <i className="fab fa-hotjar"></i>
+                </div>
+                <del className="text-center" style={{ color: '#fd7014' }}><p className="fw-bold fs-6 my-0" >15 000 ₸/мес </p></del>
+                <p className="fw-bold fs-5 my-0 text-center mb-3" style={{ color: '#fd7014' }}>13 000 ₸/мес <span className="fs-6">(-15 %)</span></p>
+                <small className="card-text d-block"><i className="fas fa-check text-success"></i> Онлайн меню с фото блюд</small>
+                <small className="card-text d-block"><i className="fas fa-check text-success"></i> Меню на 3х языках</small>
+                <small className="card-text d-block"><i className="fas fa-check text-success"></i> Продвинутый QR код</small>
+                <small className="card-text d-block"><i className="fas fa-check text-success"></i> Акции и метки</small>
+                <small className="card-text d-block"><i className="fas fa-check text-success"></i> Самовывоз / Доставка </small>
+                <small className="card-text d-block"><i className="fas fa-check text-success"></i> Блок с реквизитами</small>
+                <small className="card-text d-block"><i className="fas fa-check text-success"></i> Тех. поддержка</small>
+              </div>
+            </div>
+
+            {/* Gold card handler and tab changer */}
+            <div className={`card mx-auto cardStyle3 ${activeTarifTab === 'gold' ? '' : 'btn-animate'}`}
+              style={{
+                boxShadow: activeTarifTab === 'gold' ? '0 0 10px 3px rgb(253,112,20)' : '',
+                transform: activeTarifTab === 'gold' ? 'scale(1.05)' : '',
+                zIndex: activeTarifTab === 'gold' ? 1 : 0,
+                cursor: 'pointer',
+                maxWidth: '300px'
+              }}
+              onClick={() => handleTarifTabChange('gold')}>
+              <div className="card-body px-2">
+                <h5 className="card-title text-center">Золото</h5>
+                <p className="fw-bold fs-5 my-0 text-center mb-3" style={{ color: '#fd7014' }}>30 000 ₸/мес </p>
+                <small className="card-text d-block"><i className="fas fa-check text-success"></i> Тариф Серебро</small>
+                <small className="card-text d-block"><i className="fas fa-check text-success"></i> Проффессиональный QR код</small>
+                <small className="card-text d-block"><i className="fas fa-check text-success"></i> Эксклюзивный дизайн меню</small>
+                <small className="card-text d-block"><i className="fas fa-check text-success"></i> Онлайн оплата</small>
+                <small className="card-text d-block"><i className="fas fa-check text-success"></i> Аналитика Google, Yandex </small>
+                <small className="card-text d-block"><i className="fas fa-check text-success"></i> Заказы из зала iiko/WhatsApp</small>
+              </div>
+            </div>
           </div>
 
+          {/* Handle month change if active tab 'GOLD', temporaly show this block */}
+          {activeTarifTab === 'gold' ? (
+            <div className="container my-5">
+              <p className="text-center fs-5 fw-bold">К сожалению, на данный тариф не осталось доступных мест</p>
+            </div>
+          ) : (
+            <div className="container" style={{ maxWidth: '300px' }}>
+              {/* Get tarif title */}
+              <h5 className="my-4">Купить тариф {tarifTitle}</h5>
+              {/* Month input */}
+              <MDBInput
+                type="number"
+                label="Количество месяцев"
+                min={1}
+                max={12}
+                value={months}
+                onChange={handleMonthChange}
+              />
+              {/* Kaspi number input */}
+              <MDBInput
+                type="tel"
+                className="form-control mt-3"
+                label="Номер Kaspi"
+                max={15}
+                value={kaspiNumber}
+                onChange={handleKaspiNumberChange}
+              />
+              <small className="fst-italic text-secondary"> <i className="fas fa-tag"></i> При оплате за 12 месяцев 2 месяца в подарок (скидка 20%)</small>
+              <div className="d-flex justify-content-between mt-3" style={{ maxWidth: '300px' }}>
+                {/* Get tarif price */}
+                <small>Сумма</small>
+                <small> {(tarifPrice * months).toLocaleString()} ₸</small>
+              </div>
+              {/* if month > 12, get discount and show this block */}
+              {isDiscountApplicable && (
+                <div>
+                  <div className="d-flex justify-content-between" style={{ maxWidth: '300px' }}>
+                    {/* Get discounded price */}
+                    <small>Скидка (20%)</small>
+                    <small> -{(tarifPrice * months * 0.2).toLocaleString()} ₸</small>
+                  </div>
+                </div>
+              )}
+              <hr style={{ maxWidth: '300px' }} />
+              {/* Get total price */}
+              <div className="d-flex justify-content-between fw-bold" style={{ maxWidth: '300px', color: '#fd7014' }}>
+                <p>Итого</p>
+                <p> {calculateTotalPrice().toLocaleString()} ₸</p>
+              </div>
+              {/* Send message in telegram bot */}
+              <div className="col-10 col-sm-8 py-2">
+                {/* if the application has been successfully sent, turn off the button */}
+                <button className='btn btn-danger btn-animate'
+                  disabled={isSending}
+                  style={{ minWidth: '250px' }}
+                  onClick={handlePaymentClick}
+                >
+                  Выставить счёт на Kaspi
+                </button>
+              </div>
+
+            </div>
+          )}
+          {/* Payment table handler */}
+          {activeTarifTab !== 'gold' && payments.length > 0 && (
+            <MDBTable responsive hover small align='middle'>
+              <MDBTableHead>
+                <tr>
+                  <th scope='col'>ID #</th>
+                  <th scope='col'>Тариф</th>
+                  <th scope='col'>Кол-во месяцев</th>
+                  <th scope='col'>Kaspi номер</th>
+                  <th scope='col'>Дата</th>
+                  <th scope='col'>Статус</th>
+                </tr>
+              </MDBTableHead>
+              <MDBTableBody>
+                {payments.map(payment => (
+                  <tr key={payment.id}>
+                    <td className='fw-bold'>{payment.id}</td>
+                    <td>{payment.tarif_number === 1 ? 'БРОНЗА' : (payment.tarif_number === 2 ? 'СЕРЕБРО' : 'ЗОЛОТО')}</td>
+                    <td>{payment.months}</td>
+                    <td>{payment.phone}</td>
+                    <td>{payment.created_at}</td>
+                    <td>
+                      <MDBBadge color={payment.status === 'INPROCESSING' ? 'secondary' : (payment.status === 'PAID' ? 'success' : 'danger')} pill>
+                        {payment.status}
+                      </MDBBadge>
+                    </td>
+                    <td>
+                      <button className="btn btn-danger btn-sm" onClick={() => handleDeletePayment(payment.id)}>Удалить</button>
+                    </td>
+                  </tr>
+                ))}
+              </MDBTableBody>
+            </MDBTable>
+          )}
         </div>
       )}
-      {/* Payment table handler */}
-      {activeTarifTab !== 'gold' && payments.length > 0 && (
-        <MDBTable responsive hover small align='middle'>
-          <MDBTableHead>
-            <tr>
-              <th scope='col'>ID #</th>
-              <th scope='col'>Тариф</th>
-              <th scope='col'>Кол-во месяцев</th>
-              <th scope='col'>Kaspi номер</th>
-              <th scope='col'>Дата</th>
-              <th scope='col'>Статус</th>
-            </tr>
-          </MDBTableHead>
-          <MDBTableBody>
-            {payments.map(payment => (
-              <tr key={payment.id}>
-                <td className='fw-bold'>{payment.id}</td>
-                <td>{payment.tarif_number === 1 ? 'БРОНЗА' : (payment.tarif_number === 2 ? 'СЕРЕБРО' : 'ЗОЛОТО')}</td>
-                <td>{payment.months}</td>
-                <td>{payment.phone}</td>
-                <td>{payment.created_at}</td>
-                <td>
-                  <MDBBadge color={payment.status === 'INPROCESSING' ? 'secondary' : (payment.status === 'PAID' ? 'success' : 'danger')} pill>
-                    {payment.status}
-                  </MDBBadge>
-                </td>
-              </tr>
-            ))}
-          </MDBTableBody>
-        </MDBTable>
-      )}
-    </div>
+    </>
   );
 }
 

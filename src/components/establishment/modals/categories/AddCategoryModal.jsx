@@ -31,19 +31,19 @@ function AddCategoryModal({ open, setOpen, establishmentId, updateCategories }) 
         } catch (error) {
             if (error.response && error.response.data) {
                 if (error.response.data.name && error.response.data.name[0] === 'Убедитесь, что это значение содержит не более 30 символов.') {
-                    toast.error('30 символов макс', { autoClose: 2000, pauseOnHover: false, position: "top-center" });
+                    toast.error('Название категории не может содержать более 30 символов', { autoClose: 2000, pauseOnHover: false, position: "top-center" });
                 }
-                if (error.response.data.name && error.response.data.name[0] === 'The name can only contain letters (Russian and English)') {
-                    toast.error('рус англ буквы', { autoClose: 2000, pauseOnHover: false, position: "top-center" });
+                if (error.response.data.name && error.response.data.name[0] === 'Category: only ru/en/num characters') {
+                    toast.error('Допустимы только рус англ буквы цифры', { autoClose: 2000, pauseOnHover: false, position: "top-center" });
                 }
             }
         } finally {
-            setIsSaving(false); // Включить кнопку "Сохранить"
+            setIsSaving(false);
         }
     };
 
     const handleCloseModal = () => {
-        setCategoryName(''); // Сбросить значение categoryName при закрытии модального окна
+        setCategoryName('');
         setOpen(false);
     };
 

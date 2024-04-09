@@ -35,10 +35,10 @@ function EditSubcategoryModal({ open, setOpen, subcategoryId, subcategoryName, u
             toast.success('Категория успешно обновлена.', { autoClose: 2000, pauseOnHover: false, position: "top-center" });
         } catch (error) {
             if (error.response && error.response.data) {
-                if (error.response.data.name && error.response.data.name[0] === 'Убедитесь, что это значение содержит не более 30 символов.') {
-                    toast.error('30 символов макс', { autoClose: 2000, pauseOnHover: false, position: "top-center" });
+                if (error.response.data.name && error.response.data.name[0] === 'Убедитесь, что это значение содержит не более 50 символов.') {
+                    toast.error('50 символов макс', { autoClose: 2000, pauseOnHover: false, position: "top-center" });
                 }
-                if (error.response.data.name && error.response.data.name[0] === 'The name can only contain letters (Russian and English)') {
+                if (error.response.data.name && error.response.data.name[0] === 'Subcategory: only ru/en/num characters') {
                     toast.error('рус англ буквы', { autoClose: 2000, pauseOnHover: false, position: "top-center" });
                 }
             }

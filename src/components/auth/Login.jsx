@@ -13,7 +13,6 @@ export default function Login() {
     const [phone, setPhone] = useState('');
     const [password, setPassword] = useState('');
     const [isSaveButtonClicked, setIsSaveButtonClicked] = useState(false);
-    const [isLoading, setIsLoading] = useState(true);
     const phoneNumberPattern = /^(\+7|8)\d{10}$/;
     const navigate = useNavigate();
 
@@ -61,27 +60,11 @@ export default function Login() {
             }
         }
     };
-    // Adding a mask display when loading a component
-    useEffect(() => {
-        const timeout = setTimeout(() => { setIsLoading(false); }, 1000);
-        return () => clearTimeout(timeout);
-    }, []);
 
     // BLOCK HTML
     return (
         <main>
             <div className="container-fluid background">
-                {/* Darkened background and animation only during loading */}
-                {isLoading && (
-                    <div className="overlay"></div>
-                )}
-                <div className="d-flex justify-content-center">
-                    {isLoading && (
-                        <div className="animation-container">
-                            <img src={logo} alt="YAEM.KZ Logo" className="yaem-logo-animation" />
-                        </div>
-                    )}
-                </div>
                 <section className="section register min-vh-100 d-flex flex-column align-items-center justify-content-center py-4">
                     <div className="container">
                         <div className="row justify-content-center">

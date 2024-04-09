@@ -13,7 +13,6 @@ function Registration() {
     const [phone, setPhone] = useState('');
     const [password, setPassword] = useState('');
     const [isSaveButtonClicked, setIsSaveButtonClicked] = useState(false);
-    const [isLoading, setIsLoading] = useState(true);
     const phoneNumberPattern = /^(\+7|8)\d{10}$/;
     const navigate = useNavigate();
 
@@ -40,15 +39,17 @@ function Registration() {
                 phone_number: phone,
                 password: password,
             });
+            // Mesaage
+            toast.success('Аккаунт создан.', { autoClose: 1000, pauseOnHover: false, position: "top-center" });
             // Redirect user to login page
-            navigate('/login');
+            setTimeout(() => { navigate('/login'); }, 1500)
         } catch (error) {
             // Handle error when server is unavailable
             if (!error.response) {
                 toast.error('Технические неполадки. Пожалуйста, попробуйте позже.', { autoClose: 2000, pauseOnHover: false, position: "top-center" });
             }
             // Check if phone is exists
-            if (error.response.data.phone_number && error.response.data.phone_number[0] === 'Пользователь с таким Номер телефона уже существует.') {
+            if (error.response.data.phone_number && error.response.data.phone_number[0] === 'This phone number is already registered.') {
                 toast.error('Номер телефона уже существует.', { autoClose: 2000, pauseOnHover: false, position: "top-center" });
             }
             // Check is number format correct
@@ -66,26 +67,10 @@ function Registration() {
 
         }
     };
-    // Adding a mask display when loading a component
-    useEffect(() => {
-        const timeout = setTimeout(() => { setIsLoading(false); }, 1000);
-        return () => clearTimeout(timeout);
-    }, []);
 
     return (
         <main>
             <div className="container-fluid background">
-                {/* Darkened background and animation only during loading */}
-                {isLoading && (
-                    <div className="overlay"></div>
-                )}
-                <div className="d-flex justify-content-center">
-                    {isLoading && (
-                        <div className="animation-container">
-                            <img src={logo} alt="YAEM.KZ Logo" className="yaem-logo-animation" />
-                        </div>
-                    )}
-                </div>
                 <section className="section register min-vh-100 d-flex flex-column align-items-center justify-content-center py-4">
                     <div className="container">
                         <div className="row justify-content-center">

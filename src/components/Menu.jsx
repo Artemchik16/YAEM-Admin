@@ -1,12 +1,9 @@
-// Import react
 import React, { useState, useEffect } from 'react';
-// Images import
 import favicon from '../assets/images/favicon.png';
 import logo from '../assets/images/logo.png';
-// Import react-toastify
+import logoMask from '../assets/images/favicon.png';
 import { ToastContainer, toast } from 'react-toastify';
 import 'react-toastify/dist/ReactToastify.css';
-// Components import
 import Profile from './auth/Profile.jsx';
 import Establishments from './establishment/Establishments.jsx';
 import Payment from './payment/Payment.jsx';
@@ -14,15 +11,28 @@ import Logout from './auth/Logout.jsx';
 
 function Main() {
 
+  const [isLoading, setIsLoading] = useState(false);
   // Set active tab, default to 'establishments' tab
   const [activeTab, setActiveTab] = useState('establishments');
   // Tab change handler
-  const handleTabChange = (tab) => {
-    setActiveTab(tab);
-  };
-
+  const handleTabChange = (tab) => { setActiveTab(tab); };
   // Messages block, enumerating all keys in a session
   const [sessionMessages, setSessionMessages] = useState({});
+
+  // Adding a mask display when loading a component
+  useEffect(() => {
+    setIsLoading(true)
+    const timeout = setTimeout(() => { setIsLoading(false); }, 1600);
+    return () => clearTimeout(timeout);
+  }, []);
+
+  useEffect(() => {
+    if (!isLoading) {
+      setTimeout(() => {
+        document.querySelector('.overlay').classList.add('fade-out');
+      }, 700);
+    }
+  }, [isLoading]);
 
   // get messages from sessionStorage
   useEffect(() => {
@@ -35,7 +45,7 @@ function Main() {
     Object.keys(sessionMessages).forEach((key) => {
       // If session key include Success
       if (key.includes('Success')) {
-        toast.success(sessionMessages[key], { autoClose: 2000, pauseOnHover: false, position: "top-center" });
+        setTimeout(() => { toast.success(sessionMessages[key], { autoClose: 2000, pauseOnHover: false, position: "top-center" }); }, 1200)
         sessionStorage.removeItem(key);
       }
       // If session key include Error
@@ -48,6 +58,17 @@ function Main() {
 
   return (
     <div className="section">
+      {/* Darkened background and animation only during loading */}
+      {isLoading && (
+        <div className="overlay"></div>
+      )}
+      <div className="d-flex justify-content-center">
+        {isLoading && (
+          <div className="animation-container">
+            <img src={logoMask} alt="YAEM.KZ Logo" className="yaem-logo-animation" />
+          </div>
+        )}
+      </div>
       <div className="container-fluid">
         <div className="row">
           {/* Sidebar menu */}
@@ -119,7 +140,7 @@ function Main() {
                   </div>
                 </a>
                 <div className="credits user-select-none text-center my-3 d-none d-sm-block">
-                     <a className="text-dark">Copyright © 2023-2024 <span className="yaem-color fw-bold">YAEM.KZ</span> Kazakhstan <i class="flag flag-kazakhstan"></i></a>
+                  <a className="text-dark">Copyright © 2023-2024 <span className="yaem-color fw-bold">YAEM.KZ</span> Kazakhstan <i class="flag flag-kazakhstan"></i></a>
                 </div>
               </div>
             </div>

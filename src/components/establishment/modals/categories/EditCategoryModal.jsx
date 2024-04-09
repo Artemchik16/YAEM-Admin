@@ -36,18 +36,15 @@ function EditCategoryModal({ open, setOpen, categoryId, categoryName, updateCate
                 if (error.response.data.name && error.response.data.name[0] === 'Убедитесь, что это значение содержит не более 30 символов.') {
                     toast.error('30 символов макс', { autoClose: 2000, pauseOnHover: false, position: "top-center" });
                 }
-                if (error.response.data.name && error.response.data.name[0] === 'The name can only contain letters (Russian and English)') {
-                    toast.error('рус англ буквы', { autoClose: 2000, pauseOnHover: false, position: "top-center" });
+                if (error.response.data.name && error.response.data.name[0] === 'Category: only ru/en/num characters') {
+                    toast.error('рус англ цифры буквы', { autoClose: 2000, pauseOnHover: false, position: "top-center" });
                 }
             }
-        } finally {
-            setIsSaving(false);
-            setOpen(false);
         }
     };
 
     const handleCloseModal = () => {
-        setEditedCategoryName(''); // Сбросить значение editedCategoryName при закрытии модального окна
+        setEditedCategoryName('');
         setOpen(false);
     };
 

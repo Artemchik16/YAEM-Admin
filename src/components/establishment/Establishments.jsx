@@ -3,7 +3,6 @@ import Categories from './Categories.jsx';
 import { toast } from 'react-toastify';
 import 'react-toastify/dist/ReactToastify.css';
 import axios from "axios";
-import logo from '../../assets/images/favicon.png';
 import CreateEstablishmentForm from './forms/CreateEstablishmentForm.jsx';
 import EditEstablishmentForm from './forms/EditEstablishmentForm.jsx';
 import EstablishmentCard from './EstablishmentCard.jsx';
@@ -12,7 +11,7 @@ import EstablishmentCard from './EstablishmentCard.jsx';
 // base parent component, include CreateEstablishmentForm, EditEstablishmentForm, EstablishmentCard
 function Establishment() {
 
-  const [isLoading, setIsLoading] = useState(false);
+  const [loading, setLoading] = useState(true);
   const [editingEstablishmentId, setEditingEstablishmentId] = useState(null);
   const [showEstablishments, setShowEstablishments] = useState(true);
   const [editingDishId, setEditingDishId] = useState(null);
@@ -20,14 +19,6 @@ function Establishment() {
   const handleCreateFormIsOpen = () => { setShowCreateForm(true); };
   const handleCreateFormIsClose = () => { setShowCreateForm(false); };
   const [establishments, setEstablishments] = useState([]);
-  
-
-  // Adding a mask display when loading a component
-  useEffect(() => {
-    setIsLoading(true)
-    const timeout = setTimeout(() => { setIsLoading(false); }, 1000);
-    return () => clearTimeout(timeout);
-  }, []);
 
   // send get request on backend
   useEffect(() => {
@@ -46,7 +37,9 @@ function Establishment() {
         const data = response.data;
         // Set establishments state
         setEstablishments(data);
+        setTimeout(() => { setLoading(false); }, 200)
       } catch (error) {
+        setLoading(false)
         // Handle error
         toast.error('Ошибка при получении списка заведений', { autoClose: 2000 });
       }
@@ -80,60 +73,58 @@ function Establishment() {
 
   return (
     <>
-      <div className="col-10 col-sm-9 py-4 mx-auto">
-        {/* Darkened background and animation only during loading */}
-        {isLoading && (
-          <div className="overlay"></div>
-        )}
-        <div className="d-flex justify-content-center">
-          {isLoading && (
-            <div className="animation-container">
-              <img src={logo} alt="YAEM.KZ Logo" className="yaem-logo-animation" />
+      {loading && (
+        <div class="d-flex justify-content-center display-middle">
+          <div class="spinner-border text-warning" role="status">
+            <span class="visually-hidden">Loading...</span>
+          </div>
+        </div>
+      )}
+      {!loading && (
+        <div className="col-10 col-sm-9 py-4 mx-auto">
+          {/*  */}
+          {showEstablishments && !showCreateForm && (
+            <div className="container px-0">
+              <h1 className="ms-4 mb-3">Заведения
+                <span>
+                  <div className="btn shadow-0 btn-outline-success btn-animate px-3 my-1 mx-2" onClick={handleCreateFormIsOpen}>
+                    <i className="far fa-square-plus me-2"></i>
+                    Добавить заведение
+                  </div>
+                </span>
+              </h1>
+              {/* If user have not any establishments */}
+              {establishments.length === 0 && (
+                <>
+                  <p>Здесь будет отображен список ваших заведений.</p>
+                  {/* <p>Чтобы добавить заведение, нажмите кнопку "Добавить заведение".</p> */}
+                  <hr />
+                </>
+              )}
+              {/* If user have any establishments*/}
+              {establishments.length > 0 && (
+                <>
+                  {/* Render EstablishmentCard component and send establishments data list in this component and edit handler, dish handler, update handler*/}
+                  <EstablishmentCard establishments={establishments} onEdit={handleEditEstablishment} onEditDishes={handleEditDishes} updateEstablishments={setEstablishments} />
+                </>
+              )}
             </div>
           )}
-        </div>
-        {/*  */}
-        {showEstablishments && !showCreateForm && (
-          <div className="container px-0">
-            <h1 className="ms-4 mb-3">Заведения
-              <span>
-                <div className="btn shadow-0 btn-outline-success btn-animate px-3 my-1 mx-2" onClick={handleCreateFormIsOpen}>
-                  <i className="far fa-square-plus me-2"></i>
-                  Добавить заведение
-                </div>
-              </span>
-            </h1>
-            {/* If user have not any establishments */}
-            {establishments.length === 0 && (
-              <>
-                <p>Здесь будет отображен список ваших заведений.</p>
-                {/* <p>Чтобы добавить заведение, нажмите кнопку "Добавить заведение".</p> */}
-                <hr />
-              </>
-            )}
-            {/* If user have any establishments*/}
-            {establishments.length > 0 && (
-              <>
-                {/* Render EstablishmentCard component and send establishments data list in this component and edit handler, dish handler, update handler*/}
-                <EstablishmentCard establishments={establishments} onEdit={handleEditEstablishment} onEditDishes={handleEditDishes} updateEstablishments={setEstablishments} />
-              </>
-            )}
-          </div>
-        )}
 
-        {/* if user clicked on 'Добавить заведение' button, show CreateEstablishmentForm component and close handler, and update state */}
-        {showCreateForm && (
-          <CreateEstablishmentForm onClose={handleCreateFormIsClose} updateEstablishments={setEstablishments} />
-        )}
-        {/* If editingEstablishmentId is set, render EditEstablishmentForm component, send establishmentId and close handler, and update state */}
-        {editingEstablishmentId && (
-          <EditEstablishmentForm establishmentId={editingEstablishmentId} onFinishEditing={handleFinishEditing} updateEstablishments={setEstablishments} />
-        )}
-        {/* If editingDishId is set, render Dishes component, send establishmentId and close handler */}
-        {editingDishId && (
-          <Categories establishmentId={editingDishId} onFinishDish={handleFinishEditingDishes} />
-        )}
-      </div>
+          {/* if user clicked on 'Добавить заведение' button, show CreateEstablishmentForm component and close handler, and update state */}
+          {showCreateForm && (
+            <CreateEstablishmentForm onClose={handleCreateFormIsClose} updateEstablishments={setEstablishments}/>
+          )}
+          {/* If editingEstablishmentId is set, render EditEstablishmentForm component, send establishmentId and close handler, and update state */}
+          {editingEstablishmentId && (
+            <EditEstablishmentForm establishmentId={editingEstablishmentId} onFinishEditing={handleFinishEditing} updateEstablishments={setEstablishments} />
+          )}
+          {/* If editingDishId is set, render Dishes component, send establishmentId and close handler */}
+          {editingDishId && (
+            <Categories establishmentId={editingDishId} onFinishDish={handleFinishEditingDishes} />
+          )}
+        </div>
+      )}
     </>
   );
 }
