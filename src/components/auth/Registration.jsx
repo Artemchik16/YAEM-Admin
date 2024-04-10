@@ -12,7 +12,7 @@ function Registration() {
     // Set handlers and values
     const [phone, setPhone] = useState('');
     const [password, setPassword] = useState('');
-    const [isSaveButtonClicked, setIsSaveButtonClicked] = useState(false);
+    const [isRegisterButtonClicked, setIsRegisterButtonClicked] = useState(false);
     const phoneNumberPattern = /^(\+7|8)\d{10}$/;
     const navigate = useNavigate();
 
@@ -20,11 +20,12 @@ function Registration() {
     const handleRegistration = async (e) => {
         // Prevent default form behavior
         e.preventDefault();
+        const formattedPhone = formatPhoneNumber(phone);
         // Check is number format correct
         if (!phoneNumberPattern.test(phone)) {
             // Disabled save button button and set disabled time
-            setIsSaveButtonClicked(true)
-            setTimeout(() => { setIsSaveButtonClicked(false); }, 2000);
+            setIsRegisterButtonClicked(true)
+            setTimeout(() => { setIsRegisterButtonClicked(false); }, 2000);
             // Display message
             toast.error('Пожалуйста, укажите корректный номер.', { autoClose: 1300, pauseOnHover: false, position: "top-center" });
             return;
@@ -32,17 +33,32 @@ function Registration() {
         // Post request to backend and create user in DB
         try {
             // Disabled save button and set disabled time
-            setIsSaveButtonClicked(true)
-            setTimeout(() => { setIsSaveButtonClicked(false); }, 2200);
+            setIsRegisterButtonClicked(true)
+            setTimeout(() => { setIsRegisterButtonClicked(false); }, 2200);
             // Send request
             await axios.post('http://127.0.0.1:8000/api/v1/auth/create', {
                 phone_number: phone,
                 password: password,
             });
             // Mesaage
-            toast.success('Аккаунт создан. Вы можете войти в аккаунт', { autoClose: 1000, pauseOnHover: false, position: "top-center" });
+            toast.success('Аккаунт создан. Перенаправление.', { autoClose: 1000, pauseOnHover: false, position: "top-center" });
             // Redirect user to login page
-            setTimeout(() => { navigate('/login'); }, 1500)
+            // Send request and get response
+            const response = await axios.post('http://localhost:8000/api/v1/auth/jwt/create/', {
+                phone_number: formattedPhone,
+                password: password,
+            });
+            // Get tokens from response and save this in sessionStorage
+            const accessToken = response.data.access;
+            const refreshToken = response.data.refresh;
+            sessionStorage.setItem('accessToken', accessToken);
+            sessionStorage.setItem('refreshToken', refreshToken);
+            // Save success message in session storage, display on menu page
+            sessionStorage.setItem('IsLoginSuccess', 'Добро пожаловать.');
+            // Navigate to menu page and reload page and save tokens in sessionStorage
+            window.location.reload();
+            navigate('/menu');
+            // setTimeout(() => { navigate('/login'); }, 1500)
         } catch (error) {
             // Handle error when server is unavailable
             if (!error.response) {
@@ -64,8 +80,15 @@ function Registration() {
             if (error.response.data.password && error.response.data.password[0] === 'Введённый пароль слишком широко распространён.') {
                 toast.error('Введённый пароль слишком широко распространён.', { autoClose: 2000, pauseOnHover: false, position: "top-center" });
             }
-
         }
+    };
+
+    // Format phone
+    const formatPhoneNumber = (phoneNumber) => {
+        if (phoneNumber.startsWith('8')) {
+            return phoneNumber.replace('8', '+7');
+        }
+        return phoneNumber;
     };
 
     return (
@@ -114,7 +137,7 @@ function Registration() {
                                                 <button
                                                     className="btn btn-success w-100 btn-animate"
                                                     type="submit"
-                                                    disabled={isSaveButtonClicked}>
+                                                    disabled={isRegisterButtonClicked}>
                                                     Зарегистрироваться
                                                 </button>
                                             </div>

@@ -22,6 +22,7 @@ export default function Login() {
     const handleLogin = async (e) => {
         // Prevent default form behavior
         e.preventDefault();
+        const formattedPhone = formatPhoneNumber(phone);
         // Check is number format correct
         if (!phoneNumberPattern.test(phone)) {
             // Disabled save button button and set disabled time
@@ -38,7 +39,7 @@ export default function Login() {
             setTimeout(() => { setIsSaveButtonClicked(false); }, 2200);
             // Send request and get response
             const response = await axios.post('http://localhost:8000/api/v1/auth/jwt/create/', {
-                phone_number: phone,
+                phone_number: formattedPhone,
                 password: password,
             });
             // Get tokens from response and save this in sessionStorage
@@ -61,6 +62,13 @@ export default function Login() {
                 toast.error('Неверный номер телефона или пароль.', { autoClose: 1300, pauseOnHover: false, position: "top-center" });
             }
         }
+    };
+    // Format phone
+    const formatPhoneNumber = (phoneNumber) => {
+        if (phoneNumber.startsWith('8')) {
+            return phoneNumber.replace('8', '+7');
+        }
+        return phoneNumber;
     };
 
     // BLOCK HTML

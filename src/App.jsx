@@ -4,6 +4,9 @@ import './assets/styles/main.css'
 import Login from './components/auth/Login.jsx';
 import Registration from './components/auth//Registration.jsx';
 import Menu from './components/Menu.jsx';
+import NotFound from "./components/utils/404NotFound.jsx";
+import RobotsTxt from "./components/utils/RobotsTxt.jsx";
+import SitemapXml from "./components/utils/SitemapXml.jsx";
 
 
 export default function App() {
@@ -22,6 +25,12 @@ export default function App() {
         <Route path='/registration' element={isAuthenticated ? <Navigate to='/menu' /> : <Registration />} />
         {/* The menu page is only accessible to authenticated users */}
         <Route path='/menu' element={isAuthenticated ? <Menu /> : <Navigate to='/login' />} />
+        {/* Robots */}
+        <Route path='/robots.txt' element={<RobotsTxt />} />
+        {/* Sitemap */}
+        <Route path='/sitemap.xml' element={<SitemapXml />} />
+        {/* Not found component */}
+        <Route path='*' element={<NotFound />} />
       </Routes>
     </Router>
   );

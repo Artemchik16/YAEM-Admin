@@ -39,6 +39,10 @@ function Establishment() {
         setEstablishments(data);
         setTimeout(() => { setLoading(false); }, 200)
       } catch (error) {
+        if (error.response && error.response.status && error.response.status === 401) {
+            sessionStorage.clear();
+            window.location.reload();
+        }
         setLoading(false)
         // Handle error
         toast.error('Ошибка при получении списка заведений', { autoClose: 2000 });
@@ -74,9 +78,9 @@ function Establishment() {
   return (
     <>
       {loading && (
-        <div class="d-flex justify-content-center display-middle">
-          <div class="spinner-border text-warning" role="status">
-            <span class="visually-hidden">Loading...</span>
+        <div className="d-flex justify-content-center display-middle">
+          <div className="spinner-border text-warning" role="status">
+            <span className="visually-hidden">Loading...</span>
           </div>
         </div>
       )}

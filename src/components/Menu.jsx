@@ -23,6 +23,7 @@ function Main() {
   useEffect(() => {
     setIsLoading(true)
     const timeout = setTimeout(() => { setIsLoading(false); }, 1600);
+    setTimeout(() => { console.clear(); }, 5000);
     return () => clearTimeout(timeout);
   }, []);
 
@@ -76,7 +77,7 @@ function Main() {
             <div className='d-flex mb-auto flex-column sticky-top' style={{ minHeight: '100vh' }}>
               <img className="mx-auto my-4 text-center d-block d-sm-none btn-animate" onClick={() => window.location.reload()} style={{ maxHeight: '40px' }} src={favicon} alt="YAEM logo" />
               <img className="mx-auto my-4 text-center d-none d-sm-block btn-animate" onClick={() => window.location.reload()} draggable="false" style={{ maxHeight: '50px' }} src={logo} alt="YAEM logo" />
-              <hr className="my-0"/>
+              <hr className="my-0" />
               <ul className="list-group list-group-light my-3" style={{ '--mdb-list-group-light-active-bg': '#ff9753', '--mdb-list-group-light-active-color': 'black' }}>
                 {/* Profile tab */}
                 {/* Handle profile tab change */}
@@ -142,10 +143,10 @@ function Main() {
 
                 <a target="_blank" href="https://wa.me/77713581356?text=Опишите свою проблему: %0a
 ">
-                <div class="btn btn-warning btn-animate text-white btn-floating mt-1 mx-1">
-                    <i class="fas fa-screwdriver-wrench fa-2x text-dark"></i>
-                </div>
-            </a>
+                  <div className="btn btn-warning btn-animate text-white btn-floating mt-1 mx-1">
+                    <i className="fas fa-screwdriver-wrench fa-2x text-dark"></i>
+                  </div>
+                </a>
 
                 <div className="credits user-select-none text-center my-3 d-none d-sm-block">
                   <a className="text-dark">Copyright © 2023-2024 <span className="yaem-color fw-bold">YAEM.KZ</span> Kazakhstan <i class="flag flag-kazakhstan"></i></a>

@@ -1,14 +1,18 @@
-import React from "react";
+import { React, useState } from "react";
 import 'react-toastify/dist/ReactToastify.css';
 
 
 export default function Logout() {
+
+    const [isLogoutButtonClicked, setIsLogoutButtonClicked] = useState(false);
 
     // Logout handler
     const handleLogout = () => {
         // Remove tokens from sessionStorage and redirect to login page
         sessionStorage.removeItem('accessToken');
         sessionStorage.removeItem('refreshToken');
+        sessionStorage.clear();
+        setIsLogoutButtonClicked(true)
         window.location.href = '/login';
     };
 
@@ -20,7 +24,13 @@ export default function Logout() {
             <div className="d-flex justify-content-center">
             </div>
             {/* Handle logout button */}
-            <button className="btn btn-danger ms-4 btn-animate" onClick={handleLogout}>Да, Выйти</button>
+            <button
+                className="btn btn-danger ms-4 btn-animate"
+                onClick={handleLogout}
+                disabled={isLogoutButtonClicked}
+            >
+                Да, Выйти
+            </button>
         </div>
     );
 }

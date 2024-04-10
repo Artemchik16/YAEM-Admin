@@ -75,7 +75,7 @@ function EstablishmentCard({ establishments, onEdit, onEditDishes, updateEstabli
                                 <div className="container">
                                     {/* Render deletion confirmation message */}
                                     <p>Безвозвратно удалить заведение "{establishments[key].name}"?</p>
-                                    <div className="d-flex justify-content-center">
+                                    <div className="d-flex justify-content-center text-center">
                                         {/* Button to confirm deletion */}
                                         <button className="btn btn-sm btn-danger me-2" onClick={() => handleDeleteEstablishment(establishments[key].id, key)}>Да, удалить</button>
                                         {/* Button to cancel deletion */}
@@ -94,15 +94,49 @@ function EstablishmentCard({ establishments, onEdit, onEditDishes, updateEstabli
                                         <p className="my-3 fs-6">г.{establishments[key].city}</p>
                                     </h5>
                                     {/* <p className="card-text text-muted">{establishments[key].address}</p> */}
-{/*                                     <small className="card-text ms-3">{establishments[key].description}</small> */}
+                                    {/* <small className="card-text ms-3">{establishments[key].description}</small> */}
                                     {/* <img src={establishments[key].logo}/> */}
                                     <hr />
+                                    {/* badges */}
                                     <div className="note note-info mx-3">
-                                        <span class="badge badge-primary d-block">Пробный период</span>
-                                        <span class="badge badge-warning d-block">Тариф Бронза</span>
-                                        <span class="badge badge-light d-block">Тариф Серебро</span>
-                                        <span class="badge badge-danger d-block">Тариф не оплачен</span>
-                                        <p className="text-center fw-bold my-0"><small>Действует до 24/04/24</small></p>
+
+                                        {/* test */}
+                                        {/* <h6>{`${new Date()} / ${new Date(establishments[key].paid_at)}`}</h6> */}
+                                        {establishments[key].tarif_number === "ТЕСТ" && (
+                                            <>
+                                                {new Date() >= new Date(establishments[key].paid_at) ? (
+                                                    <span className="badge badge-danger d-block">Тариф не оплачен</span>
+                                                ) : (
+                                                    <span className="badge badge-danger d-block">Пробный период</span>
+                                                )}
+                                                <p className="text-center fw-bold my-0"><small>Действует до {new Date(establishments[key].paid_at).toLocaleDateString()}</small></p>
+                                            </>
+                                        )}
+
+                                        {/* bronze */}
+                                        {establishments[key].tarif_number === "БРОНЗА" && (
+                                            <>
+                                                {new Date() >= new Date(establishments[key].paid_at) ? (
+                                                    <span className="badge badge-danger d-block">Тариф не оплачен</span>
+                                                ) : (
+                                                    <span className="badge badge-danger d-block">{establishments[key].tarif_number}</span>
+                                                )}
+                                                <p className="text-center fw-bold my-0"><small>Действует до {new Date(establishments[key].paid_at).toLocaleDateString()}</small></p>
+                                            </>
+                                        )}
+
+                                        {/* silver */}
+                                        {establishments[key].tarif_number === "СЕРЕБРО" && (
+                                            <>
+                                                {new Date() >= new Date(establishments[key].paid_at) ? (
+                                                    <span className="badge badge-danger d-block">Тариф не оплачен</span>
+                                                ) : (
+                                                    <span className="badge badge-danger d-block">{establishments[key].tarif_number}</span>
+                                                )}
+                                                <p className="text-center fw-bold my-0"><small>Действует до {new Date(establishments[key].paid_at).toLocaleDateString()}</small></p>
+                                            </>
+                                        )}
+
                                     </div>
 
 
