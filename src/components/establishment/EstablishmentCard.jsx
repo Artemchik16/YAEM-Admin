@@ -72,9 +72,9 @@ function EstablishmentCard({ establishments, onEdit, onEditDishes, updateEstabli
                         <div className="card-body px-0 py-0">
                             {/* Check if deletion confirmation is active */}
                             {confirmDelete === key ? (
-                                <div className="container">
+                                <div className="container my-4">
                                     {/* Render deletion confirmation message */}
-                                    <p>Безвозвратно удалить заведение "{establishments[key].name}"?</p>
+                                    <p><strong>Безвозвратно</strong> удалить заведение и все вложения <strong>{establishments[key].name}</strong>?</p>
                                     <div className="d-flex justify-content-center text-center">
                                         {/* Button to confirm deletion */}
                                         <button className="btn btn-sm btn-danger me-2" onClick={() => handleDeleteEstablishment(establishments[key].id, key)}>Да, удалить</button>
@@ -107,9 +107,11 @@ function EstablishmentCard({ establishments, onEdit, onEditDishes, updateEstabli
                                                 {new Date() >= new Date(establishments[key].paid_at) ? (
                                                     <span className="badge badge-danger d-block">Тариф не оплачен</span>
                                                 ) : (
-                                                    <span className="badge badge-danger d-block">Пробный период</span>
+                                                    <>
+                                                    <span className="badge badge-success d-block">Пробный период</span>
+                                                    <p className="text-center fw-bold my-0"><small>Действует до {new Date(establishments[key].paid_at).toLocaleDateString()}</small></p>
+                                                    </>
                                                 )}
-                                                <p className="text-center fw-bold my-0"><small>Действует до {new Date(establishments[key].paid_at).toLocaleDateString()}</small></p>
                                             </>
                                         )}
 
@@ -119,7 +121,7 @@ function EstablishmentCard({ establishments, onEdit, onEditDishes, updateEstabli
                                                 {new Date() >= new Date(establishments[key].paid_at) ? (
                                                     <span className="badge badge-danger d-block">Тариф не оплачен</span>
                                                 ) : (
-                                                    <span className="badge badge-danger d-block">{establishments[key].tarif_number}</span>
+                                                    <span className="badge badge-warning d-block">{establishments[key].tarif_number}</span>
                                                 )}
                                                 <p className="text-center fw-bold my-0"><small>Действует до {new Date(establishments[key].paid_at).toLocaleDateString()}</small></p>
                                             </>
@@ -131,7 +133,7 @@ function EstablishmentCard({ establishments, onEdit, onEditDishes, updateEstabli
                                                 {new Date() >= new Date(establishments[key].paid_at) ? (
                                                     <span className="badge badge-danger d-block">Тариф не оплачен</span>
                                                 ) : (
-                                                    <span className="badge badge-danger d-block">{establishments[key].tarif_number}</span>
+                                                    <span className="badge badge-light d-block">{establishments[key].tarif_number}</span>
                                                 )}
                                                 <p className="text-center fw-bold my-0"><small>Действует до {new Date(establishments[key].paid_at).toLocaleDateString()}</small></p>
                                             </>
@@ -140,7 +142,7 @@ function EstablishmentCard({ establishments, onEdit, onEditDishes, updateEstabli
                                     </div>
 
 
-                                    <hr />
+
                                     <div className="d-flex flex-wrap justify-content-evenly text-center my-3">
                                         {/* Render action buttons */}
                                         {/* Button to open QR code */}

@@ -94,7 +94,7 @@ function Categories({ establishmentId, onFinishDish }) {
                                     onClick={() => handleCategoryClick(category)}
                                     style={{ '--mdb-btn-hover-bg': '#ff9753', '--mdb-btn-active-bg': '#ff9753' }}
                                 >
-                                    {category.name}|{category.z_index}
+                                    {category.name}
                                 </button>
                             </th>
                         ))}

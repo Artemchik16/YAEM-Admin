@@ -81,13 +81,14 @@ function AddSubcategoryModal({ open, setOpen, categoryId, updateSubcategories })
                             <MDBInput
                                 label='Наименование категории'
                                 type='text'
+                                placeholder="Супы"
                                 value={subcategoryName}
                                 onChange={(e) => setSubcategoryName(e.target.value)}
                             />
                             <MDBInput
                                 className="my-3"
                                 label='Порядок отображения'
-                                placeholder="1-2-3-4-5"
+                                placeholder="1-99"
                                 type='number'
                                 value={subcategoryZindex}
                                 onChange={(e) => setSubcategoryZindex(e.target.value)}
@@ -98,7 +99,6 @@ function AddSubcategoryModal({ open, setOpen, categoryId, updateSubcategories })
                             <MDBBtn color="success" onClick={handleAddSubcategory} disabled={isSaving || (!subcategoryName || !subcategoryZindex)}>Сохранить</MDBBtn>
                         </MDBModalFooter>
                     </form>
-                    <MDBBtn color='danger' onClick={handleCloseModal}>Закрыть</MDBBtn>
                 </MDBModalContent>
             </MDBModalDialog>
         </MDBModal>

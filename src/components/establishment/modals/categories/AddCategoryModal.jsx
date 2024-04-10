@@ -70,6 +70,7 @@ function AddCategoryModal({ open, setOpen, establishmentId, updateCategories, se
                             <MDBInput
                                 label='Наименование категории'
                                 type='text'
+                                placeholder="Завтраки"
                                 value={categoryName}
                                 onChange={(e) => setCategoryName(e.target.value)}
 
@@ -77,7 +78,7 @@ function AddCategoryModal({ open, setOpen, establishmentId, updateCategories, se
                             <MDBInput
                                 className="my-3"
                                 label='Порядок отображения'
-                                placeholder="Введите число"
+                                placeholder="1-99"
                                 type='number'
                                 value={categoryZindex}
                                 onChange={(e) => setCategoryZindex(e.target.value)}
@@ -87,7 +88,6 @@ function AddCategoryModal({ open, setOpen, establishmentId, updateCategories, se
                             <MDBBtn className="btn-animate" type="submit" color="success" disabled={isSaving || (!categoryName || !categoryZindex)}>Сохранить</MDBBtn>
                         </MDBModalFooter>
                     </form>
-                    <MDBBtn className="btn-animate" color='danger' onClick={handleCloseModal}>Закрыть</MDBBtn>
                 </MDBModalContent>
             </MDBModalDialog>
         </MDBModal>

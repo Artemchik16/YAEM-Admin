@@ -86,7 +86,6 @@ function EditCategoryModal({ open, setOpen, categoryId, categoryName, categoryZi
                             <MDBBtn type="submit" color="success" disabled={isSaving}>Сохранить</MDBBtn>
                         </MDBModalFooter>
                     </form>
-                    <MDBBtn color='secondary' onClick={handleCloseModal}>Отмена</MDBBtn>
                 </MDBModalContent>
             </MDBModalDialog>
         </MDBModal>

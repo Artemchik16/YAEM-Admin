@@ -99,7 +99,6 @@ export default function Login() {
                                                     label="Введите номер телефона"
                                                     value={phone}
                                                     onChange={(e) => setPhone(e.target.value)}
-                                                    placeholder="+7"
                                                     data-mdb-input-mask="+48 999-999-999"
                                                     required
                                                 />

@@ -185,6 +185,7 @@ function CreateEstablishmentForm({ onClose, updateEstablishments }) {
             <MDBInput
               type="text"
               label="Название заведения"
+              placeholder="Кафе"
               value={name}
               onChange={(e) => setName(e.target.value)}
               required
@@ -197,6 +198,7 @@ function CreateEstablishmentForm({ onClose, updateEstablishments }) {
             <MDBInput
               type="text"
               label="URL имя"
+              placeholder="cafe"
               value={url}
               onChange={(e) => setUrl(e.target.value)}
               required

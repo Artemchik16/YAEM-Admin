@@ -49,11 +49,11 @@ function RemoveCategoryModal({ open, setOpen, categoryId, categoryName, updateCa
                         <MDBBtn className='btn-close' color='none' onClick={() => setOpen(false)} />
                     </MDBModalHeader>
                     <MDBModalBody>
-                        Вы уверены, что хотите удалить раздел <strong>{categoryName}</strong>?
+                        <strong>Безвозвратно</strong> удалить раздел и все вложения <strong>{categoryName}</strong>?
                     </MDBModalBody>
                     <MDBModalFooter>
                         {/* Success, close handlers */}
-                        <MDBBtn color="danger" onClick={handleDeleteCategory} disabled={isDeleting}>Удалить</MDBBtn>
+                        <MDBBtn color="danger" onClick={handleDeleteCategory} disabled={isDeleting}>Да, Удалить</MDBBtn>
                         <MDBBtn color='success' onClick={() => setOpen(false)}>Отмена</MDBBtn>
                     </MDBModalFooter>
                 </MDBModalContent>
