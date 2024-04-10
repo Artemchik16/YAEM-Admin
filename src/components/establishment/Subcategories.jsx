@@ -84,7 +84,7 @@ function Subcategories({ categoryId }) {
             </h2>
 
             {/* For loop, display subcategories and handle click */}
-            <MDBTable responsive hover small align='middle' className="text-center">
+            <MDBTable responsive hover small align='middle' className="text-center my-3">
                 <MDBTableHead>
                     <tr>
                         {subcategories.map(subcategory => (
@@ -92,7 +92,7 @@ function Subcategories({ categoryId }) {
                                 <button
                                     key={subcategory.id}
                                     type="button"
-                                    className={`btn btn-outline-dark btn-animate text-nowrap btn-sm ${subcategory.id === selectedSubcategoryId ? 'active' : ''}`}
+                                    className={`btn btn-outline-dark btn-animate text-nowrap btn-sm mx-0 px-1  ${subcategory.id === selectedSubcategoryId ? 'active' : ''}`}
                                     data-mdb-color="dark"
                                     onClick={() => handleSubcategoryClick(subcategory)}
                                     style={{ '--mdb-btn-hover-bg': '#ff9753', '--mdb-btn-active-bg': '#ff9753' }}

@@ -89,18 +89,34 @@ function AddDishModal({ open, setOpen, subcategoryId, updateDishes }) {
                             {/* Form fields */}
                             <MDBInput className="mb-3" label='Наименование блюда' type='text' value={dishName} onChange={(e) => setDishName(e.target.value)} required />
                             <MDBInput className="mb-3" label='Фактическая цена' type='number' value={dishActualPrice} onChange={(e) => setDishActualPrice(e.target.value)} required />
-                            <MDBSwitch label='Стоп-лист' checked={dishStop} onChange={() => setDishStop(!dishStop)} />
+                            <div className="row">
+                                <div className="col me-0 pe-0">
+                                    <MDBSwitch label='Стоп-лист' checked={dishStop} onChange={() => setDishStop(!dishStop)} />
+                                </div>
+                                <div className="col">
+                                    <i class="mx-1 text-danger fas fa-ban"></i>
+                                </div>
+                            </div>
                             {/* Button to show additional info */}
                             <button type="button" className="btn btn-outline-secondary mt-4 btn-animate" onClick={() => setIsAdditionalInfoVisible(!isAdditionalInfoVisible)}>Показать дополнительные поля <i class="fas fa-circle-chevron-down ms-1"></i></button>
                             {/* Additional fields */}
                             {isAdditionalInfoVisible && (
-                                <div>
-                                    <MDBInput className="mb-3" label='Старая цена' type='number' value={dishOldPrice} onChange={(e) => setDishOldPrice(e.target.value)} />
-                                    <MDBInput className="mb-3" label='Описание' type='text' value={dishDescription} onChange={(e) => setDishDescription(e.target.value)} />
-                                    <MDBSwitch label='Популярное' checked={dishPopular} onChange={() => setDishPopular(!dishPopular)} />
-                                    <MDBSwitch label='Острое' checked={dishSpicy} onChange={() => setDishSpicy(!dishSpicy)} />
-                                    <MDBSwitch label='Вегетарианское' checked={dishVegetarian} onChange={() => setDishVegetarian(!dishVegetarian)} />
+                            <>
+                                <MDBInput className="my-3" label='Старая цена' type='number' value={dishOldPrice} onChange={(e) => setDishOldPrice(e.target.value)} />
+                                <MDBInput className="mb-3" label='Описание' type='text' value={dishDescription} onChange={(e) => setDishDescription(e.target.value)} />
+                                <div className="row">
+                                    <div className="col me-0 pe-0">
+                                        <MDBSwitch label='Популярное' checked={dishPopular} onChange={() => setDishPopular(!dishPopular)} />
+                                        <MDBSwitch label='Острое' checked={dishSpicy} onChange={() => setDishSpicy(!dishSpicy)} />
+                                        <MDBSwitch label='Вегетарианское' checked={dishVegetarian} onChange={() => setDishVegetarian(!dishVegetarian)} />
+                                    </div>
+                                    <div className="col">
+                                        <i className="d-block fas fa-star mt-1" style={{ 'color': 'gold' }}></i>
+                                        <i className="d-block fas fa-pepper-hot text-danger mt-2"></i>
+                                        <i className="d-block fas fa-seedling text-success mt-3"></i>
+                                    </div>
                                 </div>
+                            </>
                             )}
                         </MDBModalBody>
                         <MDBModalFooter>

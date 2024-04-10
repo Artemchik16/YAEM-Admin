@@ -72,7 +72,7 @@ function EstablishmentCard({ establishments, onEdit, onEditDishes, updateEstabli
                         <div className="card-body px-0 py-0">
                             {/* Check if deletion confirmation is active */}
                             {confirmDelete === key ? (
-                                <div className="container my-4">
+                                <div className="container my-3">
                                     {/* Render deletion confirmation message */}
                                     <p><strong>Безвозвратно</strong> удалить заведение и все вложения <strong>{establishments[key].name}</strong>?</p>
                                     <div className="d-flex justify-content-center text-center">
