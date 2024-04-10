@@ -35,7 +35,6 @@ function Dishes({ subcategoryId }) {
                 setLoading(false);
             }
         };
-
         fetchDishes();
     }, [subcategoryId]);
 
@@ -54,67 +53,67 @@ function Dishes({ subcategoryId }) {
                 </div>
             </h2>
             <div className='row'>
-            {dishes.map(dish => (
-                <div className='col-auto'>
-                <div className="card my-1 shadow-lg" style={{ width: '288px' }}>
-                    <div className="card-body px-0 py-0">
-                        <>
-                            {/* Render dish data from backend */}
-                            <div className="row">
-                                {/* Image */}
-                                <div className="col-6">
-                                    <img className="card-img px-0" src={dish.image} style={{ maxWidth: '300px' }}></img>
-                                </div>
-                                {/* Name */}
-                                <div className="col-6 my-auto ps-0">
-                                    <h5 className="card-title mx-0 px-0 my-auto" key={dish.id}>{dish.name}</h5>
-                                </div>
+                {dishes.map(dish => (
+                    <div className='col-auto'>
+                        <div className="card my-1 shadow-lg" style={{ width: '288px' }}>
+                            <div className="card-body px-0 py-0">
+                                <>
+                                    {/* Render dish data from backend */}
+                                    <div className="row">
+                                        {/* Image */}
+                                        <div className="col-6">
+                                            <img className="card-img px-0" src={dish.image} style={{ maxWidth: '300px' }}></img>
+                                        </div>
+                                        {/* Name */}
+                                        <div className="col-6 my-auto ps-0">
+                                            <h5 className="card-title mx-0 px-0 my-auto" key={dish.id}>{dish.name}</h5>
+                                        </div>
+                                    </div>
+                                    {/* Description */}
+                                    <p className="my-2 ms-3 fs-6 text-muted">{dish.description}</p>
+                                    <hr className="px-0 my-0" />
+                                    <div className="row mx-0">
+                                        <div className="col-4">
+                                            {/* Old price */}
+                                            {dish.old_price > 0 && (
+                                                <del>
+                                                    <p className="my-1 ms-3 fs-6">{dish.old_price} ₸</p>
+                                                </del>
+                                            )}
+                                            {/* Actual price */}
+                                            <p className="my-1 ms-3 fs-6 fw-bold">{dish.actual_price} ₸</p>
+                                        </div>
+                                        <div className="col-4">
+                                            {/* Stop */}
+                                            <p className="my-1 ms-3 fs-6">{dish.stop ? <i className="fas fa-check text-success"></i> : <i className="fas fa-times text-danger"></i>} <i className="fas fa-hand"></i></p>
+                                            {/* Popular */}
+                                            <p className="my-1 ms-3 fs-6">{dish.popular ? <i className="fas fa-check text-success"></i> : <i className="fas fa-times text-danger"></i>} <i className="fas fa-star" style={{ 'color': 'gold' }}></i></p>
+                                        </div>
+                                        <div className="col-4">
+                                            {/* Spicy */}
+                                            <p className="my-1 ms-3 fs-6">{dish.spicy ? <i className="fas fa-check text-success"></i> : <i className="fas fa-times text-danger"></i>} <i className="fas fa-pepper-hot text-danger"></i></p>
+                                            {/* Vegetarian */}
+                                            <p className="my-1 ms-3 fs-6">{dish.vegetarian ? <i className="fas fa-check text-success"></i> : <i className="fas fa-times text-danger"></i>} <i className="fas fa-seedling text-success"></i></p>
+                                        </div>
+                                    </div>
+                                    <small className="card-text"></small>
+                                    <hr className="my-0" />
+                                    <div className="d-flex flex-wrap justify-content-evenly text-center my-1">
+                                        {/* Handle edit */}
+                                        <div className="btn btn-animate btn-outline-dark my-1" style={{ width: '70px' }}>
+                                            <i className="fas fa-pen fa-lg"></i>
+                                        </div>
+                                        {/* Handle delete */}
+                                        <div className="btn btn-animate btn-outline-danger my-1" style={{ width: '70px' }}>
+                                            <i className="fas fa-trash fa-lg"></i>
+                                        </div>
+                                    </div>
+                                </>
                             </div>
-                            {/* Description */}
-                            <p className="my-2 ms-3 fs-6 text-muted">{dish.description}</p>
-                            <hr className="px-0 my-0" />
-                            <div className="row mx-0">
-                                <div className="col-4">
-                                    {/* Old price */}
-                                    {dish.old_price > 0 && (
-                                        <del>
-                                            <p className="my-1 ms-3 fs-6">{dish.old_price} ₸</p>
-                                        </del>
-                                    )}
-                                    {/* Actual price */}
-                                    <p className="my-1 ms-3 fs-6 fw-bold">{dish.actual_price} ₸</p>
-                                </div>
-                                <div className="col-4">
-                                    {/* Stop */}
-                                    <p className="my-1 ms-3 fs-6">{dish.stop ? <i className="fas fa-check text-success"></i> : <i className="fas fa-times text-danger"></i>} <i className="fas fa-hand"></i></p>
-                                    {/* Popular */}
-                                    <p className="my-1 ms-3 fs-6">{dish.popular ? <i className="fas fa-check text-success"></i> : <i className="fas fa-times text-danger"></i>} <i className="fas fa-star" style={{ 'color': 'gold' }}></i></p>
-                                </div>
-                                <div className="col-4">
-                                    {/* Spicy */}
-                                    <p className="my-1 ms-3 fs-6">{dish.spicy ? <i className="fas fa-check text-success"></i> : <i className="fas fa-times text-danger"></i>} <i className="fas fa-pepper-hot text-danger"></i></p>
-                                    {/* Vegetarian */}
-                                    <p className="my-1 ms-3 fs-6">{dish.vegetarian ? <i className="fas fa-check text-success"></i> : <i className="fas fa-times text-danger"></i>} <i className="fas fa-seedling text-success"></i></p>
-                                </div>
-                            </div>
-                            <small className="card-text"></small>
-                            <hr className="my-0" />
-                            <div className="d-flex flex-wrap justify-content-evenly text-center my-1">
-                                {/* Handle edit */}
-                                <div className="btn btn-animate btn-outline-dark my-1" style={{ width: '70px' }}>
-                                    <i className="fas fa-pen fa-lg"></i>
-                                </div>
-                                {/* Handle delete */}
-                                <div className="btn btn-animate btn-outline-danger my-1" style={{ width: '70px' }}>
-                                    <i className="fas fa-trash fa-lg"></i>
-                                </div>
-                            </div>
-                        </>
+                        </div>
+
+
                     </div>
-                </div>
-
-
-                </div>
                 ))}
             </div>
 

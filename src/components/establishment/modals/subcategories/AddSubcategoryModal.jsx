@@ -12,14 +12,20 @@ function AddSubcategoryModal({ open, setOpen, categoryId, updateSubcategories })
 
     // Handlers
     const userToken = sessionStorage.getItem('accessToken');
-    const [subcategoryName, setSubcategoryName] = useState('');
+    const [subcategoryName, setSubcategoryName] = useState(null);
+    const [subcategoryZindex, setSubcategoryZindex] = useState(null);
+    const [isSaving, setIsSaving] = useState(false);
 
     // Post request on backend, create category
-    const handleAddSubcategory = async () => {
+    const handleAddSubcategory = async (e) => {
+        e.preventDefault();
+        setIsSaving(true);
+        setTimeout(() => { setIsSaving(false); }, 2000);
         try {
             await axios.post('http://localhost:8000/api/v1/menu/subcategories/', {
                 category_id: categoryId,
                 name: subcategoryName,
+                z_index: subcategoryZindex
             }, {
                 headers: {
                     Authorization: `Bearer ${userToken}`
@@ -37,13 +43,23 @@ function AddSubcategoryModal({ open, setOpen, categoryId, updateSubcategories })
         } catch (error) {
             if (error.response && error.response.data) {
                 if (error.response.data.name && error.response.data.name[0] === 'Убедитесь, что это значение содержит не более 50 символов.') {
+                    setIsSaving(true);
+                    setTimeout(() => { setIsSaving(false); }, 2000);
                     toast.error('50 символов макс', { autoClose: 2000, pauseOnHover: false, position: "top-center" });
                 }
                 if (error.response.data.name && error.response.data.name[0] === 'Subcategory: only ru/en/num characters') {
+                    setIsSaving(true);
+                    setTimeout(() => { setIsSaving(false); }, 2000);
                     toast.error('рус англ цифры буквы', { autoClose: 2000, pauseOnHover: false, position: "top-center" });
                 }
             }
         }
+    };
+
+    const handleCloseModal = () => {
+        setSubcategoryName('');
+        setSubcategoryZindex('');
+        setOpen(false);
     };
 
     return (
@@ -56,30 +72,33 @@ function AddSubcategoryModal({ open, setOpen, categoryId, updateSubcategories })
                         {/* Close handler */}
                         <MDBBtn className='btn-close'
                             color='none'
-                            onClick={() => setOpen(false)}>
+                            onClick={handleCloseModal}>
                         </MDBBtn>
                     </MDBModalHeader>
-                    <MDBModalBody>
-                        {/* Name handler */}
-                        <MDBInput
-                            label='Наименование категории'
-                            type='text'
-                            value={subcategoryName}
-                            onChange={(e) => setSubcategoryName(e.target.value)}
-                            required
-                        />
-                        <MDBInput
-                            className="my-3"
-                            label='Порядок отображения'
-                            placeholder="1-2-3-4-5"
-                            type='number'
-                        />
-                    </MDBModalBody>
-                    <MDBModalFooter>
-                        {/* Success, close handlers */}
-                        <MDBBtn color="success" onClick={handleAddSubcategory}>Сохранить</MDBBtn>
-                        <MDBBtn color='danger' onClick={() => setOpen(false)}>Закрыть</MDBBtn>
-                    </MDBModalFooter>
+                    <form onSubmit={handleAddSubcategory}>
+                        <MDBModalBody>
+                            {/* Name handler */}
+                            <MDBInput
+                                label='Наименование категории'
+                                type='text'
+                                value={subcategoryName}
+                                onChange={(e) => setSubcategoryName(e.target.value)}
+                            />
+                            <MDBInput
+                                className="my-3"
+                                label='Порядок отображения'
+                                placeholder="1-2-3-4-5"
+                                type='number'
+                                value={subcategoryZindex}
+                                onChange={(e) => setSubcategoryZindex(e.target.value)}
+                            />
+                        </MDBModalBody>
+                        <MDBModalFooter>
+                            {/* Success, close handlers */}
+                            <MDBBtn color="success" onClick={handleAddSubcategory} disabled={isSaving || (!subcategoryName || !subcategoryZindex)}>Сохранить</MDBBtn>
+                        </MDBModalFooter>
+                    </form>
+                    <MDBBtn color='danger' onClick={handleCloseModal}>Закрыть</MDBBtn>
                 </MDBModalContent>
             </MDBModalDialog>
         </MDBModal>

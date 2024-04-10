@@ -65,22 +65,22 @@ function Categories({ establishmentId, onFinishDish }) {
                     </div>
                 </div>
             </div>
-            <hr className="mt-2"/>
+            <hr className="mt-2" />
 
             <h2 className="mt-3 mb-2">Разделы
                 <div className="btn shadow-0 btn-outline-success btn-animate mx-1 px-3" onClick={toggleAddModal}>
                     <i className="far fa-square-plus"></i>
                 </div>
-                            {selectedCategoryId && categories.length > 0 && (
-                <div className="d-inline">
-                    <div className="btn shadow-0 btn-animate my-auto btn-outline-dark mx-1 px-3" onClick={toggleEditModal}>
-                        <i className="fas fa-pen"></i>
+                {selectedCategoryId && (
+                    <div className="d-inline">
+                        <div className="btn shadow-0 btn-animate my-auto btn-outline-dark mx-1 px-3" onClick={toggleEditModal}>
+                            <i className="fas fa-pen"></i>
+                        </div>
+                        <div className="btn shadow-0 btn-animate my-auto btn-outline-danger mx-1 px-3" onClick={toggleRemoveModal}>
+                            <i className="fas fa-trash fa-lg"></i>
+                        </div>
                     </div>
-                    <div className="btn shadow-0 btn-animate my-auto btn-outline-danger mx-1 px-3" onClick={toggleRemoveModal}>
-                        <i className="fas fa-trash fa-lg"></i>
-                    </div>
-                </div>
-            )}
+                )}
             </h2>
 
             <MDBTable responsive hover small align='middle' className="text-center">
@@ -94,7 +94,7 @@ function Categories({ establishmentId, onFinishDish }) {
                                     onClick={() => handleCategoryClick(category)}
                                     style={{ '--mdb-btn-hover-bg': '#ff9753', '--mdb-btn-active-bg': '#ff9753' }}
                                 >
-                                    {category.name}
+                                    {category.name}|{category.z_index}
                                 </button>
                             </th>
                         ))}
@@ -102,14 +102,36 @@ function Categories({ establishmentId, onFinishDish }) {
                 </MDBTableHead>
             </MDBTable>
 
-
-            {selectedCategoryId && categories.length > 0 && (
+            {selectedCategoryId && (
                 <Subcategories categoryId={selectedCategoryId} />
             )}
-            
-            <AddCategoryModal open={addModalOpen} setOpen={setAddModalOpen} establishmentId={establishmentId} updateCategories={setCategories} />
-            <EditCategoryModal open={editModalOpen} setOpen={setEditModalOpen} establishmentId={establishmentId} categoryId={selectedCategory ? selectedCategory.id : null} categoryName={selectedCategory ? selectedCategory.name : null} updateCategories={setCategories} />
-            <RemoveCategoryModal open={removeModalOpen} setOpen={setRemoveModalOpen} establishmentId={establishmentId} categoryId={selectedCategory ? selectedCategory.id : null} categoryName={selectedCategory ? selectedCategory.name : null} updateCategories={setCategories} />
+
+            <AddCategoryModal 
+            open={addModalOpen} 
+            setOpen={setAddModalOpen} 
+            establishmentId={establishmentId} 
+            updateCategories={setCategories}
+            setSelectedCategoryId={setSelectedCategoryId}
+            setSelectedCategory={setSelectedCategory}
+            />
+            <EditCategoryModal 
+            open={editModalOpen} 
+            setOpen={setEditModalOpen} 
+            establishmentId={establishmentId} 
+            categoryId={selectedCategory ? selectedCategory.id : null} 
+            categoryName={selectedCategory ? selectedCategory.name : null} 
+            categoryZindex={selectedCategory ? selectedCategory.z_index : null} 
+            updateCategories={setCategories} 
+            />
+            <RemoveCategoryModal 
+            open={removeModalOpen} 
+            setOpen={setRemoveModalOpen} 
+            establishmentId={establishmentId} 
+            categoryId={selectedCategory ? selectedCategory.id : null} 
+            categoryName={selectedCategory ? selectedCategory.name : null} 
+            updateCategories={setCategories} 
+            setSelectedCategoryId={setSelectedCategoryId}
+            />
         </div>
     );
 }

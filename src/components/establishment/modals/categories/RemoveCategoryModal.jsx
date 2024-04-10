@@ -7,7 +7,7 @@ import axios from 'axios';
 // Import react-toastify
 import { toast } from 'react-toastify';
 
-function RemoveCategoryModal({ open, setOpen, categoryId, categoryName, updateCategories, establishmentId }) {
+function RemoveCategoryModal({ open, setOpen, categoryId, categoryName, updateCategories, establishmentId, setSelectedCategoryId }) {
     // Handlers
     const userToken = sessionStorage.getItem('accessToken');
     const [isDeleting, setIsDeleting] = React.useState(false);
@@ -28,6 +28,7 @@ function RemoveCategoryModal({ open, setOpen, categoryId, categoryName, updateCa
                 }
             });
             updateCategories(updateCategoriesResponse.data);
+            setSelectedCategoryId(null);
             setOpen(false);
             toast.success('Категория успешно удалена.', { autoClose: 2000, pauseOnHover: false, position: "top-center" });
         } catch (error) {
@@ -48,12 +49,12 @@ function RemoveCategoryModal({ open, setOpen, categoryId, categoryName, updateCa
                         <MDBBtn className='btn-close' color='none' onClick={() => setOpen(false)} />
                     </MDBModalHeader>
                     <MDBModalBody>
-                        Вы уверены, что хотите удалить категорию <strong>{categoryName}</strong>?
+                        Вы уверены, что хотите удалить раздел <strong>{categoryName}</strong>?
                     </MDBModalBody>
                     <MDBModalFooter>
                         {/* Success, close handlers */}
                         <MDBBtn color="danger" onClick={handleDeleteCategory} disabled={isDeleting}>Удалить</MDBBtn>
-                        <MDBBtn color='secondary' onClick={() => setOpen(false)}>Отмена</MDBBtn>
+                        <MDBBtn color='success' onClick={() => setOpen(false)}>Отмена</MDBBtn>
                     </MDBModalFooter>
                 </MDBModalContent>
             </MDBModalDialog>

@@ -31,7 +31,7 @@ function Subcategories({ categoryId }) {
     // Get request on backend, get all subcat categories
     useEffect(() => {
         const fetchSubcategories = async () => {
-            if (categoryId) { // Проверяем, что categoryId не null или undefined
+            if (categoryId) {
                 try {
                     const subcategoriesResponse = await axios.get(`http://localhost:8000/api/v1/menu/subcategories/?category_id=${categoryId}`, {
                         headers: {
@@ -40,6 +40,8 @@ function Subcategories({ categoryId }) {
                     });
                     setSubcategories(subcategoriesResponse.data);
                     setLoading(false);
+                    setSelectedSubcategory(null);
+                    setSelectedSubcategoryId(null);
                 } catch (error) {
                     toast.error('Ошибка при получении подкатегорий.', { autoClose: 1000 });
                     setLoading(false);
@@ -65,19 +67,19 @@ function Subcategories({ categoryId }) {
                     <i className="far fa-square-plus"></i>
                 </div>
                 {/* show this block if user have any categories */}
-                {subcategories.length > 0 && (
-                <div className="d-inline">
-                    {/* Handle edit modal */}
-                    <div className="btn shadow-0 btn-animate my-auto btn-outline-dark mx-1 px-3"
-                        onClick={toggleEditModal}>
-                        <i className="fas fa-pen"></i>
+                {selectedSubcategoryId && (
+                    <div className="d-inline">
+                        {/* Handle edit modal */}
+                        <div className="btn shadow-0 btn-animate my-auto btn-outline-dark mx-1 px-3"
+                            onClick={toggleEditModal}>
+                            <i className="fas fa-pen"></i>
+                        </div>
+                        {/* Handle remove modal */}
+                        <div className="btn shadow-0 btn-animate my-auto btn-outline-danger mx-1 px-3"
+                            onClick={toggleRemoveModal}>
+                            <i className="fas fa-trash fa-lg"></i>
+                        </div>
                     </div>
-                    {/* Handle remove modal */}
-                    <div className="btn shadow-0 btn-animate my-auto btn-outline-danger mx-1 px-3"
-                        onClick={toggleRemoveModal}>
-                        <i className="fas fa-trash fa-lg"></i>
-                    </div>
-                </div>
                 )}
             </h2>
 
@@ -85,26 +87,26 @@ function Subcategories({ categoryId }) {
             <MDBTable responsive hover small align='middle' className="text-center">
                 <MDBTableHead>
                     <tr>
-                    {subcategories.map(subcategory => (
-                      <th className="mx-0 px-1" scope='col'>
-                        <button
-                            key={subcategory.id}
-                            type="button"
-                            className={`btn btn-outline-dark btn-animate text-nowrap btn-sm ${subcategory.id === selectedSubcategoryId ? 'active' : ''}`}
-                            data-mdb-color="dark"
-                            onClick={() => handleSubcategoryClick(subcategory)}
-                            style={{ '--mdb-btn-hover-bg': '#ff9753', '--mdb-btn-active-bg': '#ff9753' }}
-                        >
-                            {subcategory.name}
-                        </button>
-                      </th>
-                    ))}
+                        {subcategories.map(subcategory => (
+                            <th className="mx-0 px-1" scope='col'>
+                                <button
+                                    key={subcategory.id}
+                                    type="button"
+                                    className={`btn btn-outline-dark btn-animate text-nowrap btn-sm ${subcategory.id === selectedSubcategoryId ? 'active' : ''}`}
+                                    data-mdb-color="dark"
+                                    onClick={() => handleSubcategoryClick(subcategory)}
+                                    style={{ '--mdb-btn-hover-bg': '#ff9753', '--mdb-btn-active-bg': '#ff9753' }}
+                                >
+                                    {subcategory.name}
+                                </button>
+                            </th>
+                        ))}
                     </tr>
                 </MDBTableHead>
             </MDBTable>
 
             {/* Conditionally render Dishes component based on the selected subcategory */}
-            {selectedSubcategory && (
+            {selectedSubcategoryId && (
                 <Dishes subcategoryId={selectedSubcategory.id} />
             )}
             {/* Modals component block */}

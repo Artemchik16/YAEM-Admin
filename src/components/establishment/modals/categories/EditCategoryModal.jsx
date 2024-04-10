@@ -3,22 +3,26 @@ import { MDBBtn, MDBModal, MDBModalDialog, MDBModalContent, MDBModalHeader, MDBM
 import axios from 'axios';
 import { toast } from 'react-toastify';
 
-function EditCategoryModal({ open, setOpen, categoryId, categoryName, updateCategories, establishmentId }) {
+function EditCategoryModal({ open, setOpen, categoryId, categoryName, categoryZindex, updateCategories, establishmentId }) {
     const userToken = sessionStorage.getItem('accessToken');
-    const [editedCategoryName, setEditedCategoryName] = useState(categoryName);
+    const [editedCategoryName, setEditedCategoryName] = useState('');
+    const [editedCategoryZindex, setEditedCategoryZindex] = useState('');
     const [isSaving, setIsSaving] = useState(false);
 
-    // Сбрасывать значение editedCategoryName при изменении categoryName
     useEffect(() => {
         setEditedCategoryName(categoryName);
-    }, [categoryName]);
+        setEditedCategoryZindex(categoryZindex);
+    }, [categoryName, categoryZindex]);
 
     const handleEditCategory = async (e) => {
         e.preventDefault();
         setIsSaving(true);
+        setOpen(false);
+        setTimeout(() => { setIsSaving(false); }, 1000);
         try {
             await axios.patch(`http://localhost:8000/api/v1/menu/categories/${categoryId}/`, {
-                name: editedCategoryName
+                name: editedCategoryName,
+                z_index: editedCategoryZindex
             }, {
                 headers: {
                     Authorization: `Bearer ${userToken}`
@@ -34,9 +38,13 @@ function EditCategoryModal({ open, setOpen, categoryId, categoryName, updateCate
         } catch (error) {
             if (error.response && error.response.data) {
                 if (error.response.data.name && error.response.data.name[0] === 'Убедитесь, что это значение содержит не более 30 символов.') {
+                    setIsSaving(true);
+                    setTimeout(() => { setIsSaving(false); }, 1000);
                     toast.error('30 символов макс', { autoClose: 2000, pauseOnHover: false, position: "top-center" });
                 }
                 if (error.response.data.name && error.response.data.name[0] === 'Category: only ru/en/num characters') {
+                    setIsSaving(true);
+                    setTimeout(() => { setIsSaving(false); }, 1000);
                     toast.error('рус англ цифры буквы', { autoClose: 2000, pauseOnHover: false, position: "top-center" });
                 }
             }
@@ -44,7 +52,6 @@ function EditCategoryModal({ open, setOpen, categoryId, categoryName, updateCate
     };
 
     const handleCloseModal = () => {
-        setEditedCategoryName('');
         setOpen(false);
     };
 
@@ -52,32 +59,34 @@ function EditCategoryModal({ open, setOpen, categoryId, categoryName, updateCate
         <MDBModal open={open} setOpen={setOpen} tabIndex='-1'>
             <MDBModalDialog>
                 <MDBModalContent>
+                    <MDBModalHeader>
+                        <MDBModalTitle>Редактировать раздел</MDBModalTitle>
+                        <MDBBtn className='btn-close' color='none' onClick={handleCloseModal} />
+                    </MDBModalHeader>
                     <form onSubmit={handleEditCategory}>
-                        <MDBModalHeader>
-                            <MDBModalTitle>Редактировать раздел</MDBModalTitle>
-                            <MDBBtn className='btn-close' color='none' onClick={handleCloseModal} />
-                        </MDBModalHeader>
                         <MDBModalBody>
                             <MDBInput
-                                label='Наименование категории'
+                                label='Наименование раздела'
                                 id='categoryName'
                                 type='text'
                                 defaultValue={categoryName}
                                 value={editedCategoryName}
-                                required
                                 onChange={(e) => setEditedCategoryName(e.target.value)} />
                             <MDBInput
                                 className="my-3"
                                 label='Порядок отображения'
                                 placeholder="1-2-3-4-5"
                                 type='number'
+                                defaultValue={categoryZindex}
+                                value={editedCategoryZindex}
+                                onChange={(e) => setEditedCategoryZindex(e.target.value)}
                             />
                         </MDBModalBody>
                         <MDBModalFooter>
-                            <MDBBtn type="submit" color="danger" disabled={isSaving}>Сохранить</MDBBtn>
-                            <MDBBtn color='secondary' onClick={handleCloseModal}>Отмена</MDBBtn>
+                            <MDBBtn type="submit" color="success" disabled={isSaving}>Сохранить</MDBBtn>
                         </MDBModalFooter>
                     </form>
+                    <MDBBtn color='secondary' onClick={handleCloseModal}>Отмена</MDBBtn>
                 </MDBModalContent>
             </MDBModalDialog>
         </MDBModal>

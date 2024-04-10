@@ -41,7 +41,7 @@ function RemoveSubcategoryModal({ open, setOpen, subcategoryId, subcategoryName,
             <MDBModalDialog>
                 <MDBModalContent>
                     <MDBModalHeader>
-                        <MDBModalTitle>Удалить подкат</MDBModalTitle>
+                        <MDBModalTitle>Удалить категорию</MDBModalTitle>
                         {/* Close handlers */}
                         <MDBBtn className='btn-close' color='none' onClick={() => setOpen(false)} />
                     </MDBModalHeader>
@@ -51,7 +51,7 @@ function RemoveSubcategoryModal({ open, setOpen, subcategoryId, subcategoryName,
                     <MDBModalFooter>
                         {/* Success, close handlers */}
                         <MDBBtn color="danger" onClick={handleDeleteSubcategory}>Удалить</MDBBtn>
-                        <MDBBtn color='secondary' onClick={() => setOpen(false)}>Отмена</MDBBtn>
+                        <MDBBtn color='success' onClick={() => setOpen(false)}>Отмена</MDBBtn>
                     </MDBModalFooter>
                 </MDBModalContent>
             </MDBModalDialog>
