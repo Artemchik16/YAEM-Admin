@@ -58,6 +58,12 @@ function Subcategories({ categoryId }) {
         setSelectedSubcategoryId(subcategory.id);
     };
 
+    if (loading) {
+        return <div className="spinner-border text-warning" role="status">
+            <span className="visually-hidden">Loading...</span>
+        </div>;
+    }
+
     return (
         <div className="container px-0">
             {/* show this block if user has not any categories */}

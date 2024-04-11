@@ -3,16 +3,33 @@ import { MDBBtn, MDBModal, MDBModalDialog, MDBModalContent, MDBModalHeader, MDBM
 import axios from 'axios';
 import { toast } from 'react-toastify';
 
-function EditCategoryModal({ open, setOpen, categoryId, categoryName, categoryZindex, updateCategories, establishmentId }) {
+function EditCategoryModal({ open, setOpen, categoryId, setSelectedCategoryId, setSelectedCategory,updateCategories, establishmentId }) {
+
     const userToken = sessionStorage.getItem('accessToken');
+    const [formChanged, setFormChanged] = useState(false);
+    const [categoryData, setCategoryData] = useState(null);
     const [editedCategoryName, setEditedCategoryName] = useState('');
-    const [editedCategoryZindex, setEditedCategoryZindex] = useState('');
+    const [editedCategoryZindex, setEditedCategoryZindex] = useState(0);
     const [isSaving, setIsSaving] = useState(false);
 
     useEffect(() => {
-        setEditedCategoryName(categoryName);
-        setEditedCategoryZindex(categoryZindex);
-    }, [categoryName, categoryZindex]);
+        const fetchCategoryData = async () => {
+            try {
+                const response = await axios.get(`http://localhost:8000/api/v1/menu/categories/${categoryId}`, {
+                    headers: {
+                        Authorization: `Bearer ${userToken}`
+                    }
+                });
+                setCategoryData(response.data);
+                setEditedCategoryName(response.data.name);
+                setEditedCategoryZindex(response.data.z_index);
+            } catch (error) {
+                toast.error('Невозможно получить информацию о категории.', { autoClose: 1000 });
+            }
+        };
+
+        fetchCategoryData();
+    }, [categoryId]);
 
     const handleEditCategory = async (e) => {
         e.preventDefault();
@@ -21,8 +38,8 @@ function EditCategoryModal({ open, setOpen, categoryId, categoryName, categoryZi
         setTimeout(() => { setIsSaving(false); }, 1000);
         try {
             await axios.patch(`http://localhost:8000/api/v1/menu/categories/${categoryId}/`, {
-                name: editedCategoryName,
-                z_index: editedCategoryZindex
+                name: editedCategoryName || categoryData.name,
+                z_index: editedCategoryZindex || categoryData.z_index
             }, {
                 headers: {
                     Authorization: `Bearer ${userToken}`
@@ -34,7 +51,9 @@ function EditCategoryModal({ open, setOpen, categoryId, categoryName, categoryZi
                 }
             });
             updateCategories(updateCategoriesResponse.data)
-            toast.success('Категория успешно обновлена.', { autoClose: 2000, pauseOnHover: false, position: "top-center" });
+            setSelectedCategory(null)
+            setSelectedCategoryId(null)
+            toast.success('Категория успешно обновлена.', { autoClose: 1000, pauseOnHover: false, position: "top-center" });
         } catch (error) {
             if (error.response && error.response.data) {
                 if (error.response.data.name && error.response.data.name[0] === 'Убедитесь, что это значение содержит не более 30 символов.') {
@@ -50,6 +69,16 @@ function EditCategoryModal({ open, setOpen, categoryId, categoryName, categoryZi
             }
         }
     };
+
+    useEffect(() => {
+        if (categoryData) {
+            setFormChanged(
+                editedCategoryName !== categoryData.name ||
+                editedCategoryZindex !== categoryData.z_index
+            );
+        }
+    }, [editedCategoryName, editedCategoryZindex]);
+
 
     const handleCloseModal = () => {
         setOpen(false);
@@ -69,21 +98,21 @@ function EditCategoryModal({ open, setOpen, categoryId, categoryName, categoryZi
                                 label='Наименование раздела'
                                 id='categoryName'
                                 type='text'
-                                defaultValue={categoryName}
+                                defaultValue={categoryData?.name}
                                 value={editedCategoryName}
                                 onChange={(e) => setEditedCategoryName(e.target.value)} />
                             <MDBInput
                                 className="my-3"
                                 label='Порядок отображения'
                                 placeholder="1-2-3-4-5"
-                                type='number'
-                                defaultValue={categoryZindex}
+                                type='text'
+                                defaultValue={categoryData?.z_index}
                                 value={editedCategoryZindex}
                                 onChange={(e) => setEditedCategoryZindex(e.target.value)}
                             />
                         </MDBModalBody>
                         <MDBModalFooter>
-                            <MDBBtn type="submit" color="success" disabled={isSaving}>Сохранить</MDBBtn>
+                            {formChanged && <MDBBtn color="success">Сохранить</MDBBtn>}
                         </MDBModalFooter>
                     </form>
                 </MDBModalContent>

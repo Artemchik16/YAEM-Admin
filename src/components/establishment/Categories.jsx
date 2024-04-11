@@ -106,31 +106,33 @@ function Categories({ establishmentId, onFinishDish }) {
                 <Subcategories categoryId={selectedCategoryId} />
             )}
 
-            <AddCategoryModal 
-            open={addModalOpen} 
-            setOpen={setAddModalOpen} 
-            establishmentId={establishmentId} 
-            updateCategories={setCategories}
-            setSelectedCategoryId={setSelectedCategoryId}
-            setSelectedCategory={setSelectedCategory}
+            <AddCategoryModal
+                open={addModalOpen}
+                setOpen={setAddModalOpen}
+                establishmentId={establishmentId}
+                updateCategories={setCategories}
+                setSelectedCategoryId={setSelectedCategoryId}
+                setSelectedCategory={setSelectedCategory}
             />
-            <EditCategoryModal 
-            open={editModalOpen} 
-            setOpen={setEditModalOpen} 
-            establishmentId={establishmentId} 
-            categoryId={selectedCategory ? selectedCategory.id : null} 
-            categoryName={selectedCategory ? selectedCategory.name : null} 
-            categoryZindex={selectedCategory ? selectedCategory.z_index : null} 
-            updateCategories={setCategories} 
-            />
-            <RemoveCategoryModal 
-            open={removeModalOpen} 
-            setOpen={setRemoveModalOpen} 
-            establishmentId={establishmentId} 
-            categoryId={selectedCategory ? selectedCategory.id : null} 
-            categoryName={selectedCategory ? selectedCategory.name : null} 
-            updateCategories={setCategories} 
-            setSelectedCategoryId={setSelectedCategoryId}
+            {selectedCategoryId && (
+                <EditCategoryModal
+                    open={editModalOpen}
+                    setOpen={setEditModalOpen}
+                    establishmentId={establishmentId}
+                    categoryId={selectedCategory ? selectedCategory.id : null}
+                    setSelectedCategoryId={setSelectedCategoryId}
+                    setSelectedCategory={setSelectedCategory}
+                    updateCategories={setCategories}
+                />
+            )}
+            <RemoveCategoryModal
+                open={removeModalOpen}
+                setOpen={setRemoveModalOpen}
+                establishmentId={establishmentId}
+                categoryId={selectedCategory ? selectedCategory.id : null}
+                categoryName={selectedCategory ? selectedCategory.name : null}
+                updateCategories={setCategories}
+                setSelectedCategoryId={setSelectedCategoryId}
             />
         </div>
     );
