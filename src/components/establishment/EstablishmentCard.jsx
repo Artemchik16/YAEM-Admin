@@ -85,14 +85,22 @@ function EstablishmentCard({ establishments, onEdit, onEditDishes, updateEstabli
                             ) : (
                                 <>
                                     {/* Render establishment data from backend */}
-                                    <img className="card-img-top px-0" loading="lazy" src={establishments[key].logo} style={{ maxWidth: '400px' }}></img>
-                                    <h5 className="card-title mx-3">{establishments[key].name}
-                                        {/* Button to open DetailEstablishment component */}
-                                        <div className="btn btn-animate my-1 shadow-0 px-2 py-1" onClick={() => handleEdit(establishments[key].id)}>
-                                            <i className="fas fa-pen fa-lg"></i>
+                                    <div className="row">
+                                        <div className="col">
+                                            <h5 className="card-title ms-2 me-0 pe-0">{establishments[key].name}
+                                            {/* Button to open DetailEstablishment component */}
+                                            <div className="btn btn-animate my-1 shadow-0 ms-1 me-0 px-0 py-0" onClick={() => handleEdit(establishments[key].id)}>
+                                                <i className="fas fa-pen fa-lg"></i>
+                                            </div>
+                                            <p className="my-3 fs-6 text-muted">г.{establishments[key].city}</p>
+                                            </h5>
                                         </div>
-                                        <p className="my-3 fs-6">г.{establishments[key].city}</p>
-                                    </h5>
+                                        <div className="col-auto text-end">
+                                            <img className="card-img-top" loading="lazy" src={establishments[key].logo} style={{ maxWidth: '100px', maxHeight: '100px' }}></img>
+                                        </div>
+                                    </div>
+
+
                                     {/* <p className="card-text text-muted">{establishments[key].address}</p> */}
                                     {/* <small className="card-text ms-3">{establishments[key].description}</small> */}
                                     {/* <img src={establishments[key].logo}/> */}

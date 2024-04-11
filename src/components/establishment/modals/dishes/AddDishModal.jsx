@@ -1,7 +1,7 @@
 // Import React, useState
 import React, { useState } from 'react';
 // Import MDB components
-import { MDBSwitch, MDBBtn, MDBModal, MDBModalDialog, MDBModalContent, MDBModalHeader, MDBModalTitle, MDBModalBody, MDBModalFooter, MDBInput } from 'mdb-react-ui-kit';
+import { MDBSwitch, MDBTextArea, MDBBtn, MDBModal, MDBModalDialog, MDBModalContent, MDBModalHeader, MDBModalTitle, MDBModalBody, MDBModalFooter, MDBInput } from 'mdb-react-ui-kit';
 // Import axios
 import axios from 'axios';
 // Import react-toastify
@@ -103,7 +103,7 @@ function AddDishModal({ open, setOpen, subcategoryId, updateDishes }) {
                             {isAdditionalInfoVisible && (
                             <>
                                 <MDBInput className="my-3" label='Старая цена' type='number' value={dishOldPrice} onChange={(e) => setDishOldPrice(e.target.value)} />
-                                <MDBInput className="mb-3" label='Описание' type='text' value={dishDescription} onChange={(e) => setDishDescription(e.target.value)} />
+                                <MDBTextArea className="mb-3" label='Описание' rows={3} type='text' value={dishDescription} onChange={(e) => setDishDescription(e.target.value)} />
                                 <div className="row">
                                     <div className="col me-0 pe-0">
                                         <MDBSwitch label='Популярное' checked={dishPopular} onChange={() => setDishPopular(!dishPopular)} />

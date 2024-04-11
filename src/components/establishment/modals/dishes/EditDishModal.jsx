@@ -1,5 +1,5 @@
 import React, { useState, useEffect } from 'react';
-import { MDBSwitch, MDBBtn, MDBModal, MDBModalDialog, MDBModalContent, MDBModalHeader, MDBModalTitle, MDBModalBody, MDBModalFooter, MDBInput } from 'mdb-react-ui-kit';
+import { MDBSwitch, MDBBtn, MDBTextArea, MDBModal, MDBModalDialog, MDBModalContent, MDBModalHeader, MDBModalTitle, MDBModalBody, MDBModalFooter, MDBInput } from 'mdb-react-ui-kit';
 import axios from 'axios';
 import { toast } from 'react-toastify';
 
@@ -143,9 +143,10 @@ function EditDishModal({ open, setOpen, dishId, updateDishes, subcategoryId }) {
                                         value={dishOldPrice}
                                         onChange={(e) => setDishOldPrice(e.target.value)}
                                     />
-                                    <MDBInput
+                                    <MDBTextArea
                                         className="mb-3"
                                         label='Описание'
+                                        rows={3}
                                         type='text'
                                         defaultValue={dishData?.description}
                                         value={dishDescription}

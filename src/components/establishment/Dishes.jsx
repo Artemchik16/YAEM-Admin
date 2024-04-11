@@ -89,34 +89,36 @@ function Dishes({ subcategoryId }) {
             </h5>
             <div className='row'>
                 {dishes.map((dish, index) => (
-                    <div key={index}>
+                    <div className="col" key={index}>
                         {/* Check if this dish needs to be deleted and show the confirmation */}
                         {confirmDelete === index ? (
-                            <div className="container my-3">
+                            <div className="card shadow text-center" style={{ width: '288px', height: '127px' }}>
+
                                 {/* Render deletion confirmation message */}
-                                <p><strong>Безвозвратно</strong> удалить блюдо <strong>{dish.name}</strong>?</p>
+                                <p className="my-3"><strong>Безвозвратно</strong> удалить блюдо <strong>{dish.name}</strong>?</p>
                                 <div className="d-flex justify-content-center text-center">
                                     {/* Button to confirm deletion */}
                                     <button className="btn btn-sm btn-danger me-2" onClick={() => handleDeleteDish(dishToDelete, index)}>Да, удалить</button>
                                     {/* Button to cancel deletion */}
                                     <button className="btn btn-sm btn-success" onClick={() => setConfirmDelete(null)}>Отмена</button>
+
                                 </div>
                             </div>
                         ) : (
                             <div className='col-auto my-2 mx-auto' key={index}>
                                 {/* Render the dish card */}
-                                <div className={`card shadow${dish.stop ? ' border border-danger' : ''}`} style={{ width: '288px' }}>
+                                <div className={`card shadow mx-auto${dish.stop ? ' border border-danger' : ''}`} style={{ width: '288px' }}>
                                     <div className="card-body px-0 py-0">
                                         <>
                                             {/* Render dish data from backend */}
-                                            <div className="row mx-0 px-0" style={{ minHeight: '84px' }}>
+                                            <div className="row mx-0 px-0" style={{ minHeight: '102px' }}>
                                                 {/* Image */}
-                                                {dish.image ? <div className="col-3 mx-0 px-0">
-                                                    <img className="img px-0 rounded-start" src={dish.image} style={{ maxWidth: '72px' }} alt={dish.name}></img>
+                                                {dish.image ? <div className="col-auto mx-0 px-0">
+                                                    <img draggable="false" loading="lazy" className="img px-0 rounded-start" src={dish.image} style={{ maxWidth: '72px', maxHeight: '72px' }} alt={dish.name}></img>
                                                 </div>
                                                     : ''}
                                                 {/* Name */}
-                                                <div className="col my-auto mx-1">
+                                                <div className="col my-auto">
                                                     {
                                                         dish.stop ? <del><span className="fw-bold " key={dish.id}>{dish.name}</span> <i className="mx-1 text-danger fas fa-ban"></i></del> :
                                                             <span className="fw-bold" key={dish.id}>{dish.name}
@@ -126,7 +128,7 @@ function Dishes({ subcategoryId }) {
                                                             </span>
                                                     }
                                                 </div>
-                                                <p className="mx-2 my-2 text-muted text-truncate lh-1 small">{dish.description}</p>
+                                                <p className=" my-2 text-muted text-truncate lh-1 small">{dish.description}</p>
                                             </div>
                                             {/* Description */}
 

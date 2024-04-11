@@ -347,9 +347,9 @@ export default function Payment() {
             <MDBTable responsive hover small align='middle'>
               <MDBTableHead>
                 <tr>
-                  <th scope='col'>ID #</th>
+                  <th scope='col'>ID</th>
                   <th scope='col'>Тариф</th>
-                  <th scope='col'>Кол-во месяцев</th>
+                  <th scope='col'>Месяцев</th>
                   <th scope='col'>Kaspi номер</th>
                   <th scope='col'>Дата</th>
                   <th scope='col'>Статус</th>
@@ -369,7 +369,8 @@ export default function Payment() {
                       </MDBBadge>
                     </td>
                     <td>
-                      <button className="btn btn-danger btn-sm" onClick={() => handleDeletePayment(payment.id)}>Удалить</button>
+{/*                       <button className="btn btn-danger btn-sm" onClick={() => handleDeletePayment(payment.id)}>Удалить</button> */}
+                      <i className="fas fa-trash text-danger btn-animate fa-lg mx-2" onClick={() => handleDeletePayment(payment.id)}></i>
                     </td>
                   </tr>
                 ))}
