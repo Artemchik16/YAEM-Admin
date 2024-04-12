@@ -86,7 +86,7 @@ function CreateEstablishmentForm({ onClose, updateEstablishments }) {
       onClose()
       console.log(requestData)
       // Get request on backend
-      const updatedEstablishmentsResponse = await axios.get('http://localhost:8000/api/v1/menu/clients/', {
+      const updatedEstablishmentsResponse = await axios.get('https://yaem.kz/api/v1/menu/clients/', {
         // Send token on backend
         headers: {
           'Authorization': `Bearer ${userToken}`
