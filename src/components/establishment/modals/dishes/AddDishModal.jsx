@@ -1,5 +1,5 @@
 // Import React, useState
-import React, { useState } from 'react';
+import React, { useState, useEffect } from 'react';
 // Import MDB components
 import { MDBSwitch, MDBTextArea, MDBBtn, MDBModal, MDBModalDialog, MDBModalContent, MDBModalHeader, MDBModalTitle, MDBModalBody, MDBModalFooter, MDBInput } from 'mdb-react-ui-kit';
 // Import axios
@@ -12,12 +12,30 @@ function AddDishModal({ open, setOpen, subcategoryId, updateDishes }) {
     const [dishName, setDishName] = useState('');
     const [dishActualPrice, setDishActualPrice] = useState('');
     const [dishStop, setDishStop] = useState(false);
+    const [image, setImage] = useState("");
+    const formData = new FormData();
+    formData.append('image', image);
     const [isAdditionalInfoVisible, setIsAdditionalInfoVisible] = useState(false);
     const [dishOldPrice, setDishOldPrice] = useState('');
     const [dishDescription, setDishDescription] = useState('');
     const [dishPopular, setDishPopular] = useState(false);
     const [dishSpicy, setDishSpicy] = useState(false);
     const [dishVegetarian, setDishVegetarian] = useState(false);
+
+    useEffect(() => {
+        if (!open) {
+            setDishName('');
+            setDishActualPrice('');
+            setDishStop(false);
+            setImage('');
+            setIsAdditionalInfoVisible(false);
+            setDishOldPrice('');
+            setDishDescription('');
+            setDishPopular(false);
+            setDishSpicy(false);
+            setDishVegetarian(false);
+        }
+    }, [open]);
 
     // Handler for creating a dish
     const handleAddDish = async (e) => {
@@ -32,6 +50,7 @@ function AddDishModal({ open, setOpen, subcategoryId, updateDishes }) {
             };
 
             // Add optional fields to the requestData object if they are not empty
+            if (image) requestData.image = image;
             if (dishOldPrice) requestData.old_price = dishOldPrice;
             if (dishDescription) requestData.description = dishDescription;
             if (dishPopular) requestData.popular = dishPopular;
@@ -41,7 +60,8 @@ function AddDishModal({ open, setOpen, subcategoryId, updateDishes }) {
             // Send a POST request to create the dish
             await axios.post('http://localhost:8000/api/v1/menu/dishes/', requestData, {
                 headers: {
-                    Authorization: `Bearer ${sessionStorage.getItem('accessToken')}`
+                    Authorization: `Bearer ${sessionStorage.getItem('accessToken')}`,
+                    'Content-Type': 'multipart/form-data'
                 }
             });
 
@@ -59,11 +79,17 @@ function AddDishModal({ open, setOpen, subcategoryId, updateDishes }) {
         } catch (error) {
             // Handle errors
             if (error.response && error.response.data) {
-                if (error.response.data.name && error.response.data.name[0] === 'Ensure this value has at most 30 characters.') {
-                    toast.error('Максимальное количество символов для наименования - 30', { autoClose: 2000, pauseOnHover: false, position: "top-center" });
+                if (error.response.data.name && error.response.data.name[0] === 'Убедитесь, что это значение содержит не более 40 символов.') {
+                    toast.error('Максимальное количество символов для наименования - 40', { autoClose: 1000, pauseOnHover: false, position: "top-center" });
                 }
-                if (error.response.data.name && error.response.data.name[0] === 'The name can only contain letters (Russian and English)') {
-                    toast.error('Наименование должно содержать только русские или английские буквы', { autoClose: 2000, pauseOnHover: false, position: "top-center" });
+                if (error.response.data.actual_price && error.response.data.actual_price[0] === 'Требуется численное значение.') {
+                    toast.error('Цена должна быть числом.', { autoClose: 1000, pauseOnHover: false, position: "top-center" });
+                }
+                if (error.response.data.old_price && error.response.data.old_price[0] === 'Требуется численное значение.') {
+                    toast.error('Цена должна быть числом.', { autoClose: 1000, pauseOnHover: false, position: "top-center" });
+                }
+                if (error.response.data.description && error.response.data.description[0] === 'Убедитесь, что это значение содержит не более 120 символов.') {
+                    toast.error('Максимальное количество символов для описания - 120', { autoClose: 1000, pauseOnHover: false, position: "top-center" });
                 }
             }
         }
@@ -88,40 +114,40 @@ function AddDishModal({ open, setOpen, subcategoryId, updateDishes }) {
                         <MDBModalBody>
                             {/* Form fields */}
                             <MDBInput className="mb-3" label='Наименование блюда' type='text' value={dishName} onChange={(e) => setDishName(e.target.value)} required />
-                            <MDBInput className="mb-3" label='Фактическая цена' type='number' value={dishActualPrice} onChange={(e) => setDishActualPrice(e.target.value)} required />
-                            <div className="row">
-                                <div className="col me-0 pe-0">
-                                    <MDBSwitch label='Стоп-лист' checked={dishStop} onChange={() => setDishStop(!dishStop)} />
-                                </div>
-                                <div className="col">
-                                    <i class="mx-1 text-danger fas fa-ban"></i>
-                                </div>
-                            </div>
+                            <MDBInput className="mb-3" label='Фактическая цена' type='text' value={dishActualPrice} onChange={(e) => setDishActualPrice(e.target.value)} required />
                             {/* Button to show additional info */}
                             <button type="button" className="btn btn-outline-secondary mt-4 btn-animate" onClick={() => setIsAdditionalInfoVisible(!isAdditionalInfoVisible)}>Показать дополнительные поля <i class="fas fa-circle-chevron-down ms-1"></i></button>
                             {/* Additional fields */}
                             {isAdditionalInfoVisible && (
-                            <>
-                                <MDBInput className="my-3" label='Старая цена' type='number' value={dishOldPrice} onChange={(e) => setDishOldPrice(e.target.value)} />
-                                <MDBTextArea className="mb-3" label='Описание' rows={3} type='text' value={dishDescription} onChange={(e) => setDishDescription(e.target.value)} />
-                                <div className="row">
-                                    <div className="col me-0 pe-0">
-                                        <MDBSwitch label='Популярное' checked={dishPopular} onChange={() => setDishPopular(!dishPopular)} />
-                                        <MDBSwitch label='Острое' checked={dishSpicy} onChange={() => setDishSpicy(!dishSpicy)} />
-                                        <MDBSwitch label='Вегетарианское' checked={dishVegetarian} onChange={() => setDishVegetarian(!dishVegetarian)} />
+                                <>
+                                    <MDBInput className="my-3" label='Старая цена' type='text' value={dishOldPrice} onChange={(e) => setDishOldPrice(e.target.value)} />
+                                    <MDBTextArea className="mb-3" label='Описание' rows={3} type='text' value={dishDescription} onChange={(e) => setDishDescription(e.target.value)} />
+                                        <input
+                                            type="file"
+                                            class="form-control"
+                                            id="inputGroupFile04"
+                                            onChange={(e) => setImage(e.target.files[0])}
+                                        />
+                                    <div className="row">
+                                        <div className="col me-0 pe-0">
+                                            <MDBSwitch label='Стоп-лист' checked={dishStop} onChange={() => setDishStop(!dishStop)} />
+                                            <MDBSwitch label='Популярное' checked={dishPopular} onChange={() => setDishPopular(!dishPopular)} />
+                                            <MDBSwitch label='Острое' checked={dishSpicy} onChange={() => setDishSpicy(!dishSpicy)} />
+                                            <MDBSwitch label='Вегетарианское' checked={dishVegetarian} onChange={() => setDishVegetarian(!dishVegetarian)} />
+                                        </div>
+                                        <div className="col">
+                                            <i class="mx-1 text-danger fas fa-ban mt-1"></i>
+                                            <i className="d-block fas fa-star mt-1" style={{ 'color': 'gold' }}></i>
+                                            <i className="d-block fas fa-pepper-hot text-danger mt-2"></i>
+                                            <i className="d-block fas fa-seedling text-success mt-3"></i>
+                                        </div>
                                     </div>
-                                    <div className="col">
-                                        <i className="d-block fas fa-star mt-1" style={{ 'color': 'gold' }}></i>
-                                        <i className="d-block fas fa-pepper-hot text-danger mt-2"></i>
-                                        <i className="d-block fas fa-seedling text-success mt-3"></i>
-                                    </div>
-                                </div>
-                            </>
+                                </>
                             )}
                         </MDBModalBody>
                         <MDBModalFooter>
                             {/* Save and close buttons */}
-                            <MDBBtn color="success" onClick={handleAddDish}>Сохранить</MDBBtn>
+                            <MDBBtn color="success" onClick={handleAddDish} disabled={!dishName || !dishActualPrice}>Сохранить</MDBBtn>
                         </MDBModalFooter>
                     </form>
                 </MDBModalContent>

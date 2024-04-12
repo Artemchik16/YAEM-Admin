@@ -1,82 +1,120 @@
-// Import react
-import React, { useState } from 'react';
-// Import MDB
+import React, { useState, useEffect } from 'react';
 import { MDBBtn, MDBModal, MDBModalDialog, MDBModalContent, MDBModalHeader, MDBModalTitle, MDBModalBody, MDBModalFooter, MDBInput } from 'mdb-react-ui-kit';
-// Import axios
 import axios from 'axios';
-// Import react-toastify
 import { toast } from 'react-toastify';
 
+function EditSubcategoryModal({ open, setOpen, setSelectedSubcategoryId, setSelectedSubcategory, subcategoryId, subcategoryName, updateSubcategories, categoryId }) {
 
-function EditSubcategoryModal({ open, setOpen, subcategoryId, subcategoryName, updateSubcategories, categoryId }) {
-
-    // Handlers
     const userToken = sessionStorage.getItem('accessToken');
+    const [subcategoryData, setSubcategoryData] = useState(null);
     const [editedSubcategoryName, setEditedSubcategoryName] = useState(subcategoryName);
+    const [editedSubcategoryZindex, setEditedSubcategoryZindex] = useState(subcategoryName);
+    const [formChanged, setFormChanged] = useState(false);
+    const [isSaving, setIsSaving] = useState(false);
 
-    // Patch request on backend, update category
-    const handleEditSubcategory = async () => {
+    useEffect(() => {
+        const fetchSubcategoryData = async () => {
+            try {
+                const response = await axios.get(`http://localhost:8000/api/v1/menu/subcategories/${subcategoryId}`, {
+                    headers: {
+                        Authorization: `Bearer ${userToken}`
+                    }
+                });
+                setSubcategoryData(response.data);
+                setEditedSubcategoryName(response.data.name);
+                setEditedSubcategoryZindex(response.data.z_index);
+            } catch (error) {
+                toast.error('Невозможно получить информацию о категории.', { autoClose: 1000 });
+            }
+        };
+
+        fetchSubcategoryData();
+    }, [subcategoryId]);
+
+    useEffect(() => {
+        if (subcategoryData) {
+            setFormChanged(
+                editedSubcategoryName !== subcategoryData.name ||
+                editedSubcategoryZindex !== subcategoryData.z_index
+            );
+        }
+    }, [editedSubcategoryName, editedSubcategoryZindex]);
+
+    const handleEditSubcategory = async (e) => {
+        e.preventDefault()
+        setIsSaving(true);
+        setTimeout(() => { setIsSaving(false); }, 2000);
         try {
-            await axios.patch(`http://localhost:8000/api/v1/menu/subcategories/${subcategoryId}/`, {
-                name: editedSubcategoryName
+            const response = await axios.patch(`http://localhost:8000/api/v1/menu/subcategories/${subcategoryId}/`, {
+                name: editedSubcategoryName,
+                z_index: editedSubcategoryZindex
             }, {
                 headers: {
                     Authorization: `Bearer ${userToken}`
                 }
             });
-            // Update displayed categories list
-            const updateSubcategoriesResponse = await axios.get(`http://localhost:8000/api/v1/menu/subcategories?category_id=${categoryId}`, {
+
+            setIsSaving(false);
+
+            const updatedSubcategories = await axios.get(`http://localhost:8000/api/v1/menu/subcategories?category_id=${categoryId}`, {
                 headers: {
                     Authorization: `Bearer ${userToken}`
                 }
             });
-            updateSubcategories(updateSubcategoriesResponse.data)
+
+            updateSubcategories(updatedSubcategories.data);
+            setSelectedSubcategoryId(null)
+            setSelectedSubcategory(null)
             setOpen(false);
-            toast.success('Категория успешно обновлена.', { autoClose: 2000, pauseOnHover: false, position: "top-center" });
+            toast.success('Категория успешно обновлена.', { autoClose: 1000, pauseOnHover: false, position: "top-center" });
         } catch (error) {
             if (error.response && error.response.data) {
                 if (error.response.data.name && error.response.data.name[0] === 'Убедитесь, что это значение содержит не более 50 символов.') {
-                    toast.error('50 символов макс', { autoClose: 2000, pauseOnHover: false, position: "top-center" });
+                    toast.error('Максимальная длина названия категории - 50 символов', { autoClose: 2000, pauseOnHover: false, position: "top-center" });
                 }
-                if (error.response.data.name && error.response.data.name[0] === 'Subcategory: only ru/en/num characters') {
-                    toast.error('рус англ буквы', { autoClose: 2000, pauseOnHover: false, position: "top-center" });
+                if (error.response.data.z_index && error.response.data.z_index[0] === 'Введите правильное число.') {
+                    toast.error('Порядок отображения должен быть числом.', { autoClose: 1000, pauseOnHover: false, position: "top-center" });
                 }
             }
         }
     };
 
+    const handleCloseModal = () => {
+        setOpen(false);
+    };
+
     return (
-        // Modal handlers
         <MDBModal open={open} setOpen={setOpen} tabIndex='-1'>
             <MDBModalDialog>
                 <MDBModalContent>
                     <MDBModalHeader>
-                        <MDBModalTitle>Редактировать категорию</MDBModalTitle>
-                        {/* Close handler */}
-                        <MDBBtn className='btn-close'
-                            color='none'
-                            onClick={() => setOpen(false)} />
+                        <MDBModalTitle>Редактировать подкатегорию</MDBModalTitle>
+                        <MDBBtn className='btn-close' color='none' onClick={handleCloseModal} />
                     </MDBModalHeader>
-                    <MDBModalBody>
-                        <h1>{subcategoryName} АРТЁМ ПОЛОЖИ ЗНАЧЕНИЯ !!!!</h1>
-                        {/* Name handler */}
-                        <MDBInput
-                            label='Наименование категории'
-                            id='categoryName'
-                            type='text'
-                            defaultValue={subcategoryName}
-                            value={editedSubcategoryName}
-                            onChange={(e) => setEditedSubcategoryName(e.target.value)} />
-                        <MDBInput
-                            className="my-3"
-                            label='Порядок отображения'
-                            type='number'
-                        />
-                    </MDBModalBody>
-                    <MDBModalFooter>
-                        {/* Success, close handlers */}
-                        <MDBBtn color="success" onClick={handleEditSubcategory}>Сохранить</MDBBtn>
-                    </MDBModalFooter>
+                    <form onSubmit={handleEditSubcategory}>
+                        <MDBModalBody>
+                            <MDBInput
+                                label='Наименование подкатегории'
+                                id='subcategoryName'
+                                type='text'
+                                defaultValue={subcategoryData?.name}
+                                value={editedSubcategoryName}
+                                onChange={(e) => setEditedSubcategoryName(e.target.value)}
+                            />
+                            <MDBInput
+                                className="my-3"
+                                label='Порядок отображения'
+                                placeholder="1-2-3-4-5"
+                                type='text'
+                                defaultValue={subcategoryData?.z_index}
+                                value={editedSubcategoryZindex}
+                                onChange={(e) => setEditedSubcategoryZindex(e.target.value)}
+                            />
+                        </MDBModalBody>
+                        <MDBModalFooter>
+                            {formChanged && <MDBBtn color="success" disabled={isSaving || (!editedSubcategoryName || !editedSubcategoryZindex)}>Сохранить</MDBBtn>}
+                        </MDBModalFooter>
+                    </form>
                 </MDBModalContent>
             </MDBModalDialog>
         </MDBModal>

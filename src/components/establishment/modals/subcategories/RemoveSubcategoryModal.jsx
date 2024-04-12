@@ -8,7 +8,7 @@ import axios from 'axios';
 import { toast } from 'react-toastify';
 
 
-function RemoveSubcategoryModal({ open, setOpen, subcategoryId, subcategoryName, updateSubcategories, categoryId }) {
+function RemoveSubcategoryModal({ open, setOpen, subcategoryId, setSelectedSubcategoryId, subcategoryName, updateSubcategories, categoryId }) {
 
     // Handlers
     const userToken = sessionStorage.getItem('accessToken');
@@ -28,6 +28,7 @@ function RemoveSubcategoryModal({ open, setOpen, subcategoryId, subcategoryName,
                 }
             });
             updateSubcategories(updateSubcategoriesResponse.data)
+            setSelectedSubcategoryId(null)
             setOpen(false);
             toast.success('Категория успешно удалена.', { autoClose: 2000, pauseOnHover: false, position: "top-center" });
         } catch (error) {

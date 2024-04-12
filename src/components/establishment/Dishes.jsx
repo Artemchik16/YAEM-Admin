@@ -61,7 +61,7 @@ function Dishes({ subcategoryId }) {
                 }
             );
             // Notify user about successful deletion
-            toast.warning('Блюдо удалено.', { autoClose: 2000 });
+            toast.warning('Блюдо удалено.', { autoClose: 1000 });
             // Remove the deleted dish from the dishes list
             const updatedDishes = dishes.filter(dish => dish.id !== dishId);
             setDishes(updatedDishes);

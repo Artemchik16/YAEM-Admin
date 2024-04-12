@@ -3,7 +3,7 @@ import { MDBBtn, MDBModal, MDBModalDialog, MDBModalContent, MDBModalHeader, MDBM
 import axios from 'axios';
 import { toast } from 'react-toastify';
 
-function EditCategoryModal({ open, setOpen, categoryId, setSelectedCategoryId, setSelectedCategory,updateCategories, establishmentId }) {
+function EditCategoryModal({ open, setOpen, categoryId, setSelectedCategoryId, setSelectedCategory, updateCategories, establishmentId }) {
 
     const userToken = sessionStorage.getItem('accessToken');
     const [formChanged, setFormChanged] = useState(false);
@@ -34,8 +34,7 @@ function EditCategoryModal({ open, setOpen, categoryId, setSelectedCategoryId, s
     const handleEditCategory = async (e) => {
         e.preventDefault();
         setIsSaving(true);
-        setOpen(false);
-        setTimeout(() => { setIsSaving(false); }, 1000);
+        setTimeout(() => { setIsSaving(false); }, 2000);
         try {
             await axios.patch(`http://localhost:8000/api/v1/menu/categories/${categoryId}/`, {
                 name: editedCategoryName || categoryData.name,
@@ -45,6 +44,9 @@ function EditCategoryModal({ open, setOpen, categoryId, setSelectedCategoryId, s
                     Authorization: `Bearer ${userToken}`
                 }
             });
+
+            setIsSaving(false);
+
             const updateCategoriesResponse = await axios.get(`http://localhost:8000/api/v1/menu/categories?client_id=${establishmentId}`, {
                 headers: {
                     Authorization: `Bearer ${userToken}`
@@ -53,18 +55,15 @@ function EditCategoryModal({ open, setOpen, categoryId, setSelectedCategoryId, s
             updateCategories(updateCategoriesResponse.data)
             setSelectedCategory(null)
             setSelectedCategoryId(null)
+            setOpen(false);
             toast.success('Категория успешно обновлена.', { autoClose: 1000, pauseOnHover: false, position: "top-center" });
         } catch (error) {
             if (error.response && error.response.data) {
                 if (error.response.data.name && error.response.data.name[0] === 'Убедитесь, что это значение содержит не более 30 символов.') {
-                    setIsSaving(true);
-                    setTimeout(() => { setIsSaving(false); }, 1000);
-                    toast.error('30 символов макс', { autoClose: 2000, pauseOnHover: false, position: "top-center" });
+                    toast.error('Название категории не может содержать более 30 символов', { autoClose: 1000, pauseOnHover: false, position: "top-center" });
                 }
-                if (error.response.data.name && error.response.data.name[0] === 'Category: only ru/en/num characters') {
-                    setIsSaving(true);
-                    setTimeout(() => { setIsSaving(false); }, 1000);
-                    toast.error('рус англ цифры буквы', { autoClose: 2000, pauseOnHover: false, position: "top-center" });
+                if (error.response.data.z_index && error.response.data.z_index[0] === 'Введите правильное число.') {
+                    toast.error('Порядок отображения должен быть числом.', { autoClose: 1000, pauseOnHover: false, position: "top-center" });
                 }
             }
         }
@@ -78,7 +77,6 @@ function EditCategoryModal({ open, setOpen, categoryId, setSelectedCategoryId, s
             );
         }
     }, [editedCategoryName, editedCategoryZindex]);
-
 
     const handleCloseModal = () => {
         setOpen(false);
@@ -112,7 +110,7 @@ function EditCategoryModal({ open, setOpen, categoryId, setSelectedCategoryId, s
                             />
                         </MDBModalBody>
                         <MDBModalFooter>
-                            {formChanged && <MDBBtn color="success">Сохранить</MDBBtn>}
+                            {formChanged && <MDBBtn color="success" disabled={isSaving || (!editedCategoryName || !editedCategoryZindex)}>Сохранить</MDBBtn>}
                         </MDBModalFooter>
                     </form>
                 </MDBModalContent>

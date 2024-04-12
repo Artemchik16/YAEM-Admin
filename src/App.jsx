@@ -8,11 +8,10 @@ import NotFound from "./components/utils/404NotFound.jsx";
 import RobotsTxt from "./components/utils/RobotsTxt.jsx";
 import SitemapXml from "./components/utils/SitemapXml.jsx";
 
-
+// Parent component
 export default function App() {
   // Check is authenticated user, getting user token
   const isAuthenticated = sessionStorage.getItem('accessToken') !== null;
-
 
   return (
     <Router>

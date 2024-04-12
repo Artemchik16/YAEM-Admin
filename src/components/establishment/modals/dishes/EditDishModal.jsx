@@ -8,14 +8,23 @@ function EditDishModal({ open, setOpen, dishId, updateDishes, subcategoryId }) {
     const [isAdditionalInfoVisible, setIsAdditionalInfoVisible] = useState(false);
     const [formChanged, setFormChanged] = useState(false);
     const [dishData, setDishData] = useState(null);
-    const [dishName, setDishName] = useState('');
+    const [dishName, setDishName] = useState("");
     const [dishActualPrice, setDishActualPrice] = useState('');
-    const [dishStop, setDishStop] = useState(false);
+    const [dishStop, setDishStop] = useState(null);
+    const [image, setImage] = useState(null);
+    const formData = new FormData();
+    formData.append('image', image);
     const [dishOldPrice, setDishOldPrice] = useState('');
     const [dishDescription, setDishDescription] = useState('');
-    const [dishPopular, setDishPopular] = useState(false);
-    const [dishSpicy, setDishSpicy] = useState(false);
-    const [dishVegetarian, setDishVegetarian] = useState(false);
+    const [dishPopular, setDishPopular] = useState(null);
+    const [dishSpicy, setDishSpicy] = useState(null);
+    const [dishVegetarian, setDishVegetarian] = useState(null);
+
+    useEffect(() => {
+        if (!open) {
+            setIsAdditionalInfoVisible(false);
+        }
+    }, [open]);
 
     useEffect(() => {
         const fetchDishData = async () => {
@@ -29,6 +38,7 @@ function EditDishModal({ open, setOpen, dishId, updateDishes, subcategoryId }) {
                 setDishName(response.data.name);
                 setDishActualPrice(response.data.actual_price);
                 setDishStop(response.data.stop);
+                // setImage(response.data.image)
                 setDishOldPrice(response.data.old_price);
                 setDishDescription(response.data.description);
                 setDishPopular(response.data.popular);
@@ -42,21 +52,29 @@ function EditDishModal({ open, setOpen, dishId, updateDishes, subcategoryId }) {
         fetchDishData();
     }, [dishId]);
 
+
     const handleUpdateDish = async (e) => {
         e.preventDefault();
         try {
-            await axios.patch(`http://localhost:8000/api/v1/menu/dishes/${dishId}/`, {
+            const requestData = {
                 name: dishName || dishData.name,
                 actual_price: dishActualPrice || dishData.actual_price,
-                ...(dishStop !== null && { stop: dishStop }),
+                stop: dishStop,
                 old_price: dishOldPrice || dishData.old_price,
                 description: dishDescription || dishData.description,
-                ...(dishPopular !== null && { popular: dishPopular }),
-                ...(dishSpicy !== null && { spicy: dishSpicy }),
-                ...(dishVegetarian !== null && { vegetarian: dishVegetarian }),
-            }, {
+                popular: dishPopular,
+                spicy: dishSpicy,
+                vegetarian: dishVegetarian
+            };
+
+            if (image) {
+                requestData.image = image;
+            }
+
+            await axios.patch(`http://localhost:8000/api/v1/menu/dishes/${dishId}/`, requestData, {
                 headers: {
-                    Authorization: `Bearer ${sessionStorage.getItem('accessToken')}`
+                    Authorization: `Bearer ${sessionStorage.getItem('accessToken')}`,
+                    'Content-Type': 'multipart/form-data'
                 }
             });
 
@@ -70,7 +88,7 @@ function EditDishModal({ open, setOpen, dishId, updateDishes, subcategoryId }) {
             setOpen(false);
             toast.success('Блюдо успешно обновлено.', { autoClose: 2000, pauseOnHover: false, position: "top-center" });
         } catch (error) {
-            console.error(error);
+            console.log(dishData.image, image)
             toast.error('Произошла ошибка при обновлении блюда.', { autoClose: 2000, pauseOnHover: false, position: "top-center" });
         }
     };
@@ -139,7 +157,7 @@ function EditDishModal({ open, setOpen, dishId, updateDishes, subcategoryId }) {
                                         className="my-3"
                                         label='Старая цена'
                                         type='number'
-                                        defaultValue={dishData?.old_price}
+                                        defaultValue={dishData.old_price}
                                         value={dishOldPrice}
                                         onChange={(e) => setDishOldPrice(e.target.value)}
                                     />
@@ -151,6 +169,17 @@ function EditDishModal({ open, setOpen, dishId, updateDishes, subcategoryId }) {
                                         defaultValue={dishData?.description}
                                         value={dishDescription}
                                         onChange={(e) => setDishDescription(e.target.value)}
+                                    />
+                                    <input
+                                        type="file"
+                                        class="form-control"
+                                        id="inputGroupFile04"
+                                        onChange={(e) => {
+                                            const file = e.target.files[0];
+                                            if (file) {
+                                                setImage(file);
+                                            }
+                                        }}
                                     />
                                     <div className="row">
                                         <div className="col me-0 pe-0">
@@ -168,7 +197,7 @@ function EditDishModal({ open, setOpen, dishId, updateDishes, subcategoryId }) {
                             )}
                         </MDBModalBody>
                         <MDBModalFooter>
-                            {formChanged && <MDBBtn color="success">Сохранить</MDBBtn>}
+                            <MDBBtn color="success">Сохранить</MDBBtn>
                         </MDBModalFooter>
                     </form>
                 </MDBModalContent>

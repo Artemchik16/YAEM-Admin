@@ -122,18 +122,23 @@ function Subcategories({ categoryId }) {
                 categoryId={categoryId}
                 updateSubcategories={setSubcategories}
             />
-            <EditSubcategoryModal
-                open={editModalOpen}
-                setOpen={setEditModalOpen}
-                categoryId={categoryId}
-                subcategoryId={selectedSubcategory ? selectedSubcategory.id : null}
-                subcategoryName={selectedSubcategory ? selectedSubcategory.name : null}
-                updateSubcategories={setSubcategories}
-            />
+            {selectedSubcategoryId && (
+                <EditSubcategoryModal
+                    open={editModalOpen}
+                    setOpen={setEditModalOpen}
+                    categoryId={categoryId}
+                    setSelectedSubcategoryId={setSelectedSubcategoryId}
+                    setSelectedSubcategory={setSelectedSubcategory}
+                    subcategoryId={selectedSubcategory ? selectedSubcategory.id : null}
+                    subcategoryName={selectedSubcategory ? selectedSubcategory.name : null}
+                    updateSubcategories={setSubcategories}
+                />
+            )}
             <RemoveSubcategoryModal
                 open={removeModalOpen}
                 setOpen={setRemoveModalOpen}
                 categoryId={categoryId}
+                setSelectedSubcategoryId={setSelectedSubcategoryId}
                 subcategoryId={selectedSubcategory ? selectedSubcategory.id : null}
                 subcategoryName={selectedSubcategory ? selectedSubcategory.name : null}
                 updateSubcategories={setSubcategories}

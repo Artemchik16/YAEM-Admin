@@ -26,9 +26,9 @@ function EditEstablishmentForm({ establishmentId, onFinishEditing, updateEstabli
   const [city, setCity] = useState('');
   const [cities, setCities] = useState([]);
   const [description, setDescription] = useState('');
-//   const [logo, setLogo] = useState("");
-//   const formData = new FormData();
-//   formData.append('logo', logo);
+  const [logo, setLogo] = useState(null);
+  const formData = new FormData();
+  formData.append('logo', logo);
   const [address, setAddress] = useState("");
   const [phone, setPhone] = useState("");
   const [instagramLink, setInstagramLink] = useState("");
@@ -59,7 +59,7 @@ function EditEstablishmentForm({ establishmentId, onFinishEditing, updateEstabli
         setUrlName(response.data.url_name);
         setCity(response.data.city);
         setDescription(response.data.description);
-//         setLogo(response.data.logo);
+        // setLogo(response.data.logo);
         setAddress(response.data.address);
         setPhone(response.data.phone);
         setInstagramLink(response.data.inst);
@@ -100,28 +100,31 @@ function EditEstablishmentForm({ establishmentId, onFinishEditing, updateEstabli
   const handleUpdate = async (e) => {
     e.preventDefault();
     try {
-      await axios.patch(`http://localhost:8000/api/v1/menu/clients/${establishmentId}/`, {
-        // Send updated data if data changed
+      const requestData = {
         name: name || establishmentData.name,
         url_name: urlName || establishmentData.url_name,
         city: city || establishmentData.city,
         description: description || establishmentData.description,
         address: address || establishmentData.address,
-//         logo: logo || establishmentData.logo,
         phone: phone || establishmentData.phone,
         inst: instagramLink || establishmentData.inst,
         two_gis: twogisLink || establishmentData.two_gis,
-        ...(outside !== null && { outside }),
-        ...(delivery !== null && { delivery }),
         service: service || establishmentData.service,
         wifi: wifiName || establishmentData.wifi,
         wifi_password: wifiPassword || establishmentData.wifi_password,
         work_time_start: workTimeStart || establishmentData.work_time_start,
         work_time_end: workTimeEnd || establishmentData.work_time_end,
-      }, {
-        // Send token
+        ...(outside !== null && { outside }),
+        ...(delivery !== null && { delivery }),
+      };
+      if (logo) {
+        requestData.logo = logo;
+      }
+
+      await axios.patch(`http://localhost:8000/api/v1/menu/clients/${establishmentId}/`, requestData, {
         headers: {
-          Authorization: `Bearer ${userToken}`
+          Authorization: `Bearer ${userToken}`,
+          'Content-Type': 'multipart/form-data'
         }
       });
       // Success block
@@ -209,7 +212,7 @@ function EditEstablishmentForm({ establishmentId, onFinishEditing, updateEstabli
       urlName !== establishmentData?.url_name ||
       city !== establishmentData?.city ||
       description !== establishmentData?.description ||
-//       logo !== establishmentData?.logo ||
+      //       logo !== establishmentData?.logo ||
       address !== establishmentData?.address ||
       phone !== establishmentData?.phone ||
       instagramLink !== establishmentData?.inst ||
@@ -277,7 +280,7 @@ function EditEstablishmentForm({ establishmentId, onFinishEditing, updateEstabli
         >
           <option value="">Выберите город</option>
           {cities.map(city => (
-          <option key={city.id} value={city.id}>{city.name}</option>
+            <option key={city.id} value={city.id}>{city.name}</option>
           ))}
         </select>
         {/* Button to open a block with additional information */}
@@ -298,15 +301,20 @@ function EditEstablishmentForm({ establishmentId, onFinishEditing, updateEstabli
               />
             </div>
             {/* Establishment logo */}
-{/*             <div class="input-group"> */}
-{/*               <label class="input-group-text" for="inputGroupFile01">Логотип</label> */}
-{/*               <input */}
-{/*                 type="file" */}
-{/*                 class="form-control" */}
-{/*                 id="inputGroupFile04" */}
-{/*                 onChange={(e) => setLogo(e.target.files[0])} */}
-{/*               /> */}
-{/*             </div> */}
+            <div class="input-group">
+              <label class="input-group-text" for="inputGroupFile01">Логотип</label>
+              <input
+                type="file"
+                class="form-control"
+                id="inputGroupFile04"
+                onChange={(e) => {
+                  const file = e.target.files[0];
+                  if (file) {
+                    setLogo(file);
+                  }
+                }}
+              />
+            </div>
             {/* Establishment address*/}
             <div className="input-group my-3">
               <span className="input-group-text"><i class="fas fa-location-dot"></i></span>
@@ -375,7 +383,7 @@ function EditEstablishmentForm({ establishmentId, onFinishEditing, updateEstabli
             <div className="input-group mt-3">
               <span className="input-group-text"><i class="fas fa-percent"></i></span>
               <MDBInput
-                type="phone"
+                type="text"
                 label="Процент обслуживания"
                 defaultValue={establishmentData.service}
                 value={service}

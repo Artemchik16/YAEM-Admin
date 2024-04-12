@@ -40,6 +40,7 @@ function AddCategoryModal({ open, setOpen, establishmentId, updateCategories, se
                     Authorization: `Bearer ${sessionStorage.getItem('accessToken')}`
                 }
             });
+            setIsSaving(false);
             // Fetch updated categories list
             const updateCategoriesResponse = await axios.get(`http://localhost:8000/api/v1/menu/categories?client_id=${establishmentId}`, {
                 headers: {
@@ -58,19 +59,10 @@ function AddCategoryModal({ open, setOpen, establishmentId, updateCategories, se
             if (error.response && error.response.data) {
                 // Show error toast notifications based on the error response
                 if (error.response.data.name && error.response.data.name[0] === 'Убедитесь, что это значение содержит не более 30 символов.') {
-                    setIsSaving(true);
-                    setTimeout(() => { setIsSaving(false); }, 1000);
-                    toast.error('Название категории не может содержать более 30 символов', { autoClose: 1000, pauseOnHover: false, position: "top-center" });
-                }
-                if (error.response.data.name && error.response.data.name[0] === 'Category: only ru/en/num characters') {
-                    setIsSaving(true);
-                    setTimeout(() => { setIsSaving(false); }, 1500);
-                    toast.error('Допустимы только рус англ буквы цифры', { autoClose: 1000, pauseOnHover: false, position: "top-center" });
+                    toast.error('Название раздела не может содержать более 30 символов', { autoClose: 1000, pauseOnHover: false, position: "top-center" });
                 }
                 if (error.response.data.z_index && error.response.data.z_index[0] === 'Введите правильное число.') {
-                    setIsSaving(true);
-                    setTimeout(() => { setIsSaving(false); }, 1500);
-                    toast.error('число индекс', { autoClose: 1000, pauseOnHover: false, position: "top-center" });
+                    toast.error('Порядок отображения должен быть числом.', { autoClose: 1000, pauseOnHover: false, position: "top-center" });
                 }
             }
         }

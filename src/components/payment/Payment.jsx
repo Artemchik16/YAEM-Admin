@@ -44,7 +44,6 @@ export default function Payment() {
         setPayments(paymentData);
       } catch (error) {
         setLoading(false);
-        console.error('Ошибка при получении данных:', error);
       }
     };
     fetchData();
@@ -116,7 +115,7 @@ export default function Payment() {
         tarif_number: tarifTitleID,
         months: months,
         phone: kaspiNumber,
-        status: "INPROCESSING"
+        status: "В ОБРАБОТКЕ"
       }, {
         headers: {
           'Authorization': `Bearer ${userToken}`
@@ -362,14 +361,13 @@ export default function Payment() {
                     <td>{payment.tarif_number === 1 ? 'БРОНЗА' : (payment.tarif_number === 2 ? 'СЕРЕБРО' : 'ЗОЛОТО')}</td>
                     <td>{payment.months}</td>
                     <td>{payment.phone}</td>
-                    <td>{payment.created_at}</td>
+                    <td>{new Date(payment.created_at).toLocaleDateString()}</td>
                     <td>
-                      <MDBBadge color={payment.status === 'INPROCESSING' ? 'secondary' : (payment.status === 'PAID' ? 'success' : 'danger')} pill>
+                      <MDBBadge color={payment.status === 'В ОБРАБОТКЕ' ? 'secondary' : (payment.status === 'ОПЛАЧЕНО' ? 'success' : 'danger')} pill>
                         {payment.status}
                       </MDBBadge>
                     </td>
                     <td>
-{/*                       <button className="btn btn-danger btn-sm" onClick={() => handleDeletePayment(payment.id)}>Удалить</button> */}
                       <i className="fas fa-trash text-danger btn-animate fa-lg mx-2" onClick={() => handleDeletePayment(payment.id)}></i>
                     </td>
                   </tr>
