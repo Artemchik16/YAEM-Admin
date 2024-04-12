@@ -33,7 +33,7 @@ function CreateEstablishmentForm({ onClose, updateEstablishments }) {
 
   // Get request on a list of cities from backend
   useEffect(() => {
-    axios.get("http://127.0.0.1:8000/api/v1/menu/city/", {
+    axios.get("https://yaem.kz/api/v1/menu/city/", {
       // Send token on backend
       headers: {
         'Authorization': `Bearer ${userToken}`,
@@ -74,7 +74,7 @@ function CreateEstablishmentForm({ onClose, updateEstablishments }) {
       if (workTimeStart && workTimeStart !== '00:00') requestData.work_time_start = workTimeStart;
       if (workTimeEnd && workTimeEnd !== '00:00') requestData.work_time_end = workTimeEnd;
       // Post request on backend
-      await axios.post("http://127.0.0.1:8000/api/v1/menu/clients/", requestData, {
+      await axios.post("https://yaem.kz/api/v1/menu/clients/", requestData, {
         // Send token on backend
         headers: {
           'Authorization': `Bearer ${userToken}`,

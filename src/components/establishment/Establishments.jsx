@@ -27,7 +27,7 @@ function Establishment() {
         // Get access token value
         const token = sessionStorage.getItem('accessToken');
         // Make a GET request on backend
-        const response = await axios.get('http://localhost:8000/api/v1/menu/clients/', {
+        const response = await axios.get('https://yaem.kz/api/v1/menu/clients/', {
           // Send token on backend
           headers: {
             'Authorization': `Bearer ${token}`

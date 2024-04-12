@@ -15,7 +15,7 @@ function EditSubcategoryModal({ open, setOpen, setSelectedSubcategoryId, setSele
     useEffect(() => {
         const fetchSubcategoryData = async () => {
             try {
-                const response = await axios.get(`http://localhost:8000/api/v1/menu/subcategories/${subcategoryId}`, {
+                const response = await axios.get(`https://yaem.kz/api/v1/menu/subcategories/${subcategoryId}`, {
                     headers: {
                         Authorization: `Bearer ${userToken}`
                     }
@@ -45,7 +45,7 @@ function EditSubcategoryModal({ open, setOpen, setSelectedSubcategoryId, setSele
         setIsSaving(true);
         setTimeout(() => { setIsSaving(false); }, 2000);
         try {
-            const response = await axios.patch(`http://localhost:8000/api/v1/menu/subcategories/${subcategoryId}/`, {
+            const response = await axios.patch(`https://yaem.kz/api/v1/menu/subcategories/${subcategoryId}/`, {
                 name: editedSubcategoryName,
                 z_index: editedSubcategoryZindex
             }, {
@@ -56,7 +56,7 @@ function EditSubcategoryModal({ open, setOpen, setSelectedSubcategoryId, setSele
 
             setIsSaving(false);
 
-            const updatedSubcategories = await axios.get(`http://localhost:8000/api/v1/menu/subcategories?category_id=${categoryId}`, {
+            const updatedSubcategories = await axios.get(`https://yaem.kz/api/v1/menu/subcategories?category_id=${categoryId}`, {
                 headers: {
                     Authorization: `Bearer ${userToken}`
                 }

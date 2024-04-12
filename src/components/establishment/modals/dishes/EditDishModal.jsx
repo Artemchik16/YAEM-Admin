@@ -29,7 +29,7 @@ function EditDishModal({ open, setOpen, dishId, updateDishes, subcategoryId }) {
     useEffect(() => {
         const fetchDishData = async () => {
             try {
-                const response = await axios.get(`http://localhost:8000/api/v1/menu/dishes/${dishId}`, {
+                const response = await axios.get(`https://yaem.kz/api/v1/menu/dishes/${dishId}`, {
                     headers: {
                         Authorization: `Bearer ${userToken}`
                     }
@@ -71,14 +71,14 @@ function EditDishModal({ open, setOpen, dishId, updateDishes, subcategoryId }) {
                 requestData.image = image;
             }
 
-            await axios.patch(`http://localhost:8000/api/v1/menu/dishes/${dishId}/`, requestData, {
+            await axios.patch(`https://yaem.kz/api/v1/menu/dishes/${dishId}/`, requestData, {
                 headers: {
                     Authorization: `Bearer ${sessionStorage.getItem('accessToken')}`,
                     'Content-Type': 'multipart/form-data'
                 }
             });
 
-            const updateDishesResponse = await axios.get(`http://localhost:8000/api/v1/menu/dishes?food_type_id=${subcategoryId}`, {
+            const updateDishesResponse = await axios.get(`https://yaem.kz/api/v1/menu/dishes?food_type_id=${subcategoryId}`, {
                 headers: {
                     Authorization: `Bearer ${sessionStorage.getItem('accessToken')}`
                 }

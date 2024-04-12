@@ -58,7 +58,7 @@ function AddDishModal({ open, setOpen, subcategoryId, updateDishes }) {
             if (dishVegetarian) requestData.vegetarian = dishVegetarian;
 
             // Send a POST request to create the dish
-            await axios.post('http://localhost:8000/api/v1/menu/dishes/', requestData, {
+            await axios.post('https://yaem.kz/api/v1/menu/dishes/', requestData, {
                 headers: {
                     Authorization: `Bearer ${sessionStorage.getItem('accessToken')}`,
                     'Content-Type': 'multipart/form-data'
@@ -66,7 +66,7 @@ function AddDishModal({ open, setOpen, subcategoryId, updateDishes }) {
             });
 
             // Update displayed dishes list
-            const updateDishesResponse = await axios.get(`http://localhost:8000/api/v1/menu/dishes?food_type_id=${subcategoryId}`, {
+            const updateDishesResponse = await axios.get(`https://yaem.kz/api/v1/menu/dishes?food_type_id=${subcategoryId}`, {
                 headers: {
                     Authorization: `Bearer ${sessionStorage.getItem('accessToken')}`
                 }

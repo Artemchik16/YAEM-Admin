@@ -16,13 +16,13 @@ function RemoveSubcategoryModal({ open, setOpen, subcategoryId, setSelectedSubca
     // Delete request on backend, delete category
     const handleDeleteSubcategory = async () => {
         try {
-            await axios.delete(`http://localhost:8000/api/v1/menu/subcategories/${subcategoryId}`, {
+            await axios.delete(`https://yaem.kz/api/v1/menu/subcategories/${subcategoryId}`, {
                 headers: {
                     Authorization: `Bearer ${userToken}`
                 }
             });
             // Update displayed categories list
-            const updateSubcategoriesResponse = await axios.get(`http://localhost:8000/api/v1/menu/subcategories?category_id=${categoryId}`, {
+            const updateSubcategoriesResponse = await axios.get(`https://yaem.kz/api/v1/menu/subcategories?category_id=${categoryId}`, {
                 headers: {
                     Authorization: `Bearer ${userToken}`
                 }

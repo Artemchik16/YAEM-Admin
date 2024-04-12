@@ -32,7 +32,7 @@ function EstablishmentCard({ establishments, onEdit, onEditDishes, updateEstabli
             const token = sessionStorage.getItem('accessToken');
             // Send delete request to the backend
             await axios.delete(
-                `http://localhost:8000/api/v1/menu/clients/${EstablishmentID}`,
+                `https://yaem.kz/api/v1/menu/clients/${EstablishmentID}`,
                 {
                     // Send token on backend
                     headers: {
@@ -44,7 +44,7 @@ function EstablishmentCard({ establishments, onEdit, onEditDishes, updateEstabli
             // Notify user about successful deletion
             toast.warning('Заведение удалено.', { autoClose: 2000 })
             // Another request on backend
-            const updatedEstablishmentsResponse = await axios.get('http://localhost:8000/api/v1/menu/clients/', {
+            const updatedEstablishmentsResponse = await axios.get('https://yaem.kz/api/v1/menu/clients/', {
                 // Send token on backend
                 headers: {
                     'Authorization': `Bearer ${token}`

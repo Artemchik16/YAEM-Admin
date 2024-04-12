@@ -33,7 +33,7 @@ function Subcategories({ categoryId }) {
         const fetchSubcategories = async () => {
             if (categoryId) {
                 try {
-                    const subcategoriesResponse = await axios.get(`http://localhost:8000/api/v1/menu/subcategories/?category_id=${categoryId}`, {
+                    const subcategoriesResponse = await axios.get(`https://yaem.kz/api/v1/menu/subcategories/?category_id=${categoryId}`, {
                         headers: {
                             Authorization: `Bearer ${userToken}`
                         }

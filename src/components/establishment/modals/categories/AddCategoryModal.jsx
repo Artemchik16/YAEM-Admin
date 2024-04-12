@@ -31,7 +31,7 @@ function AddCategoryModal({ open, setOpen, establishmentId, updateCategories, se
         setTimeout(() => { setIsSaving(false); }, 2000);
         try {
             // Send a POST request to add a new category
-            await axios.post('http://localhost:8000/api/v1/menu/categories/', {
+            await axios.post('https://yaem.kz/api/v1/menu/categories/', {
                 client_id: establishmentId,
                 name: categoryName,
                 z_index: categoryZindex
@@ -42,7 +42,7 @@ function AddCategoryModal({ open, setOpen, establishmentId, updateCategories, se
             });
             setIsSaving(false);
             // Fetch updated categories list
-            const updateCategoriesResponse = await axios.get(`http://localhost:8000/api/v1/menu/categories?client_id=${establishmentId}`, {
+            const updateCategoriesResponse = await axios.get(`https://yaem.kz/api/v1/menu/categories?client_id=${establishmentId}`, {
                 headers: {
                     Authorization: `Bearer ${sessionStorage.getItem('accessToken')}`
                 }

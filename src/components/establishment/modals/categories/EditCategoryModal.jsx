@@ -15,7 +15,7 @@ function EditCategoryModal({ open, setOpen, categoryId, setSelectedCategoryId, s
     useEffect(() => {
         const fetchCategoryData = async () => {
             try {
-                const response = await axios.get(`http://localhost:8000/api/v1/menu/categories/${categoryId}`, {
+                const response = await axios.get(`https://yaem.kz/api/v1/menu/categories/${categoryId}`, {
                     headers: {
                         Authorization: `Bearer ${userToken}`
                     }
@@ -36,7 +36,7 @@ function EditCategoryModal({ open, setOpen, categoryId, setSelectedCategoryId, s
         setIsSaving(true);
         setTimeout(() => { setIsSaving(false); }, 2000);
         try {
-            await axios.patch(`http://localhost:8000/api/v1/menu/categories/${categoryId}/`, {
+            await axios.patch(`https://yaem.kz/api/v1/menu/categories/${categoryId}/`, {
                 name: editedCategoryName || categoryData.name,
                 z_index: editedCategoryZindex || categoryData.z_index
             }, {
@@ -47,7 +47,7 @@ function EditCategoryModal({ open, setOpen, categoryId, setSelectedCategoryId, s
 
             setIsSaving(false);
 
-            const updateCategoriesResponse = await axios.get(`http://localhost:8000/api/v1/menu/categories?client_id=${establishmentId}`, {
+            const updateCategoriesResponse = await axios.get(`https://yaem.kz/api/v1/menu/categories?client_id=${establishmentId}`, {
                 headers: {
                     Authorization: `Bearer ${userToken}`
                 }

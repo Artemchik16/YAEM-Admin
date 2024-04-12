@@ -26,14 +26,14 @@ export default function Payment() {
     const fetchData = async () => {
       try {
         // Get the user's phone number
-        const userPhoneNumberResponse = await axios.get('http://localhost:8000/api/v1/auth/phone-number', {
+        const userPhoneNumberResponse = await axios.get('https://yaem.kz/api/v1/auth/phone-number', {
           headers: {
             'Authorization': `Bearer ${userToken}`
           }
         });
         const userPhoneNumber = userPhoneNumberResponse.data.phone_number;
         // Receive payment data
-        const paymentResponse = await axios.get('http://localhost:8000/api/v1/auth/payment/', {
+        const paymentResponse = await axios.get('https://yaem.kz/api/v1/auth/payment/', {
           headers: {
             'Authorization': `Bearer ${userToken}`
           }
@@ -51,7 +51,7 @@ export default function Payment() {
 
   const handleDeletePayment = async (paymentId) => {
     try {
-      const response = await axios.delete(`http://localhost:8000/api/v1/auth/payment/${paymentId}/`, {
+      const response = await axios.delete(`https://yaem.kz/api/v1/auth/payment/${paymentId}/`, {
         headers: {
           'Authorization': `Bearer ${userToken}`
         }
@@ -111,7 +111,7 @@ export default function Payment() {
     // Requests
     try {
       // Sending a POST request to create an payment
-      await axios.post('http://localhost:8000/api/v1/auth/payment/', {
+      await axios.post('https://yaem.kz/api/v1/auth/payment/', {
         tarif_number: tarifTitleID,
         months: months,
         phone: kaspiNumber,
@@ -122,7 +122,7 @@ export default function Payment() {
         }
       });
       // Another get request to receive an already created payment
-      const response = await axios.get('http://localhost:8000/api/v1/auth/payment/', {
+      const response = await axios.get('https://yaem.kz/api/v1/auth/payment/', {
         headers: {
           'Authorization': `Bearer ${userToken}`
         }

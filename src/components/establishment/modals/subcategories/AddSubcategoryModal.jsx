@@ -35,7 +35,7 @@ function AddSubcategoryModal({ open, setOpen, categoryId, updateSubcategories })
         setIsSaving(true);
         setTimeout(() => { setIsSaving(false); }, 2000);
         try {
-            await axios.post('http://localhost:8000/api/v1/menu/subcategories/', {
+            await axios.post('https://yaem.kz/api/v1/menu/subcategories/', {
                 category_id: categoryId,
                 name: subcategoryName,
                 z_index: subcategoryZindex
@@ -46,7 +46,7 @@ function AddSubcategoryModal({ open, setOpen, categoryId, updateSubcategories })
             });
             setIsSaving(false);
             // Update displayed categories list
-            const updateSubcategoriesResponse = await axios.get(`http://localhost:8000/api/v1/menu/subcategories?category_id=${categoryId}`, {
+            const updateSubcategoriesResponse = await axios.get(`https://yaem.kz/api/v1/menu/subcategories?category_id=${categoryId}`, {
                 headers: {
                     Authorization: `Bearer ${userToken}`
                 }

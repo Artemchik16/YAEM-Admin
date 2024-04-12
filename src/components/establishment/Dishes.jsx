@@ -32,7 +32,7 @@ function Dishes({ subcategoryId }) {
     useEffect(() => {
         const fetchDishes = async () => {
             try {
-                const dishesResponse = await axios.get(`http://localhost:8000/api/v1/menu/dishes/?food_type_id=${subcategoryId}`, {
+                const dishesResponse = await axios.get(`https://yaem.kz/api/v1/menu/dishes/?food_type_id=${subcategoryId}`, {
                     headers: {
                         Authorization: `Bearer ${userToken}`
                     }
@@ -52,7 +52,7 @@ function Dishes({ subcategoryId }) {
         try {
             // Send delete request to the backend
             await axios.delete(
-                `http://localhost:8000/api/v1/menu/dishes/${dishId}`,
+                `https://yaem.kz/api/v1/menu/dishes/${dishId}`,
                 {
                     // Send token on backend
                     headers: {

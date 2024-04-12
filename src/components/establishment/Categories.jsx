@@ -24,7 +24,7 @@ function Categories({ establishmentId, onFinishDish }) {
     useEffect(() => {
         const fetchCategories = async () => {
             try {
-                const categoriesResponse = await axios.get(`http://localhost:8000/api/v1/menu/categories?client_id=${establishmentId}`, {
+                const categoriesResponse = await axios.get(`https://yaem.kz/api/v1/menu/categories?client_id=${establishmentId}`, {
                     headers: {
                         Authorization: `Bearer ${userToken}`
                     }

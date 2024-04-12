@@ -46,7 +46,7 @@ function EditEstablishmentForm({ establishmentId, onFinishEditing, updateEstabli
   useEffect(() => {
     const fetchEstablishmentData = async () => {
       try {
-        const response = await axios.get(`http://localhost:8000/api/v1/menu/clients/${establishmentId}`, {
+        const response = await axios.get(`https://yaem.kz/api/v1/menu/clients/${establishmentId}`, {
           // Send token
           headers: {
             Authorization: `Bearer ${userToken}`
@@ -82,7 +82,7 @@ function EditEstablishmentForm({ establishmentId, onFinishEditing, updateEstabli
 
   // Get request on a list of cities from backend
   useEffect(() => {
-    axios.get("http://127.0.0.1:8000/api/v1/menu/city/", {
+    axios.get("https://yaem.kz/api/v1/menu/city/", {
       // Send token on backend
       headers: {
         'Authorization': `Bearer ${userToken}`,
@@ -121,7 +121,7 @@ function EditEstablishmentForm({ establishmentId, onFinishEditing, updateEstabli
         requestData.logo = logo;
       }
 
-      await axios.patch(`http://localhost:8000/api/v1/menu/clients/${establishmentId}/`, requestData, {
+      await axios.patch(`https://yaem.kz/api/v1/menu/clients/${establishmentId}/`, requestData, {
         headers: {
           Authorization: `Bearer ${userToken}`,
           'Content-Type': 'multipart/form-data'
@@ -131,7 +131,7 @@ function EditEstablishmentForm({ establishmentId, onFinishEditing, updateEstabli
       toast.success('Заведение обновлено.', { autoClose: 2000, pauseOnHover: false, position: "top-center" });
       onFinishEditing()
       // Another request on backend
-      const updatedEstablishmentsResponse = await axios.get('http://localhost:8000/api/v1/menu/clients/', {
+      const updatedEstablishmentsResponse = await axios.get('https://yaem.kz/api/v1/menu/clients/', {
         // Send token on backend
         headers: {
           'Authorization': `Bearer ${userToken}`

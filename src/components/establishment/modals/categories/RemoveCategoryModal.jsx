@@ -16,13 +16,13 @@ function RemoveCategoryModal({ open, setOpen, categoryId, categoryName, updateCa
     const handleDeleteCategory = async () => {
         setIsDeleting(true); // Выключить кнопку "Удалить"
         try {
-            await axios.delete(`http://localhost:8000/api/v1/menu/categories/${categoryId}`, {
+            await axios.delete(`https://yaem.kz/api/v1/menu/categories/${categoryId}`, {
                 headers: {
                     Authorization: `Bearer ${userToken}`
                 }
             });
             // Update displayed categories list
-            const updateCategoriesResponse = await axios.get(`http://localhost:8000/api/v1/menu/categories?client_id=${establishmentId}`, {
+            const updateCategoriesResponse = await axios.get(`https://yaem.kz/api/v1/menu/categories?client_id=${establishmentId}`, {
                 headers: {
                     Authorization: `Bearer ${userToken}`
                 }

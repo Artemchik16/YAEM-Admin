@@ -12,10 +12,10 @@ function QRModal({ open, establishmentName, establishmentUrl, onClose }) {
                         <MDBBtn className='btn-close' color='none' onClick={onClose}></MDBBtn>
                     </MDBModalHeader>
                     <MDBModalBody className="text-center">
-                        <QRCode size={300} value={`http://127.0.0.1:8000/${establishmentUrl}/menu`}/>
+                        <QRCode size={300} value={`https://yaem.kz/${establishmentUrl}/menu`}/>
                         <p>Отсканируйте QR код для просмотра меню</p>
                         <p>{`https://yaem.kz/${establishmentUrl}/menu`}</p>
-                        <a href={`http://127.0.0.1:8000/${establishmentUrl}/menu`} target="_blank">
+                        <a href={`https://yaem.kz/${establishmentUrl}/menu`} target="_blank">
                             <MDBBtn className="btn-animate">Перейти в меню</MDBBtn>
                         </a>
                     </MDBModalBody>

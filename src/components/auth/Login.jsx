@@ -38,7 +38,7 @@ export default function Login() {
             setIsSaveButtonClicked(true)
             setTimeout(() => { setIsSaveButtonClicked(false); }, 2200);
             // Send request and get response
-            const response = await axios.post('http://localhost:8000/api/v1/auth/jwt/create/', {
+            const response = await axios.post('https://yaem.kz/api/v1/auth/jwt/create/', {
                 phone_number: formattedPhone,
                 password: password,
             });
