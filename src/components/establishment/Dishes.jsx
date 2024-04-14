@@ -89,11 +89,11 @@ function Dishes({ subcategoryId }) {
             </h5>
             <div className='row'>
                 {dishes.map((dish, index) => (
-                    <div className="col" key={index}>
+                    <div className="col-auto my-2 mx-auto" key={index}>
                         {/* Check if this dish needs to be deleted and show the confirmation */}
                         {confirmDelete === index ? (
                             <div className="card shadow text-center" style={{ width: '288px', height: '127px' }}>
-
+                                <div className="card-body px-0 py-0">
                                 {/* Render deletion confirmation message */}
                                 <p className="my-3"><strong>Безвозвратно</strong> удалить блюдо <strong>{dish.name}</strong>?</p>
                                 <div className="d-flex justify-content-center text-center">
@@ -101,7 +101,7 @@ function Dishes({ subcategoryId }) {
                                     <button className="btn btn-sm btn-danger me-2" onClick={() => handleDeleteDish(dishToDelete, index)}>Да, удалить</button>
                                     {/* Button to cancel deletion */}
                                     <button className="btn btn-sm btn-success" onClick={() => setConfirmDelete(null)}>Отмена</button>
-
+                                </div>
                                 </div>
                             </div>
                         ) : (
@@ -134,21 +134,21 @@ function Dishes({ subcategoryId }) {
 
                                             <hr className="px-0 my-0" />
                                             <div className="row mx-0 my-2" style={{ height: '26px' }}>
-                                                <div className="col my-auto">
+                                                <div className="col my-auto pe-0">
                                                     {/* Old price */}
                                                     {dish.old_price > 0 && (
                                                         <del>
-                                                            <small className="my-1">{dish.old_price} ₸</small>
+                                                            <small className="my-1">{Number(dish.old_price).toLocaleString()} ₸</small>
                                                         </del>
                                                     )}
                                                     {/* Actual price */}
-                                                    <small className="ms-3 my-auto fw-bold">{dish.actual_price} ₸</small>
+                                                    <small className="ms-3 my-auto fw-bold">{Number(dish.actual_price).toLocaleString()} ₸</small>
                                                 </div>
-                                                <div className="col text-end my-auto">
+                                                <div className="col-auto text-end my-auto">
                                                     {/* Button to open edit modal */}
-                                                    <i className="fas fa-pen mx-4 fa-lg btn-animate" onClick={() => openEditModal(dish.id)}></i>
+                                                    <i className="fas fa-pen fa-lg btn-animate" onClick={() => openEditModal(dish.id)}></i>
                                                     {/* Button to trigger deletion confirmation */}
-                                                    <i className="fas fa-trash text-danger btn-animate fa-lg mx-2" onClick={() => { setDishToDelete(dish.id); setConfirmDelete(index); }}></i>
+                                                    <i className="fas fa-trash text-danger btn-animate fa-lg mx-4" onClick={() => { setDishToDelete(dish.id); setConfirmDelete(index); }}></i>
                                                 </div>
                                             </div>
                                         </>

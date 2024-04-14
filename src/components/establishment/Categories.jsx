@@ -60,9 +60,11 @@ function Categories({ establishmentId, onFinishDish }) {
                     </div>
                 </div>
                 <div className="col text-end">
-                    <div className="btn shadow-0 btn-animate my-auto btn-outline-dark text-nowrap">В меню
+                    <a href={`https://yaem.kz/element/menu`} target="_blank">
+                        <div className="btn shadow-0 btn-animate my-auto btn-outline-dark text-nowrap">В меню
                         <i className="fas fa-arrow-right-long fa-lg mx-1"></i>
-                    </div>
+                        </div>
+                    </a>
                 </div>
             </div>
             <hr className="mt-2" />

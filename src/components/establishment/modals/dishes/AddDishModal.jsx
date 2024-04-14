@@ -111,37 +111,56 @@ function AddDishModal({ open, setOpen, subcategoryId, updateDishes }) {
                         <MDBBtn className='btn-close' color='none' onClick={handleCloseModal}></MDBBtn>
                     </MDBModalHeader>
                     <form>
-                        <MDBModalBody>
+                        <MDBModalBody className="my-1">
                             {/* Form fields */}
-                            <MDBInput className="mb-3" label='Наименование блюда' type='text' value={dishName} onChange={(e) => setDishName(e.target.value)} required />
-                            <MDBInput className="mb-3" label='Фактическая цена' type='text' value={dishActualPrice} onChange={(e) => setDishActualPrice(e.target.value)} required />
+                            <MDBInput className="" label='Наименование блюда' type='text' maxLength="40" showCounter={true} value={dishName} onChange={(e) => setDishName(e.target.value)} required />
+                            <MDBInput className="mt-4" label='Фактическая цена' type='text' maxLength="6" showCounter={true} value={dishActualPrice} onChange={(e) => setDishActualPrice(e.target.value)} required />
+                            <div className="row mt-3">
+                                <div className="col me-0 pe-0">
+                                    <MDBSwitch
+                                        label='Стоп-лист'
+                                        checked={dishStop}
+                                        onChange={() => setDishStop(!dishStop)} />
+                                </div>
+                                <div className="col">
+                                    <i className="mx-1 text-danger fas fa-ban"></i>
+                                </div>
+                            </div>
                             {/* Button to show additional info */}
-                            <button type="button" className="btn btn-outline-secondary mt-4 btn-animate" onClick={() => setIsAdditionalInfoVisible(!isAdditionalInfoVisible)}>Показать дополнительные поля <i class="fas fa-circle-chevron-down ms-1"></i></button>
+                            <button type="button" className="btn btn-outline-secondary my-3 btn-animate" onClick={() => setIsAdditionalInfoVisible(!isAdditionalInfoVisible)}>Показать дополнительные поля <i class="fas fa-circle-chevron-down ms-1"></i></button>
                             {/* Additional fields */}
                             {isAdditionalInfoVisible && (
                                 <>
-                                    <MDBInput className="my-3" label='Старая цена' type='text' value={dishOldPrice} onChange={(e) => setDishOldPrice(e.target.value)} />
-                                    <MDBTextArea className="mb-3" label='Описание' rows={3} type='text' value={dishDescription} onChange={(e) => setDishDescription(e.target.value)} />
+                                    <MDBInput className="" label='Старая цена' type='text' maxLength="6" showCounter={true} value={dishOldPrice} onChange={(e) => setDishOldPrice(e.target.value)} />
+                                    <MDBTextArea className="my-4" label='Описание' rows={3} type='text' value={dishDescription} onChange={(e) => setDishDescription(e.target.value)} />
                                         <input
                                             type="file"
                                             class="form-control"
                                             id="inputGroupFile04"
                                             onChange={(e) => setImage(e.target.files[0])}
                                         />
-                                    <div className="row">
+                                        <small id='helperTextExample' className='form-helper text-muted'>
+                                            Размер файла не должен превышать 1мб.
+                                          </small>
+                                    <div className="row mt-2">
                                         <div className="col me-0 pe-0">
-                                            <MDBSwitch label='Стоп-лист' checked={dishStop} onChange={() => setDishStop(!dishStop)} />
                                             <MDBSwitch label='Популярное' checked={dishPopular} onChange={() => setDishPopular(!dishPopular)} />
                                             <MDBSwitch label='Острое' checked={dishSpicy} onChange={() => setDishSpicy(!dishSpicy)} />
                                             <MDBSwitch label='Вегетарианское' checked={dishVegetarian} onChange={() => setDishVegetarian(!dishVegetarian)} />
                                         </div>
                                         <div className="col">
-                                            <i class="mx-1 text-danger fas fa-ban mt-1"></i>
                                             <i className="d-block fas fa-star mt-1" style={{ 'color': 'gold' }}></i>
                                             <i className="d-block fas fa-pepper-hot text-danger mt-2"></i>
                                             <i className="d-block fas fa-seedling text-success mt-3"></i>
                                         </div>
                                     </div>
+                                    <MDBInput
+                                        className="mt-3"
+                                        label='Порядковый номер'
+                                        placeholder="1-99"
+                                        type='text'
+                                        maxLength="2" showCounter={true}
+                                    />
                                 </>
                             )}
                         </MDBModalBody>

@@ -126,9 +126,12 @@ export default function Login() {
                                             {/* Messages block */}
                                             <ToastContainer></ToastContainer>
                                             {/* Redirect to registration page */}
-                                            <div className="col-12">
-                                                <span>Нет аккаунта?</span> <Link to='/registration'>Зарегистрируйтесь</Link>
-                                            </div>
+                                            <div className="col-12 my-1 mx-0">
+                                                <small>Нет аккаунта? <Link to='/registration'>Зарегистрируйтесь</Link>
+                                            </small></div>
+                                            <div className="col-12 my-1 mx-0">
+                                                <small>Забыли пароль? <a target="_blank" href="https://wa.me/77713581356?text=Здравствуйте, прошу восстановить пароль для личного кабинета YAEM.%0aНомер телефона: ">Обратиться в Тех.Поддержку</a>
+                                            </small></div>
                                         </form>
                                     </div>
                                 </div>

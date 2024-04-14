@@ -122,24 +122,26 @@ function EditDishModal({ open, setOpen, dishId, updateDishes, subcategoryId }) {
                         <MDBBtn className='btn-close' color='none' onClick={handleCloseModal}></MDBBtn>
                     </MDBModalHeader>
                     <form onSubmit={handleUpdateDish}>
-                        <MDBModalBody>
+                        <MDBModalBody className="my-1">
                             <MDBInput
-                                className="mb-3"
+                                className=""
                                 label='Наименование блюда'
                                 type='text'
                                 value={dishName}
+                                maxLength="40" showCounter={true}
                                 defaultValue={dishData?.name}
                                 onChange={(e) => setDishName(e.target.value)}
                                 required />
                             <MDBInput
-                                className="mb-3"
+                                className="mt-4"
                                 label='Фактическая цена'
                                 type='number'
+                                maxLength="6" showCounter={true}
                                 value={dishActualPrice}
                                 defaultValue={dishData?.actual_price}
                                 onChange={(e) => setDishActualPrice(e.target.value)}
                                 required />
-                            <div className="row">
+                            <div className="row mt-3">
                                 <div className="col me-0 pe-0">
                                     <MDBSwitch
                                         label='Стоп-лист'
@@ -150,19 +152,20 @@ function EditDishModal({ open, setOpen, dishId, updateDishes, subcategoryId }) {
                                     <i className="mx-1 text-danger fas fa-ban"></i>
                                 </div>
                             </div>
-                            <button type="button" className="btn btn-outline-secondary mt-4 btn-animate" onClick={() => setIsAdditionalInfoVisible(!isAdditionalInfoVisible)}>Показать дополнительные поля <i className="fas fa-circle-chevron-down ms-1"></i></button>
+                            <button type="button" className="btn btn-outline-secondary mt-3 btn-animate" onClick={() => setIsAdditionalInfoVisible(!isAdditionalInfoVisible)}>Показать дополнительные поля <i className="fas fa-circle-chevron-down ms-1"></i></button>
                             {isAdditionalInfoVisible && (
                                 <>
                                     <MDBInput
-                                        className="my-3"
+                                        className="mt-3"
                                         label='Старая цена'
                                         type='number'
+                                        maxLength="6" showCounter={true}
                                         defaultValue={dishData.old_price}
                                         value={dishOldPrice}
                                         onChange={(e) => setDishOldPrice(e.target.value)}
                                     />
                                     <MDBTextArea
-                                        className="mb-3"
+                                        className="my-4"
                                         label='Описание'
                                         rows={3}
                                         type='text'
@@ -181,7 +184,10 @@ function EditDishModal({ open, setOpen, dishId, updateDishes, subcategoryId }) {
                                             }
                                         }}
                                     />
-                                    <div className="row">
+                                    <small id='helperTextExample' className='form-helper text-muted'>
+                                        Размер файла не должен превышать 1мб.
+                                    </small>
+                                    <div className="row mt-2">
                                         <div className="col me-0 pe-0">
                                             <MDBSwitch label='Популярное' checked={dishPopular} onChange={() => setDishPopular(!dishPopular)} />
                                             <MDBSwitch label='Острое' checked={dishSpicy} onChange={() => setDishSpicy(!dishSpicy)} />
@@ -193,6 +199,13 @@ function EditDishModal({ open, setOpen, dishId, updateDishes, subcategoryId }) {
                                             <i className="d-block fas fa-seedling text-success mt-3"></i>
                                         </div>
                                     </div>
+                                    <MDBInput
+                                        className="mt-3"
+                                        label='Порядковый номер'
+                                        placeholder="1-99"
+                                        type='text'
+                                        maxLength="2" showCounter={true}
+                                    />
                                 </>
                             )}
                         </MDBModalBody>

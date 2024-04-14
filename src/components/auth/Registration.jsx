@@ -145,8 +145,8 @@ function Registration() {
                                             {/* Messages block */}
                                             <ToastContainer></ToastContainer>
                                             {/* Redirect to login page */}
-                                            <div className="col-12">
-                                                Уже есть аккаунт?<Link to='/login'> Войти</Link>
+                                            <div className="col-12 my-0">
+                                                <small>Уже есть аккаунт?<Link to='/login'> Войти</Link></small>
                                             </div>
                                         </form>
                                     </div>

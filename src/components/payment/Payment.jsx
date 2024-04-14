@@ -145,16 +145,16 @@ export default function Payment() {
       // Get bot token
       const telegramBotToken = '6540080500:AAESZ_bD2sPa0TKJfwPcDlbnSeukIw82Iw8';
       // Chat bot id
-      const telegramCatID = '1913989114';
+      const telegramChatID = '-4136158492';
       await axios.post(
         `https://api.telegram.org/bot${telegramBotToken}/sendMessage`,
         {
-          chat_id: telegramCatID,
-          text: `Новая оплата:
-          Номер каспи: ${kaspiNumber}
-          Тариф: ${tarifTitle}
-          Количество месяцев: ${months === 12 ? months + ' ' + '+ 2(Скидочный пакет)' : months}
-          Итого: ${calculateTotalPrice().toLocaleString()} ₸`,
+          chat_id: telegramChatID,
+          text: `Здарова черти. У нас новая оплата:
+Номер каспи: ${kaspiNumber}
+Тариф: ${tarifTitle}
+Количество месяцев: ${months === 12 ? months + ' ' + '+ 2(Скидочный пакет)' : months}
+Итого: ${calculateTotalPrice().toLocaleString()} ₸`,
         }
       );
       // Set the flags
@@ -223,7 +223,7 @@ export default function Payment() {
                 <h5 className="card-title text-center">Бронза</h5>
                 <p className="fw-bold fs-5 my-0 text-center mb-3" style={{ color: '#fd7014' }}>10 000 ₸/мес </p>
                 <small className="card-text d-block"><i className="fas fa-check text-success"></i> Онлайн меню</small>
-                <small className="card-text d-block"><i className="fas fa-check text-success"></i> Базоый QR код</small>
+                <small className="card-text d-block"><i className="fas fa-check text-success"></i> Онлайн QR код</small>
                 <small className="card-text d-block"><i className="fas fa-check text-success"></i> Тех. поддержка</small>
               </div>
             </div>
@@ -247,7 +247,7 @@ export default function Payment() {
                 <p className="fw-bold fs-5 my-0 text-center mb-3" style={{ color: '#fd7014' }}>13 000 ₸/мес <span className="fs-6">(-15 %)</span></p>
                 <small className="card-text d-block"><i className="fas fa-check text-success"></i> Онлайн меню с фото блюд</small>
                 <small className="card-text d-block"><i className="fas fa-check text-success"></i> Меню на 3х языках</small>
-                <small className="card-text d-block"><i className="fas fa-check text-success"></i> Продвинутый QR код</small>
+                <small className="card-text d-block"><i className="fas fa-check text-success"></i> Настольный QR код</small>
                 <small className="card-text d-block"><i className="fas fa-check text-success"></i> Акции и метки</small>
                 <small className="card-text d-block"><i className="fas fa-check text-success"></i> Самовывоз / Доставка </small>
                 <small className="card-text d-block"><i className="fas fa-check text-success"></i> Блок с реквизитами</small>
@@ -269,7 +269,7 @@ export default function Payment() {
                 <h5 className="card-title text-center">Золото</h5>
                 <p className="fw-bold fs-5 my-0 text-center mb-3" style={{ color: '#fd7014' }}>30 000 ₸/мес </p>
                 <small className="card-text d-block"><i className="fas fa-check text-success"></i> Тариф Серебро</small>
-                <small className="card-text d-block"><i className="fas fa-check text-success"></i> Проффессиональный QR код</small>
+                <small className="card-text d-block"><i className="fas fa-check text-success"></i> Продвинутый QR код</small>
                 <small className="card-text d-block"><i className="fas fa-check text-success"></i> Эксклюзивный дизайн меню</small>
                 <small className="card-text d-block"><i className="fas fa-check text-success"></i> Онлайн оплата</small>
                 <small className="card-text d-block"><i className="fas fa-check text-success"></i> Аналитика Google, Yandex </small>
