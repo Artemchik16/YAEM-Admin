@@ -8,7 +8,7 @@ import RemoveCategoryModal from './modals/categories/RemoveCategoryModal.jsx';
 import EditCategoryModal from './modals/categories/EditCategoryModal.jsx';
 import { MDBTable, MDBTableHead } from 'mdb-react-ui-kit';
 
-function Categories({ establishmentId, onFinishDish }) {
+function Categories({ establishmentId, onFinishDish, establishmentUrl }) {
     const userToken = sessionStorage.getItem('accessToken');
     const [categories, setCategories] = useState([]);
     const [loading, setLoading] = useState(true);
@@ -60,7 +60,7 @@ function Categories({ establishmentId, onFinishDish }) {
                     </div>
                 </div>
                 <div className="col text-end">
-                    <a href={`https://yaem.kz/element/menu`} target="_blank">
+                    <a href={`https://yaem.kz/${establishmentUrl}/menu`} target="_blank">
                         <div className="btn shadow-0 btn-animate my-auto btn-outline-dark text-nowrap">В меню
                         <i className="fas fa-arrow-right-long fa-lg mx-1"></i>
                         </div>

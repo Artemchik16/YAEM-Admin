@@ -8,6 +8,7 @@ function EditDishModal({ open, setOpen, dishId, updateDishes, subcategoryId }) {
     const [isAdditionalInfoVisible, setIsAdditionalInfoVisible] = useState(false);
     const [formChanged, setFormChanged] = useState(false);
     const [dishData, setDishData] = useState(null);
+    const [dishZindex, setDishZindex] = useState('');
     const [dishName, setDishName] = useState("");
     const [dishActualPrice, setDishActualPrice] = useState('');
     const [dishStop, setDishStop] = useState(null);
@@ -36,6 +37,7 @@ function EditDishModal({ open, setOpen, dishId, updateDishes, subcategoryId }) {
                 });
                 setDishData(response.data);
                 setDishName(response.data.name);
+                setDishZindex(response.data.z_index);
                 setDishActualPrice(response.data.actual_price);
                 setDishStop(response.data.stop);
                 // setImage(response.data.image)
@@ -58,6 +60,7 @@ function EditDishModal({ open, setOpen, dishId, updateDishes, subcategoryId }) {
         try {
             const requestData = {
                 name: dishName || dishData.name,
+                z_index: dishZindex || dishData.z_index,
                 actual_price: dishActualPrice || dishData.actual_price,
                 stop: dishStop,
                 old_price: dishOldPrice || dishData.old_price,
@@ -205,6 +208,9 @@ function EditDishModal({ open, setOpen, dishId, updateDishes, subcategoryId }) {
                                         placeholder="1-99"
                                         type='text'
                                         maxLength="2" showCounter={true}
+                                        defaultValue={dishData?.z_index}
+                                        value={dishZindex}
+                                        onChange={(e) => setDishZindex(e.target.value)}
                                     />
                                 </>
                             )}

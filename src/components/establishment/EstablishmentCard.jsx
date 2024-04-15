@@ -13,7 +13,7 @@ function EstablishmentCard({ establishments, onEdit, onEditDishes, updateEstabli
     // is used to handle the establishment edit event and calls the onEdit function, passing it the establishmentId.
     const handleEdit = (establishmentId) => { onEdit(establishmentId); };
     // is used to handle the dishes edit event and calls the onEditDish function, passing it the establishmentId.
-    const handleEditDish = (establishmentId) => { onEditDishes(establishmentId); };
+    const handleEditDish = (establishmentId, establishmentUrl) => { onEditDishes(establishmentId, establishmentUrl); };
     // State for deleted establishments and confirmation of deletion
     const [deletedEstablishments, setDeletedEstablishments] = useState([]);
     const [confirmDelete, setConfirmDelete] = useState(null);
@@ -159,7 +159,7 @@ function EstablishmentCard({ establishments, onEdit, onEditDishes, updateEstabli
                                         </div>
                                         {showQRModal && <QRModal open={showQRModal} establishmentUrl={selectedEstablishmentUrl} establishmentName={selectedEstablishmentName} onClose={() => setShowQRModal(false)} />}
                                         {/* Button to open Dishes component */}
-                                        <div className="btn btn-animate my-1" style={{ width: '70px' }} onClick={() => handleEditDish(establishments[key].id)}>
+                                        <div className="btn btn-animate my-1" style={{ width: '70px' }} onClick={() => handleEditDish(establishments[key].id, establishments[key].url_name)}>
                                             <i className="fas fa-book-open fa-lg"></i>
                                         </div>
 

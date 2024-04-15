@@ -10,6 +10,7 @@ import { toast } from 'react-toastify';
 function AddDishModal({ open, setOpen, subcategoryId, updateDishes }) {
     // State for dish data
     const [dishName, setDishName] = useState('');
+    const [dishZindex, setDishZindex] = useState('');
     const [dishActualPrice, setDishActualPrice] = useState('');
     const [dishStop, setDishStop] = useState(false);
     const [image, setImage] = useState("");
@@ -25,6 +26,7 @@ function AddDishModal({ open, setOpen, subcategoryId, updateDishes }) {
     useEffect(() => {
         if (!open) {
             setDishName('');
+            setDishZindex('');
             setDishActualPrice('');
             setDishStop(false);
             setImage('');
@@ -50,6 +52,7 @@ function AddDishModal({ open, setOpen, subcategoryId, updateDishes }) {
             };
 
             // Add optional fields to the requestData object if they are not empty
+            if (dishZindex) requestData.z_index = dishZindex;
             if (image) requestData.image = image;
             if (dishOldPrice) requestData.old_price = dishOldPrice;
             if (dishDescription) requestData.description = dishDescription;
@@ -133,15 +136,15 @@ function AddDishModal({ open, setOpen, subcategoryId, updateDishes }) {
                                 <>
                                     <MDBInput className="" label='Старая цена' type='text' maxLength="6" showCounter={true} value={dishOldPrice} onChange={(e) => setDishOldPrice(e.target.value)} />
                                     <MDBTextArea className="my-4" label='Описание' rows={3} type='text' value={dishDescription} onChange={(e) => setDishDescription(e.target.value)} />
-                                        <input
-                                            type="file"
-                                            class="form-control"
-                                            id="inputGroupFile04"
-                                            onChange={(e) => setImage(e.target.files[0])}
-                                        />
-                                        <small id='helperTextExample' className='form-helper text-muted'>
-                                            Размер файла не должен превышать 1мб.
-                                          </small>
+                                    <input
+                                        type="file"
+                                        class="form-control"
+                                        id="inputGroupFile04"
+                                        onChange={(e) => setImage(e.target.files[0])}
+                                    />
+                                    <small id='helperTextExample' className='form-helper text-muted'>
+                                        Размер файла не должен превышать 1мб.
+                                    </small>
                                     <div className="row mt-2">
                                         <div className="col me-0 pe-0">
                                             <MDBSwitch label='Популярное' checked={dishPopular} onChange={() => setDishPopular(!dishPopular)} />
@@ -159,7 +162,10 @@ function AddDishModal({ open, setOpen, subcategoryId, updateDishes }) {
                                         label='Порядковый номер'
                                         placeholder="1-99"
                                         type='text'
-                                        maxLength="2" showCounter={true}
+                                        maxLength="2" 
+                                        showCounter={true}
+                                        value={dishZindex} 
+                                        onChange={(e) => setDishZindex(e.target.value)}
                                     />
                                 </>
                             )}

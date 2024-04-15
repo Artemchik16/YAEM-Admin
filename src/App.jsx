@@ -1,6 +1,6 @@
-import React, { useState, useEffect } from "react";
+import React from "react";
 import { BrowserRouter as Router, Routes, Route, Navigate } from 'react-router-dom';
-import './assets/styles/main.css'
+import './assets/styles/main.css';
 import Login from './components/auth/Login.jsx';
 import Registration from './components/auth//Registration.jsx';
 import Menu from './components/Menu.jsx';

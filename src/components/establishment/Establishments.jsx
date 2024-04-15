@@ -15,6 +15,7 @@ function Establishment() {
   const [editingEstablishmentId, setEditingEstablishmentId] = useState(null);
   const [showEstablishments, setShowEstablishments] = useState(true);
   const [editingDishId, setEditingDishId] = useState(null);
+  const [editingDishUrl, setEditingDishUrl] = useState(null);
   const [showCreateForm, setShowCreateForm] = useState(false);
   const handleCreateFormIsOpen = () => { setShowCreateForm(true); };
   const handleCreateFormIsClose = () => { setShowCreateForm(false); };
@@ -64,8 +65,9 @@ function Establishment() {
   };
 
   // Function for setting the identifier of the edited dishes and hiding the list of establishments
-  const handleEditDishes = (establishmentId) => {
+  const handleEditDishes = (establishmentId, establishmentUrl) => {
     setEditingDishId(establishmentId);
+    setEditingDishUrl(establishmentUrl);
     setShowEstablishments(false);
   };
 
@@ -124,7 +126,7 @@ function Establishment() {
           )}
           {/* If editingDishId is set, render Dishes component, send establishmentId and close handler */}
           {editingDishId && (
-            <Categories establishmentId={editingDishId} onFinishDish={handleFinishEditingDishes} />
+            <Categories establishmentId={editingDishId} establishmentUrl={editingDishUrl} onFinishDish={handleFinishEditingDishes} />
           )}
         </div>
       )}
