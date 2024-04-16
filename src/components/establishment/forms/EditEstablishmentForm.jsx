@@ -242,31 +242,34 @@ function EditEstablishmentForm({ establishmentId, onFinishEditing, updateEstabli
   return (
     <div>
       {/* Back handler */}
-      <div className="btn shadow-0 btn-animate my-auto btn-outline-dark" onClick={onFinishEditing}>
+      <div className="btn shadow-0 btn-animate my-auto" onClick={onFinishEditing}>
         <i className="fas fa-arrow-left-long fa-lg"></i>
       </div>
-      <h2 className="my-3">Редактирование заведения - {establishmentData.name}</h2>
+      <hr className="my-0"/>
+      <h2 className="my-3">Редактирование - <span className="yaem-color">{establishmentData.name}</span></h2>
       {/* Edit establishment form */}
       {/* Form handler */}
       <form className="my-4" onSubmit={handleUpdate}>
-        <div className="input-group mb-3">
+        <div className="input-group mb-4">
           <span className="input-group-text"><i className="fas fa-font fa-xs text-muted"></i></span>
           {/* Establishment name */}
           <MDBInput
             type="text"
             label='Название заведения'
+            maxLength="20" showCounter={true}
             defaultValue={establishmentData.name}
             value={name}
             onChange={(e) => setName(e.target.value)}
           />
         </div>
-        <div className="input-group mb-3">
+        <div className="input-group mb-4">
           <span className="input-group-text"><i className="fas fa-link fa-xs text-muted"></i></span>
           <span className="input-group-text text-muted fst-" id="basic-addon2">yaem.kz/</span>
           {/* Establishment url */}
           <MDBInput
             type="text"
             label="URL имя"
+            maxLength="20" showCounter={true}
             defaultValue={establishmentData.url_name}
             value={urlName}
             onChange={(e) => setUrlName(e.target.value)}
@@ -302,7 +305,7 @@ function EditEstablishmentForm({ establishmentId, onFinishEditing, updateEstabli
             </div>
             {/* Establishment logo */}
             <div class="input-group">
-              <label class="input-group-text" for="inputGroupFile01">Логотип</label>
+              <label class="input-group-text" for="inputGroupFile01"><i class="far fa-image"></i></label>
               <input
                 type="file"
                 class="form-control"
@@ -315,87 +318,96 @@ function EditEstablishmentForm({ establishmentId, onFinishEditing, updateEstabli
                 }}
               />
             </div>
+            <small id='helperTextExample' className='form-helper text-muted'>
+                    Размер файла не более 1мб.
+                </small>
+                <p className="text-primary">Удалить изображение</p>
             {/* Establishment address*/}
-            <div className="input-group my-3">
+            <div className="input-group mb-4">
               <span className="input-group-text"><i class="fas fa-location-dot"></i></span>
               <MDBInput
                 type="text"
                 label="Адрес заведения"
+                maxLength="50" showCounter={true}
                 defaultValue={establishmentData.address}
                 value={address}
                 onChange={(e) => setAddress(e.target.value)}
               />
             </div>
             {/* Establishment phone*/}
-            <div className="input-group mt-3">
+            <div className="input-group mb-4">
               <span className="input-group-text"><i class="fas fa-phone"></i></span>
               <MDBInput
                 type="text"
                 label="Телефон для связи / заказов WhatsApp"
-                placeholder="+7"
+                placeholder="+7..."
+                maxLength="12" showCounter={true}
                 defaultValue={establishmentData.phone}
                 value={phone}
                 onChange={(e) => setPhone(e.target.value)}
               />
             </div>
             {/* Establishment instagram*/}
-            <div className="input-group mt-3">
+            <div className="input-group mb-4">
               <span className="input-group-text"><i class="fab fa-instagram"></i></span>
               <MDBInput
                 type="text"
                 label="Ссылка на Instagram"
                 placeholder="instagram.com/yaem_qr/"
+                maxLength="100" showCounter={true}
                 defaultValue={establishmentData.inst}
                 value={instagramLink}
                 onChange={(e) => setInstagramLink(e.target.value)}
               />
             </div>
             {/* Establishment 2gis*/}
-            <div className="input-group mt-3">
+            <div className="input-group mb-3">
               <span className="input-group-text"><i class="fas fa-map-location-dot"></i></span>
               <MDBInput
                 type="text"
                 label="Ссылка на 2Gis"
                 placeholder="go.2gis.com/d9pf44"
+                maxLength="150" showCounter={true}
                 defaultValue={establishmentData.two_gis}
                 value={twogisLink}
                 onChange={(e) => setTwogisLink(e.target.value)}
               />
             </div>
             {/* Establishment Outside/Delivery */}
-            <div class="input-group my-3">
-              <div class="form-check">
-                <MDBSwitch
-                  checked={outside}
-                  label='Самовывоз'
-                  onChange={() => setOutside(!outside)}
-                />
+            <div class="form-check mx-0 px-0 my-1">
+                  <MDBSwitch
+                    checked={outside}
+                    label='Самовывоз'
+                    onChange={() => setOutside(!outside)}
+                  />
+                </div>
+                <div class="form-check mx-0 px-0 mb-3">
+                  <MDBSwitch
+                    checked={delivery}
+                    label='Доставка'
+                    onChange={() => setDelivery(!delivery)}
+                  />
+
               </div>
-              <div class="form-check mx-3">
-                <MDBSwitch
-                  checked={delivery}
-                  label='Доставка'
-                  onChange={() => setDelivery(!delivery)}
-                />
-              </div>
-            </div>
             {/* Establishment Service */}
-            <div className="input-group mt-3">
+            <div className="input-group mb-4">
               <span className="input-group-text"><i class="fas fa-percent"></i></span>
               <MDBInput
                 type="text"
                 label="Процент обслуживания"
+                maxLength="2" showCounter={true}
                 defaultValue={establishmentData.service}
                 value={service}
                 onChange={(e) => setService(e.target.value)}
               />
             </div>
             {/* Establishment WiFi/Password */}
-            <div class="input-group my-3">
+            <div class="input-group mb-4">
               <span className="input-group-text"><i class="fas fa-wifi"></i></span>
               <MDBInput
                 type="text"
                 label='Wi-Fi'
+                maxLength="30" showCounter={true}
                 defaultValue={establishmentData.wifi}
                 value={wifiName}
                 onChange={(e) => setWifiName(e.target.value)}
@@ -415,11 +427,13 @@ function EditEstablishmentForm({ establishmentId, onFinishEditing, updateEstabli
               <span className="input-group-text">Рабочее время</span>
               <MDBInput
                 value={workTimeStart}
+                placeholder="10:00"
                 defaultValue={establishmentData.work_time_start}
                 onChange={(e) => setWorkTimeStart(e.target.value)}
               />
               <MDBInput
                 value={workTimeEnd}
+                placeholder="21:00"
                 defaultValue={establishmentData.work_time_end}
                 onChange={(e) => setWorkTimeEnd(e.target.value)}
               />
@@ -434,7 +448,7 @@ function EditEstablishmentForm({ establishmentId, onFinishEditing, updateEstabli
         {/* Show this button if button with additional information not clicked and form is changed */}
         {!isAdditionalInfoVisible && formChanged && (
           <div className="d-flex justify-content-center">
-            <button type="submit" className="btn btn-success my-3 me-2">Добавить</button>
+            <button type="submit" className="btn btn-success my-3 me-2">Сохранить</button>
           </div>
         )}
       </form>

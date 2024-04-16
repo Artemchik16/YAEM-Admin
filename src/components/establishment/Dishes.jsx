@@ -74,17 +74,19 @@ function Dishes({ subcategoryId }) {
     };
 
     if (loading) {
-        return <div className="spinner-border text-warning" role="status">
-            <span className="visually-hidden">Loading...</span>
+        return <div className="container text-center">
+            <div className="spinner-border text-warning" role="status">
+                <span className="visually-hidden">Loading...</span>
+            </div>
         </div>;
     }
 
     return (
         <div className="container my-2 px-0">
-            <h5 className="mb-3">Блюда
-                <div className="btn shadow-0 btn-outline-success btn-animate px-3 mx-2"
+            <h5 className="mb-0">Блюда
+                <div className="btn shadow-0 text-success btn-animate mx-1 px-2 py-0"
                     onClick={toggleAddModal}>
-                    <i className="far fa-square-plus"></i>
+                    <i className="far fa-square-plus fa-2x"></i>
                 </div>
             </h5>
             <div className='row'>

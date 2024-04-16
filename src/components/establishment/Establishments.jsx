@@ -80,11 +80,9 @@ function Establishment() {
   return (
     <>
       {loading && (
-        <div className="d-flex justify-content-center display-middle">
-          <div className="spinner-border text-warning" role="status">
-            <span className="visually-hidden">Loading...</span>
-          </div>
-        </div>
+      <div className="spinner-border text-warning mx-auto my-auto" role="status">
+        <span className="visually-hidden">Loading...</span>
+      </div>
       )}
       {!loading && (
         <div className="col-10 col-sm-9 py-4 mx-auto">
@@ -93,8 +91,8 @@ function Establishment() {
             <div className="container px-0">
               <h1 className="ms-4 mb-3">Заведения
                 <span>
-                  <div className="btn shadow-0 btn-outline-success btn-animate px-3 my-1 mx-2" onClick={handleCreateFormIsOpen}>
-                    <i className="far fa-square-plus"></i>
+                  <div className="btn shadow-0 btn-animate px-3 my-1 mx-2 py-0" onClick={handleCreateFormIsOpen}>
+                    <i className="far fa-square-plus text-success fa-2x"></i>
                   </div>
                 </span>
               </h1>

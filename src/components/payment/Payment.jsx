@@ -129,14 +129,14 @@ export default function Payment() {
       });
       setLoading(false);
       setIsSending(true)
-      setTimeout(() => { setIsSending(false); }, 15000);
+      setTimeout(() => { setIsSending(false); }, 5000);
       setPayments(response.data)
     } catch (error) {
       setIsSending(true)
-      setTimeout(() => { setIsSending(false); }, 15000);
+      setTimeout(() => { setIsSending(false); }, 5000);
       if (error.response.data && error.response.data[0] === 'Payment: limit error') {
         setLoading(false);
-        toast.error('Достигнут лимит заявок.', { autoClose: 2000, pauseOnHover: false, position: "top-center" });
+        toast.error('Достигнут лимит заявок. Удалите заявку, либо дождитесь звонка администратора', { autoClose: 2000, pauseOnHover: false, position: "top-center" });
         return;
       }
     }
@@ -150,7 +150,7 @@ export default function Payment() {
         `https://api.telegram.org/bot${telegramBotToken}/sendMessage`,
         {
           chat_id: telegramChatID,
-          text: `Здарова черти. У нас новая оплата:
+          text: `Здарова черти бизнеса. У нас новая оплата:
 Номер каспи: ${kaspiNumber}
 Тариф: ${tarifTitle}
 Количество месяцев: ${months === 12 ? months + ' ' + '+ 2(Скидочный пакет)' : months}
@@ -199,15 +199,13 @@ export default function Payment() {
   return (
     <>
       {loading && (
-        <div class="d-flex justify-content-center display-middle">
-          <div class="spinner-border text-warning" role="status">
-            <span class="visually-hidden">Loading...</span>
-          </div>
-        </div>
+      <div class="spinner-border text-warning mx-auto my-auto" role="status">
+        <span class="visually-hidden">Loading...</span>
+      </div>
       )}
       {!loading && (
-        <div className="col-10 col-sm-8 py-4 mx-auto">
-          <h1 className="ms-4 mb-4">Оплата <a href="//yaem.kz/partner" target="_blank"><span className="btn shadow-0 btn-outline-success btn-animate btn-sm px-1 my-1 mx-2"><i class="far fa-circle-question"></i> Подробнее</span></a></h1>
+        <div className="col-10 col-sm-8 py-4 mx-auto" style={{ fontSize: '14px' }}>
+          <h1 className="ms-4 mb-3">Оплата <a href="//yaem.kz/partner" target="_blank"><span className="btn shadow-0 text-success btn-animate btn-sm px-1 my-1 mx-2"><i class="far fa-circle-question"></i> Подробнее</span></a></h1>
           <div className="card-group justify-content-center">
             {/* Bronze card handler and tab changer*/}
             <div className={`card mx-auto cardStyle ${activeTarifTab === 'bronze' ? '' : 'btn-animate'}`}
@@ -219,9 +217,9 @@ export default function Payment() {
                 maxWidth: '300px'
               }}
               onClick={() => handleTarifTabChange('bronze')}>
-              <div className="card-body px-3">
+              <div className="card-body px-3 py-2">
                 <h5 className="card-title text-center">Бронза</h5>
-                <p className="fw-bold fs-5 my-0 text-center mb-3" style={{ color: '#fd7014' }}>10 000 ₸/мес </p>
+                <p className="fw-bold fs-5 my-0 text-center mb-1" style={{ color: '#fd7014' }}>10 000 ₸/мес </p>
                 <small className="card-text d-block"><i className="fas fa-check text-success"></i> Онлайн меню</small>
                 <small className="card-text d-block"><i className="fas fa-check text-success"></i> Онлайн QR код</small>
                 <small className="card-text d-block"><i className="fas fa-check text-success"></i> Тех. поддержка</small>
@@ -238,13 +236,13 @@ export default function Payment() {
                 position: 'relative'
               }}
               onClick={() => handleTarifTabChange('silver')}>
-              <div className="card-body px-3">
+              <div className="card-body px-3 py-2">
                 <h5 className="card-title text-center">Серебро</h5>
                 <div style={{ position: 'absolute', top: '0', right: '0', backgroundColor: 'red', color: '#fff', padding: '5px 10px', borderRadius: '5px 0 0 0' }}>
                   <i className="fab fa-hotjar"></i>
                 </div>
                 <del className="text-center" style={{ color: '#fd7014' }}><p className="fw-bold fs-6 my-0" >15 000 ₸/мес </p></del>
-                <p className="fw-bold fs-5 my-0 text-center mb-3" style={{ color: '#fd7014' }}>13 000 ₸/мес <span className="fs-6">(-15 %)</span></p>
+                <p className="fw-bold fs-5 my-0 text-center mb-1" style={{ color: '#fd7014' }}>13 000 ₸/мес <span className="fs-6">(-15 %)</span></p>
                 <small className="card-text d-block"><i className="fas fa-check text-success"></i> Онлайн меню с фото блюд</small>
                 <small className="card-text d-block"><i className="fas fa-check text-success"></i> Меню на 3х языках</small>
                 <small className="card-text d-block"><i className="fas fa-check text-success"></i> Настольный QR код</small>
@@ -265,9 +263,9 @@ export default function Payment() {
                 maxWidth: '300px'
               }}
               onClick={() => handleTarifTabChange('gold')}>
-              <div className="card-body px-2">
+              <div className="card-body px-2 py-2">
                 <h5 className="card-title text-center">Золото</h5>
-                <p className="fw-bold fs-5 my-0 text-center mb-3" style={{ color: '#fd7014' }}>30 000 ₸/мес </p>
+                <p className="fw-bold fs-5 my-0 text-center mb-1" style={{ color: '#fd7014' }}>30 000 ₸/мес </p>
                 <small className="card-text d-block"><i className="fas fa-check text-success"></i> Тариф Серебро</small>
                 <small className="card-text d-block"><i className="fas fa-check text-success"></i> Продвинутый QR код</small>
                 <small className="card-text d-block"><i className="fas fa-check text-success"></i> Эксклюзивный дизайн меню</small>
@@ -284,7 +282,7 @@ export default function Payment() {
               <p className="text-center fs-5 fw-bold">К сожалению, на данный тариф не осталось доступных мест</p>
             </div>
           ) : (
-            <div className="container" style={{ maxWidth: '300px' }}>
+            <div className="container mx-0" style={{ maxWidth: '300px' }}>
               {/* Get tarif title */}
               <h5 className="my-4">Купить тариф {tarifTitle}</h5>
               {/* Month input */}
@@ -343,7 +341,7 @@ export default function Payment() {
           )}
           {/* Payment table handler */}
           {activeTarifTab !== 'gold' && payments.length > 0 && (
-            <MDBTable responsive hover small align='middle'>
+            <MDBTable className="mb-5" responsive hover small align='middle' data-aos="fade-in">
               <MDBTableHead>
                 <tr>
                   <th scope='col'>ID</th>

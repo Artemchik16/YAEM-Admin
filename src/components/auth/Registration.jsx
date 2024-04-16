@@ -94,17 +94,17 @@ function Registration() {
     return (
         <main>
             <div className="container-fluid background">
-                <section className="section register min-vh-100 d-flex flex-column align-items-center justify-content-center py-4">
+                <section className="section register min-vh-100 d-flex flex-column align-items-center py-4">
                     <div className="container">
                         <div className="row justify-content-center">
                             <div className="col-lg-4 col-md-6 d-flex flex-column align-items-center justify-content-center">
-                                <div className="d-flex justify-content-center py-4">
+                                <div className="d-flex justify-content-center py-3">
                                     <div className="logo d-flex align-items-center w-auto">
                                         <img className="mx-auto my-4 text-center" style={{ maxHeight: '30px' }} src={logo} alt="YAEM logo" />
                                         <span className="fs-3 fw-bold yaem-color mx-2">YAEM.KZ</span>
                                     </div>
                                 </div>
-                                <div className="card mb-3 shadow-lg">
+                                <div className="card mb-3 shadow-lg" data-aos="fade-out">
                                     <div className="card-body">
                                         <div className="my-4">
                                             <h5 className="card-title text-center fs-4">Регистрация</h5>
@@ -151,8 +151,8 @@ function Registration() {
                                         </form>
                                     </div>
                                 </div>
-                                <div className="credits user-select-none">
-                                    <a className="text-dark">Copyright © 2023-2024 <span className="yaem-color fw-bold">YAEM</span> Kazakhstan <i class="flag flag-kazakhstan"></i></a>
+                                <div className="credits user-select-none text-center">
+                                    <a className="text-dark">Copyright © 2023-2024 <span className="d-block"><span className="yaem-color fw-bold">YAEM</span> Kazakhstan <i class="flag flag-kazakhstan"></i></span></a>
                                 </div>
                             </div>
                         </div>

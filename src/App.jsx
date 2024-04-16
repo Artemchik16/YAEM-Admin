@@ -1,4 +1,4 @@
-import React from "react";
+import React, { useState, useEffect } from "react";
 import { BrowserRouter as Router, Routes, Route, Navigate } from 'react-router-dom';
 import './assets/styles/main.css';
 import Login from './components/auth/Login.jsx';
@@ -7,11 +7,17 @@ import Menu from './components/Menu.jsx';
 import NotFound from "./components/utils/404NotFound.jsx";
 import RobotsTxt from "./components/utils/RobotsTxt.jsx";
 import SitemapXml from "./components/utils/SitemapXml.jsx";
+// importing aos
+import AOS from 'aos';
+import 'aos/dist/aos.css';
 
 // Parent component
 export default function App() {
   // Check is authenticated user, getting user token
   const isAuthenticated = sessionStorage.getItem('accessToken') !== null;
+  useEffect(() => {
+    AOS.init();
+}, [])
 
   return (
     <Router>

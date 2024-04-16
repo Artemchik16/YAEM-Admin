@@ -85,7 +85,7 @@ function Main() {
                 >
                   <div className="d-flex">
                     <i className="fas fa-user mx-auto my-auto"></i>
-                    <p className="mb-0 fw-bold d-none d-sm-block mx-2"><strong>Профиль</strong></p>
+                    <p className="mb-0 fw-bold d-none d-sm-block mx-2" ><strong>Профиль</strong></p>
                   </div>
                 </li>
                 {/* Reports tab */}

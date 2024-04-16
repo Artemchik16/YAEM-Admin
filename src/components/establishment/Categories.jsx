@@ -46,8 +46,10 @@ function Categories({ establishmentId, onFinishDish, establishmentUrl }) {
     };
 
     if (loading) {
-        return <div className="spinner-border text-warning" role="status">
-            <span className="visually-hidden">Loading...</span>
+        return  <div className="container text-center">
+            <div className="spinner-border text-warning" role="status">
+                <span className="visually-hidden">Loading...</span>
+            </div>
         </div>;
     }
 
@@ -55,13 +57,13 @@ function Categories({ establishmentId, onFinishDish, establishmentUrl }) {
         <div className="container mx-0 px-0">
             <div className="row">
                 <div className="col">
-                    <div className="btn shadow-0 btn-animate my-auto btn-outline-dark" onClick={onFinishDish}>
+                    <div data-aos="fade-in" data-aos-delay="100" className="btn shadow-0 btn-animate my-auto" onClick={onFinishDish}>
                         <i className="fas fa-arrow-left-long fa-lg"></i>
                     </div>
                 </div>
                 <div className="col text-end">
                     <a href={`https://yaem.kz/${establishmentUrl}/menu`} target="_blank">
-                        <div className="btn shadow-0 btn-animate my-auto btn-outline-dark text-nowrap">В меню
+                        <div data-aos="fade-in"  className="btn shadow-0 btn-animate my-auto text-nowrap">В меню
                         <i className="fas fa-arrow-right-long fa-lg mx-1"></i>
                         </div>
                     </a>
@@ -70,16 +72,16 @@ function Categories({ establishmentId, onFinishDish, establishmentUrl }) {
             <hr className="mt-2" />
 
             <h2 className="mt-3 mb-2">Разделы
-                <div className="btn shadow-0 btn-outline-success btn-animate mx-1 px-3" onClick={toggleAddModal}>
-                    <i className="far fa-square-plus"></i>
+                <div className="btn shadow-0 text-success btn-animate mx-1 px-2 py-0" onClick={toggleAddModal}>
+                    <i className="far fa-square-plus fa-2x"></i>
                 </div>
                 {selectedCategoryId && (
                     <div className="d-inline">
-                        <div className="btn shadow-0 btn-animate my-auto btn-outline-dark mx-1 px-3" onClick={toggleEditModal}>
-                            <i className="fas fa-pen"></i>
+                        <div className="btn shadow-0 btn-animate my-auto mx-1 px-3 py-0" onClick={toggleEditModal}>
+                            <i className="fas fa-pen fa-2x"></i>
                         </div>
-                        <div className="btn shadow-0 btn-animate my-auto btn-outline-danger mx-1 px-3" onClick={toggleRemoveModal}>
-                            <i className="fas fa-trash fa-lg"></i>
+                        <div className="btn shadow-0 text-danger btn-animate my-auto mx-1 px-2 py-0" onClick={toggleRemoveModal}>
+                            <i className="fas fa-trash fa-2x"></i>
                         </div>
                     </div>
                 )}
@@ -89,7 +91,7 @@ function Categories({ establishmentId, onFinishDish, establishmentUrl }) {
                 <MDBTableHead>
                     <tr>
                         {categories.map(category => (
-                            <th scope='col' key={category.id}>
+                            <th data-aos="fade-in" scope='col' key={category.id}>
                                 <button
                                     type="button"
                                     className={`btn btn-outline-dark btn-animate text-nowrap ${category.id === selectedCategoryId ? 'active' : ''}`}

@@ -171,27 +171,29 @@ function CreateEstablishmentForm({ onClose, updateEstablishments }) {
     <div className="container">
       <div className="create-establishment">
         {/* Back handler */}
-        <div className="btn shadow-0 btn-animate my-auto btn-outline-dark" onClick={onClose}>
+        <div className="btn shadow-0 btn-animate my-auto" onClick={onClose}>
           <i className="fas fa-arrow-left-long fa-lg"></i>
         </div>
-        <h2 className="ms-4 my-3">Добавить заведение</h2>
+        <hr className="my-0"/>
+        <h2 className="my-3">Добавить заведение</h2>
         <h6 className="my-3">Основная информация </h6>
         {/* Add establishment form */}
         {/* Form handler */}
         <form className="my-1" onSubmit={handleSubmit}>
-          <div className="input-group mb-3">
+          <div className="input-group mb-4">
             <span className="input-group-text"><i className="fas fa-font fa-xs"></i></span>
             {/* Establishment name */}
             <MDBInput
               type="text"
               label="Название заведения"
               placeholder="Кафе"
+              maxLength="20" showCounter={true}
               value={name}
               onChange={(e) => setName(e.target.value)}
               required
             />
           </div>
-          <div className="input-group mb-3">
+          <div className="input-group mb-4">
             <span className="input-group-text"><i className="fas fa-link fa-xs"></i></span>
             <span className="input-group-text text-muted fst-" id="basic-addon2">yaem.kz/</span>
             {/* Establishment url */}
@@ -199,6 +201,7 @@ function CreateEstablishmentForm({ onClose, updateEstablishments }) {
               type="text"
               label="URL имя"
               placeholder="cafe"
+              maxLength="20" showCounter={true}
               value={url}
               onChange={(e) => setUrl(e.target.value)}
               required
@@ -218,7 +221,7 @@ function CreateEstablishmentForm({ onClose, updateEstablishments }) {
             ))}
           </select>
           {/* Button to open a block with additional information */}
-          <button type="button" className="btn btn-outline-secondary mt-4 btn-animate" onClick={() => setIsAdditionalInfoVisible(!isAdditionalInfoVisible)}>Показать дополнительные поля <i class="fas fa-circle-chevron-down ms-1"></i></button>
+          <button type="button" className="btn btn-outline-secondary mt-4 btn-animate px-2" onClick={() => setIsAdditionalInfoVisible(!isAdditionalInfoVisible)}>Показать дополнительные поля <i class="fas fa-circle-chevron-down ms-1"></i></button>
           {/* Show this block if button clicked */}
           {isAdditionalInfoVisible && (
             <>
@@ -236,7 +239,7 @@ function CreateEstablishmentForm({ onClose, updateEstablishments }) {
 
               {/* Establishment logo */}
               <div class="input-group">
-                <label class="input-group-text" for="inputGroupFile01">Логотип</label>
+                <label class="input-group-text" for="inputGroupFile01"><i class="far fa-image"></i></label>
                 <input
                   type="file"
                   class="form-control"
@@ -244,83 +247,92 @@ function CreateEstablishmentForm({ onClose, updateEstablishments }) {
                   onChange={(e) => setLogo(e.target.files[0])}
                 />
               </div>
-
+                <small id='helperTextExample' className='form-helper text-muted'>
+                    Размер файла не более 1мб.
+                </small>
+                <p className="text-primary">Удалить изображение</p>
               {/* Establishment address*/}
-              <div className="input-group my-3">
+              <div className="input-group mb-4">
                 <span className="input-group-text"><i class="fas fa-location-dot"></i></span>
                 <MDBInput
                   type="text"
                   label="Адрес заведения"
+                  maxLength="50" showCounter={true}
                   value={address}
                   onChange={(e) => setAddress(e.target.value)}
                 />
               </div>
               {/* Establishment phone*/}
-              <div className="input-group mt-3">
+              <div className="input-group mb-4">
                 <span className="input-group-text"><i class="fas fa-phone"></i></span>
                 <MDBInput
                   type="text"
-                  label="Телефон для связи / заказов WhatsApp"
-                  placeholder="+7"
+                  label="Телефон заведения"
+                  placeholder="+7..."
+                  maxLength="12" showCounter={true}
                   value={phone}
                   onChange={(e) => setPhone(e.target.value)}
                 />
               </div>
               {/* Establishment instagram*/}
-              <div className="input-group mt-3">
+              <div className="input-group mb-4">
                 <span className="input-group-text"><i class="fab fa-instagram"></i></span>
                 <MDBInput
                   type="text"
                   label="Ссылка на Instagram"
                   placeholder="instagram.com/yaem_qr/"
+                  maxLength="100" showCounter={true}
                   value={instagramLink}
                   onChange={(e) => setInstagramLink(e.target.value)}
                 />
               </div>
               {/* Establishment 2gis*/}
-              <div className="input-group mt-3">
+              <div className="input-group mb-3">
                 <span className="input-group-text"><i class="fas fa-map-location-dot"></i></span>
                 <MDBInput
                   type="text"
                   label="Ссылка на 2Gis"
                   placeholder="go.2gis.com/d9pf44"
+                  maxLength="150" showCounter={true}
                   value={twogisLink}
                   onChange={(e) => setTwogisLink(e.target.value)}
                 />
               </div>
               {/* Establishment Outside/Delivery */}
-              <div class="input-group my-3">
-                <div class="form-check">
+
+                <div class="form-check mx-0 px-0 my-1">
                   <MDBSwitch
                     checked={outside}
                     label='Самовывоз'
                     onChange={() => setOutside(!outside)}
                   />
                 </div>
-                <div class="form-check mx-3">
+                <div class="form-check mx-0 px-0">
                   <MDBSwitch
                     checked={delivery}
                     label='Доставка'
                     onChange={() => setDelivery(!delivery)}
                   />
-                </div>
+
               </div>
               {/* Establishment Service */}
               <div className="input-group mt-3">
                 <span className="input-group-text"><i class="fas fa-percent"></i></span>
                 <MDBInput
-                  type="phone"
+                  type="text"
                   label="Процент обслуживания"
+                  maxLength="2" showCounter={true}
                   value={service}
                   onChange={(e) => setService(e.target.value)}
                 />
               </div>
               {/* Establishment WiFi/Password */}
-              <div class="input-group my-3">
+              <div class="input-group my-4">
                 <span className="input-group-text"><i class="fas fa-wifi"></i></span>
                 <MDBInput
                   type="text"
                   label='Wi-Fi'
+                  maxLength="30" showCounter={true}
                   value={wifiName}
                   onChange={(e) => setWifiName(e.target.value)}
                 />
@@ -337,10 +349,12 @@ function CreateEstablishmentForm({ onClose, updateEstablishments }) {
               <div className="input-group my-3">
                 <span className="input-group-text">Рабочее время</span>
                 <MDBInput
+                  placeholder="10:00"
                   value={workTimeStart}
                   onChange={(e) => setWorkTimeStart(e.target.value)}
                 />
                 <MDBInput
+                  placeholder="21:00"
                   value={workTimeEnd}
                   onChange={(e) => setWorkTimeEnd(e.target.value)}
                 />

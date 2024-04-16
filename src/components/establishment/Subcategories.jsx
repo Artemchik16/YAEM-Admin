@@ -59,38 +59,40 @@ function Subcategories({ categoryId }) {
     };
 
     if (loading) {
-        return <div className="spinner-border text-warning" role="status">
-            <span className="visually-hidden">Loading...</span>
+        return <div className="container text-center">
+            <div className="spinner-border text-warning" role="status">
+                <span className="visually-hidden">Loading...</span>
+            </div>
         </div>;
     }
 
     return (
         <div className="container px-0">
             {/* show this block if user has not any categories */}
-            <h2 className="mt-2 mb-2">Категории
-                <div className="btn shadow-0 btn-outline-success btn-animate mx-1 px-3"
+            <h2 className="mt-2 mb-0">Категории
+                <div className="btn shadow-0 text-success btn-animate mx-1 px-2 py-0"
                     onClick={toggleAddModal}>
-                    <i className="far fa-square-plus"></i>
+                    <i className="far fa-square-plus fa-2x"></i>
                 </div>
                 {/* show this block if user have any categories */}
                 {selectedSubcategoryId && (
                     <div className="d-inline">
                         {/* Handle edit modal */}
-                        <div className="btn shadow-0 btn-animate my-auto btn-outline-dark mx-1 px-3"
+                        <div className="btn shadow-0 btn-animate my-auto mx-1 px-3 py-0"
                             onClick={toggleEditModal}>
-                            <i className="fas fa-pen"></i>
+                            <i className="fas fa-pen fa-2x"></i>
                         </div>
                         {/* Handle remove modal */}
-                        <div className="btn shadow-0 btn-animate my-auto btn-outline-danger mx-1 px-3"
+                        <div className="btn shadow-0 text-danger btn-animate my-auto mx-1 px-2 py-0"
                             onClick={toggleRemoveModal}>
-                            <i className="fas fa-trash fa-lg"></i>
+                            <i className="fas fa-trash fa-2x"></i>
                         </div>
                     </div>
                 )}
             </h2>
 
             {/* For loop, display subcategories and handle click */}
-            <MDBTable responsive hover small align='middle' className="text-center my-3">
+            <MDBTable responsive hover small align='middle' className="text-center my-2">
                 <MDBTableHead>
                     <tr>
                         {subcategories.map(subcategory => (
