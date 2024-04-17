@@ -1,15 +1,19 @@
-// Base import
+// Import react
 import React, { useState } from "react";
-// HTTP import library
+// Import axios(HTTP)
 import axios from "axios";
-// Messages import library
+// Import toast(messages)
 import { toast } from 'react-toastify';
 import 'react-toastify/dist/ReactToastify.css';
+// Import urls
+import apiUrls from "../utils/ApiUrls.js";
+// Import components
 import QRModal from "./modals/establishments/QRModal";
 
+export default function EstablishmentCard({ establishments, onEdit, onEditDishes, updateEstablishments }) {
 
-function EstablishmentCard({ establishments, onEdit, onEditDishes, updateEstablishments }) {
-
+    // Get user auth token
+    const userToken = sessionStorage.getItem('accessToken');
     // is used to handle the establishment edit event and calls the onEdit function, passing it the establishmentId.
     const handleEdit = (establishmentId) => { onEdit(establishmentId); };
     // is used to handle the dishes edit event and calls the onEditDish function, passing it the establishmentId.
@@ -17,9 +21,13 @@ function EstablishmentCard({ establishments, onEdit, onEditDishes, updateEstabli
     // State for deleted establishments and confirmation of deletion
     const [deletedEstablishments, setDeletedEstablishments] = useState([]);
     const [confirmDelete, setConfirmDelete] = useState(null);
+    // QR modal show state
     const [showQRModal, setShowQRModal] = useState(false);
+    // State for establishment url
     const [selectedEstablishmentUrl, setSelectedEstablishmentUrl] = useState('');
+    // State for establishment name
     const [selectedEstablishmentName, setSelectedEstablishmentName] = useState('');
+    // When you click on qr, open the modal and transfer the data there
     const handleQRButtonClick = (establishmentUrl, establishmentName) => {
         setSelectedEstablishmentUrl(establishmentUrl);
         setSelectedEstablishmentName(establishmentName);
@@ -28,38 +36,33 @@ function EstablishmentCard({ establishments, onEdit, onEditDishes, updateEstabli
     // Function to handle establishment deletion on establishment ID
     const handleDeleteEstablishment = async (EstablishmentID, key) => {
         try {
-            // Get token from session storage
-            const token = sessionStorage.getItem('accessToken');
             // Send delete request to the backend
             await axios.delete(
-                `https://yaem.kz/api/v1/menu/clients/${EstablishmentID}`,
+                `${apiUrls.client}${EstablishmentID}`,
                 {
                     // Send token on backend
                     headers: {
-                        Authorization: `Bearer ${token}`
+                        Authorization: `Bearer ${userToken}`
                     }
                 }
             );
-            // Success block
             // Notify user about successful deletion
             toast.warning('Заведение удалено.', { autoClose: 2000 })
             // Another request on backend
-            const updatedEstablishmentsResponse = await axios.get('https://yaem.kz/api/v1/menu/clients/', {
-                // Send token on backend
+            const updatedEstablishmentsResponse = await axios.get(apiUrls.client, {
                 headers: {
                     'Authorization': `Bearer ${token}`
                 }
             });
+            // Update establishment component after deleting
             updateEstablishments(updatedEstablishmentsResponse.data);
-            // Update the list of deleted establishments
-            // setDeletedEstablishments([...deletedEstablishments, key]);
-            // Error block
         } catch (error) {
             // Notify user about deletion error
             toast.error('Ошибка при удалении заведения', { autoClose: 2000 })
         }
     };
 
+    // HTMP block
     return (
         <div className="container">
             <div className="d-flex flex-wrap justify-content-evenly">
@@ -84,40 +87,35 @@ function EstablishmentCard({ establishments, onEdit, onEditDishes, updateEstabli
                                 </div>
                             ) : (
                                 <>
-                                    {/* Render establishment data from backend */}
+                                    {/* Display establishment data from backend */}
                                     <div className="row">
                                         <div className="col">
                                             <h5 className="card-title ms-2 me-0 pe-0">{establishments[key].name}
-                                            {/* Button to open DetailEstablishment component */}
-                                            <div className="btn btn-animate my-1 shadow-0 ms-1 me-0 px-0 py-0" onClick={() => handleEdit(establishments[key].id)}>
-                                                <i className="fas fa-pen fa-lg"></i>
-                                            </div>
-                                            <p className="my-3 fs-6 text-muted">г.{establishments[key].city}</p>
+                                                {/* Button to open DetailEstablishment component */}
+                                                <div className="btn btn-animate my-1 shadow-0 ms-1 me-0 px-0 py-0" onClick={() => handleEdit(establishments[key].id)}>
+                                                    <i className="fas fa-pen fa-lg"></i>
+                                                </div>
+                                                <p className="my-3 fs-6 text-muted">г.{establishments[key].city}</p>
                                             </h5>
                                         </div>
                                         <div className="col-auto text-end">
                                             <img className="card-img-top" loading="lazy" src={establishments[key].logo} style={{ maxWidth: '100px', maxHeight: '100px' }}></img>
                                         </div>
                                     </div>
-
-
-                                    {/* <p className="card-text text-muted">{establishments[key].address}</p> */}
-                                    {/* <small className="card-text ms-3">{establishments[key].description}</small> */}
-                                    {/* <img src={establishments[key].logo}/> */}
                                     <hr />
-                                    {/* badges */}
+
+                                    {/* Badges, date comparison and processing */}
                                     <div className="note note-info mx-3">
 
                                         {/* test */}
-                                        {/* <h6>{`${new Date()} / ${new Date(establishments[key].paid_at)}`}</h6> */}
                                         {establishments[key].tarif_number === "ТЕСТ" && (
                                             <>
                                                 {new Date() >= new Date(establishments[key].paid_at) ? (
                                                     <span className="badge badge-danger d-block">Тариф не оплачен</span>
                                                 ) : (
                                                     <>
-                                                    <span className="badge badge-success d-block">Пробный период</span>
-                                                    <p className="text-center fw-bold my-0"><small>Действует до {new Date(establishments[key].paid_at).toLocaleDateString()}</small></p>
+                                                        <span className="badge badge-success d-block">Пробный период</span>
+                                                        <p className="text-center fw-bold my-0"><small>Действует до {new Date(establishments[key].paid_at).toLocaleDateString()}</small></p>
                                                     </>
                                                 )}
                                             </>
@@ -146,20 +144,26 @@ function EstablishmentCard({ establishments, onEdit, onEditDishes, updateEstabli
                                                 <p className="text-center fw-bold my-0"><small>Действует до {new Date(establishments[key].paid_at).toLocaleDateString()}</small></p>
                                             </>
                                         )}
-
                                     </div>
-
-
-
+                                    {/* Render action buttons */}
                                     <div className="d-flex flex-wrap justify-content-evenly text-center my-3">
-                                        {/* Render action buttons */}
                                         {/* Button to open QR code */}
-                                        <div className="btn btn-animate my-1" style={{ width: '70px' }} onClick={() => handleQRButtonClick(establishments[key].url_name, establishments[key].name)}>
+                                        <div className="btn btn-animate my-1" style={{ width: '70px' }}
+                                            onClick={() => handleQRButtonClick(establishments[key].url_name, establishments[key].name)}>
                                             <i className="fas fa-qrcode fa-lg"></i>
                                         </div>
-                                        {showQRModal && <QRModal open={showQRModal} establishmentUrl={selectedEstablishmentUrl} establishmentName={selectedEstablishmentName} onClose={() => setShowQRModal(false)} />}
+                                        {/* Show QR window when clicked */}
+                                        {showQRModal &&
+                                            <QRModal
+                                                open={showQRModal}
+                                                establishmentUrl={selectedEstablishmentUrl}
+                                                establishmentName={selectedEstablishmentName}
+                                                onClose={() => setShowQRModal(false)} />
+                                        }
+
                                         {/* Button to open Dishes component */}
-                                        <div className="btn btn-animate my-1" style={{ width: '70px' }} onClick={() => handleEditDish(establishments[key].id, establishments[key].url_name)}>
+                                        <div className="btn btn-animate my-1" style={{ width: '70px' }}
+                                            onClick={() => handleEditDish(establishments[key].id, establishments[key].url_name)}>
                                             <i className="fas fa-book-open fa-lg"></i>
                                         </div>
 
@@ -178,5 +182,3 @@ function EstablishmentCard({ establishments, onEdit, onEditDishes, updateEstabli
         </div>
     );
 }
-
-export default EstablishmentCard;
