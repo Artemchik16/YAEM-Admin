@@ -1,40 +1,72 @@
+// Import react
 import React, { useState, useEffect } from "react";
-import axios from "axios";
+// Import toast(messages)
 import { toast } from 'react-toastify';
 import 'react-toastify/dist/ReactToastify.css';
+// Import axios(HTTP)
+import axios from "axios";
+// Import MDB
 import { MDBInput, MDBTextArea, MDBSwitch } from "mdb-react-ui-kit";
+// Import urls
+import apiUrls from "../../utils/ApiUrls";
+// Import errors
+import { CreateAndUpdateEstablishmentErrors } from '../../utils/Errors';
 
 
-function CreateEstablishmentForm({ onClose, updateEstablishments }) {
+export default function CreateEstablishmentForm({ onClose, updateEstablishments }) {
   // Get user auth token
   const userToken = sessionStorage.getItem('accessToken');
-  // State for visibility other info block
+  // State for visibility other(not required) info block
   const [isAdditionalInfoVisible, setIsAdditionalInfoVisible] = useState(false);
-  // States block for user data
+  // Set success state
+  const [isCreateButtonClicked, setIsCreateButtonClicked] = useState(false);
+
+  // Set name state
   const [name, setName] = useState("");
+  // Set URL state
   const [url, setUrl] = useState("");
+  // Set city state
   const [city, setCity] = useState("");
+  // Set cities list state
   const [cities, setCities] = useState([]);
+  // Set description state
   const [description, setDescription] = useState('');
+  // Set logo state
   const [logo, setLogo] = useState("");
+  // Create a new FormData object for uploading logo
   const formData = new FormData();
   formData.append('logo', logo);
+  // Delete logo handler
+  const handleDeleteLogo = () => {
+    setLogo("");
+    document.getElementById('inputGroupFile04').value = "";
+  };
+  // Set address state
   const [address, setAddress] = useState("");
+  // Set phone state
   const [phone, setPhone] = useState("");
+  // Set Instagram link state
   const [instagramLink, setInstagramLink] = useState("");
+  // Set 2GIS link state
   const [twogisLink, setTwogisLink] = useState("");
+  // Set outside seating state
   const [outside, setOutside] = useState(false);
+  // Set delivery state
   const [delivery, setDelivery] = useState(false);
+  // Set service state
   const [service, setService] = useState("");
+  // Set Wi-Fi name state
   const [wifiName, setWifiName] = useState("");
+  // Set Wi-Fi password state
   const [wifiPassword, setWifiPassword] = useState("");
+  // Set working hours start time state
   const [workTimeStart, setWorkTimeStart] = useState('00:00');
+  // Set working hours end time state
   const [workTimeEnd, setWorkTimeEnd] = useState('00:00');
 
-  // Get request on a list of cities from backend
+  // When loading the component we get a list of all cities
   useEffect(() => {
-    axios.get("https://yaem.kz/api/v1/menu/city/", {
-      // Send token on backend
+    axios.get(apiUrls.city, {
       headers: {
         'Authorization': `Bearer ${userToken}`,
       }
@@ -51,122 +83,62 @@ function CreateEstablishmentForm({ onClose, updateEstablishments }) {
 
   // Post request on backend, create establishment
   const handleSubmit = async (e) => {
+    // Prevent default form behavior
     e.preventDefault();
     try {
       // Required fields dict
-      let requestData = {
+      let establishmentDict = {
         name: name,
         url_name: url,
         city: city,
       };
-      // Other data, if vslue exist, add to requestData dict
-      if (description !== '') requestData.description = description;
-      if (logo !== '') requestData.logo = logo;
-      if (address !== '') requestData.address = address;
-      if (phone !== '') requestData.phone = phone;
-      if (instagramLink !== '') requestData.inst = instagramLink;
-      if (twogisLink !== '') requestData.two_gis = twogisLink;
-      if (outside == true) requestData.outside = outside;
-      if (delivery == true) requestData.delivery = delivery;
-      if (service !== '') requestData.service = service;
-      if (wifiName !== '') requestData.wifi = wifiName;
-      if (wifiPassword !== '') requestData.wifi_password = wifiPassword;
-      if (workTimeStart && workTimeStart !== '00:00') requestData.work_time_start = workTimeStart;
-      if (workTimeEnd && workTimeEnd !== '00:00') requestData.work_time_end = workTimeEnd;
+      // Other data(not required), if value exist, add to establishmentDict dict
+      if (description !== '') establishmentDict.description = description;
+      if (logo !== '') establishmentDict.logo = logo;
+      if (address !== '') establishmentDict.address = address;
+      if (phone !== '') establishmentDict.phone = phone;
+      if (instagramLink !== '') establishmentDict.inst = instagramLink;
+      if (twogisLink !== '') establishmentDict.two_gis = twogisLink;
+      if (outside == true) establishmentDict.outside = outside;
+      if (delivery == true) establishmentDict.delivery = delivery;
+      if (service !== '') establishmentDict.service = service;
+      if (wifiName !== '') establishmentDict.wifi = wifiName;
+      if (wifiPassword !== '') establishmentDict.wifi_password = wifiPassword;
+      if (workTimeStart && workTimeStart !== '00:00') establishmentDict.work_time_start = workTimeStart;
+      if (workTimeEnd && workTimeEnd !== '00:00') establishmentDict.work_time_end = workTimeEnd;
       // Post request on backend
-      await axios.post("https://yaem.kz/api/v1/menu/clients/", requestData, {
-        // Send token on backend
+      await axios.post(apiUrls.client, establishmentDict, {
         headers: {
           'Authorization': `Bearer ${userToken}`,
           'Content-Type': 'multipart/form-data'
         }
       });
-      // Success block
       toast.success(`Заведение '${name.charAt(0).toUpperCase() + name.slice(1)}' успешно созданно`, { autoClose: 2000, pauseOnHover: false, position: "top-center" });
+      // Close create form
       onClose()
-      console.log(requestData)
       // Get request on backend
-      const updatedEstablishmentsResponse = await axios.get('https://yaem.kz/api/v1/menu/clients/', {
-        // Send token on backend
+      const updatedEstablishmentsResponse = await axios.get(apiUrls.client, {
         headers: {
           'Authorization': `Bearer ${userToken}`
         }
       });
+      // Update establishment component after creating
       updateEstablishments(updatedEstablishmentsResponse.data);
-      // Error block
     } catch (error) {
-      if (error.response && error.response.data) {
-        if (error.response.data[0] === "Establishment: limit error") {
-          toast.error('Вы превысили лимит на количество созданных заведений', { autoClose: 2000, pauseOnHover: false, position: "top-center" });
-        } else {
-          if (error.response.data.name && error.response.data.name[0] === 'Name: only ru/en/num characters') {
-            toast.error('Имя может содержать только русские/английские/численные символы', { autoClose: 2000, pauseOnHover: false, position: "top-center" });
-          }
-          if (error.response.data.name && error.response.data.name[0] === 'Убедитесь, что это значение содержит не более 20 символов.') {
-            toast.error('Название не может содержать больше 20 символов', { autoClose: 2000, pauseOnHover: false, position: "top-center" });
-          }
-          if (error.response.data.url_name && error.response.data.url_name[0] === 'Убедитесь, что это значение содержит не более 30 символов.') {
-            toast.error('URL не может содержать больше 30 символов', { autoClose: 2000, pauseOnHover: false, position: "top-center" });
-          }
-          if (error.response.data.url_name && error.response.data.url_name[0] === 'The URL name can only contain Latin characters') {
-            toast.error('URL может содержать только английские буквы', { autoClose: 2000, pauseOnHover: false, position: "top-center" });
-          }
-          if (error.response.data.url_name && error.response.data.url_name[0] === 'Заведение с таким /url уже существует.') {
-            toast.error('URL уже занят', { autoClose: 2000, pauseOnHover: false, position: "top-center" });
-          }
-          if (error.response.data.description && error.response.data.description[0] === 'Убедитесь, что это значение содержит не более 200 символов.') {
-            toast.error('Описание не может содержать больше 200 символов', { autoClose: 2000, pauseOnHover: false, position: "top-center" });
-          }
-          if (error.response.data.logo && error.response.data.logo[0] === 'Загруженный файл не является корректным файлом.') {
-            toast.error('Загруженный файл не является корректным файлом', { autoClose: 2000, pauseOnHover: false, position: "top-center" });
-          }
-          if (error.response.data.address && error.response.data.address[0] === 'Убедитесь, что это значение содержит не более 50 символов.') {
-            toast.error('Адрес не может содержать больше 50 символов', { autoClose: 2000, pauseOnHover: false, position: "top-center" });
-          }
-          if (error.response.data.phone && error.response.data.phone[0] === 'Требуется численное значение.') {
-            toast.error('Неверный формат номера телефона', { autoClose: 2000, pauseOnHover: false, position: "top-center" });
-          }
-          if (error.response.data.phone && error.response.data.phone[0] === 'Phone: correct format - "+7XXXXXXXXXX" or "8XXXXXXXXXX"') {
-            toast.error('Неверный формат номера телефона', { autoClose: 2000, pauseOnHover: false, position: "top-center" });
-          }
-          if (error.response.data.inst && error.response.data.inst[0] === 'Instagram error: pattern - https://www.instagram.com/*') {
-            toast.error('Не корректный формат ссылки Instagram', { autoClose: 2000, pauseOnHover: false, position: "top-center" });
-          }
-          if (error.response.data.inst && error.response.data.inst[0] === 'Убедитесь, что это значение содержит не более 100 символов.') {
-            toast.error('Instagram не может содержать больше 100 символов.', { autoClose: 2000, pauseOnHover: false, position: "top-center" });
-          }
-          if (error.response.data.two_gis && error.response.data.two_gis[0] === 'Two gis error: pattern - https://2gis/*/*') {
-            toast.error('Не корректный формат ссылки Two gis', { autoClose: 2000, pauseOnHover: false, position: "top-center" });
-          }
-          if (error.response.data.two_gis && error.response.data.two_gis[0] === 'Убедитесь, что это значение содержит не более 150 символов.') {
-            toast.error('Two gis не может содержать больше 150 символов.', { autoClose: 2000, pauseOnHover: false, position: "top-center" });
-          }
-          if (error.response.data.service && error.response.data.service[0] === 'Введите правильное число.') {
-            toast.error('Процент обсулживания должен быть числом.', { autoClose: 2000, pauseOnHover: false, position: "top-center" });
-          }
-          if (error.response.data.service && error.response.data.service[0] === 'Service: only range(1, 100)') {
-            toast.error('Процент обсулживания должен быть не более 100.', { autoClose: 2000, pauseOnHover: false, position: "top-center" });
-          }
-          if (error.response.data.wifi && error.response.data.wifi[0] === 'Убедитесь, что это значение содержит не более 30 символов.') {
-            toast.error('WIFI не может содержать больше 30 символов.', { autoClose: 2000, pauseOnHover: false, position: "top-center" });
-          }
-          if (error.response.data.wifi_password && error.response.data.wifi_password[0] === 'Убедитесь, что это значение содержит не более 30 символов.') {
-            toast.error('WIFI-Пароль не может содержать больше 30 символов.', { autoClose: 2000, pauseOnHover: false, position: "top-center" });
-          }
-          if (error.response.data.work_time_start && error.response.data.work_time_start[0] === 'Неправильный формат времени. Используйте один из этих форматов: hh:mm[:ss[.uuuuuu]].') {
-            toast.error('Неправильный формат времени(hh:mm).', { autoClose: 2000, pauseOnHover: false, position: "top-center" });
-          }
-          if (error.response.data.work_time_end && error.response.data.work_time_end[0] === 'Неправильный формат времени. Используйте один из этих форматов: hh:mm[:ss[.uuuuuu]].') {
-            toast.error('Неправильный формат времени(hh:mm).', { autoClose: 2000, pauseOnHover: false, position: "top-center" });
-          }
-        }
-      } else {
-        // Other errors
-        toast.error('Ошибка при создании заведения', { autoClose: 2000, pauseOnHover: false, position: "top-center" });
+      // Limit error
+      if (error.response.data[0] === "Establishment: limit error") {
+        toast.error('Вы превысили лимит на количество созданных заведений', { autoClose: 2000, pauseOnHover: false, position: "top-center" });
       }
+      // Call error handler
+      CreateAndUpdateEstablishmentErrors(error);
+    }
+    finally {
+      // Disabled save button and set disabled time
+      setIsCreateButtonClicked(true)
+      setTimeout(() => { setIsCreateButtonClicked(false); }, 2000);
     }
   };
-
+  // HTML block
   return (
     <div className="container">
       <div className="create-establishment">
@@ -174,12 +146,13 @@ function CreateEstablishmentForm({ onClose, updateEstablishments }) {
         <div className="btn shadow-0 btn-animate my-auto" onClick={onClose}>
           <i className="fas fa-arrow-left-long fa-lg"></i>
         </div>
-        <hr className="my-0"/>
+        <hr className="my-0" />
         <h2 className="my-3">Добавить заведение</h2>
         <h6 className="my-3">Основная информация </h6>
         {/* Add establishment form */}
         {/* Form handler */}
         <form className="my-1" onSubmit={handleSubmit}>
+
           <div className="input-group mb-4">
             <span className="input-group-text"><i className="fas fa-font fa-xs"></i></span>
             {/* Establishment name */}
@@ -193,6 +166,7 @@ function CreateEstablishmentForm({ onClose, updateEstablishments }) {
               required
             />
           </div>
+
           <div className="input-group mb-4">
             <span className="input-group-text"><i className="fas fa-link fa-xs"></i></span>
             <span className="input-group-text text-muted fst-" id="basic-addon2">yaem.kz/</span>
@@ -207,8 +181,8 @@ function CreateEstablishmentForm({ onClose, updateEstablishments }) {
               required
             />
           </div>
-          {/* Establishment city */}
 
+          {/* Establishment city */}
           <select
             value={city}
             onChange={(e) => setCity(e.target.value)}
@@ -217,12 +191,12 @@ function CreateEstablishmentForm({ onClose, updateEstablishments }) {
           >
             <option value="">Выберите город</option>
             {cities.map(city => (
-            <option key={city.id} value={city.id}>{city.name}</option>
+              <option key={city.id} value={city.id}>{city.name}</option>
             ))}
           </select>
           {/* Button to open a block with additional information */}
           <button type="button" className="btn btn-outline-secondary mt-4 btn-animate px-2" onClick={() => setIsAdditionalInfoVisible(!isAdditionalInfoVisible)}>Показать дополнительные поля <i class="fas fa-circle-chevron-down ms-1"></i></button>
-          {/* Show this block if button clicked */}
+          {/* Show this block if additionainfo button clicked */}
           {isAdditionalInfoVisible && (
             <>
               {/* Establishment description */}
@@ -247,10 +221,14 @@ function CreateEstablishmentForm({ onClose, updateEstablishments }) {
                   onChange={(e) => setLogo(e.target.files[0])}
                 />
               </div>
-                <small id='helperTextExample' className='form-helper text-muted'>
-                    Размер файла не более 1мб.
-                </small>
-                <p className="text-primary">Удалить изображение</p>
+              <small id='helperTextExample' className='form-helper text-muted'>
+                Размер файла не более 1мб.
+              </small>
+              {/* If logo has uploaded, show reset button */}
+              {logo != '' && (
+                <p className="text-primary" onClick={handleDeleteLogo}>Удалить изображение</p>
+              )}
+
               {/* Establishment address*/}
               <div className="input-group mb-4">
                 <span className="input-group-text"><i class="fas fa-location-dot"></i></span>
@@ -262,6 +240,7 @@ function CreateEstablishmentForm({ onClose, updateEstablishments }) {
                   onChange={(e) => setAddress(e.target.value)}
                 />
               </div>
+
               {/* Establishment phone*/}
               <div className="input-group mb-4">
                 <span className="input-group-text"><i class="fas fa-phone"></i></span>
@@ -274,6 +253,7 @@ function CreateEstablishmentForm({ onClose, updateEstablishments }) {
                   onChange={(e) => setPhone(e.target.value)}
                 />
               </div>
+
               {/* Establishment instagram*/}
               <div className="input-group mb-4">
                 <span className="input-group-text"><i class="fab fa-instagram"></i></span>
@@ -286,6 +266,7 @@ function CreateEstablishmentForm({ onClose, updateEstablishments }) {
                   onChange={(e) => setInstagramLink(e.target.value)}
                 />
               </div>
+
               {/* Establishment 2gis*/}
               <div className="input-group mb-3">
                 <span className="input-group-text"><i class="fas fa-map-location-dot"></i></span>
@@ -298,23 +279,23 @@ function CreateEstablishmentForm({ onClose, updateEstablishments }) {
                   onChange={(e) => setTwogisLink(e.target.value)}
                 />
               </div>
+
               {/* Establishment Outside/Delivery */}
-
-                <div class="form-check mx-0 px-0 my-1">
-                  <MDBSwitch
-                    checked={outside}
-                    label='Самовывоз'
-                    onChange={() => setOutside(!outside)}
-                  />
-                </div>
-                <div class="form-check mx-0 px-0">
-                  <MDBSwitch
-                    checked={delivery}
-                    label='Доставка'
-                    onChange={() => setDelivery(!delivery)}
-                  />
-
+              <div class="form-check mx-0 px-0 my-1">
+                <MDBSwitch
+                  checked={outside}
+                  label='Самовывоз'
+                  onChange={() => setOutside(!outside)}
+                />
               </div>
+              <div class="form-check mx-0 px-0">
+                <MDBSwitch
+                  checked={delivery}
+                  label='Доставка'
+                  onChange={() => setDelivery(!delivery)}
+                />
+              </div>
+
               {/* Establishment Service */}
               <div className="input-group mt-3">
                 <span className="input-group-text"><i class="fas fa-percent"></i></span>
@@ -326,6 +307,7 @@ function CreateEstablishmentForm({ onClose, updateEstablishments }) {
                   onChange={(e) => setService(e.target.value)}
                 />
               </div>
+
               {/* Establishment WiFi/Password */}
               <div class="input-group my-4">
                 <span className="input-group-text"><i class="fas fa-wifi"></i></span>
@@ -359,18 +341,29 @@ function CreateEstablishmentForm({ onClose, updateEstablishments }) {
                   onChange={(e) => setWorkTimeEnd(e.target.value)}
                 />
               </div>
-
-              {/* Submit button */}
+              {/* Save button */}
               <div className="d-flex justify-content-center">
-                <button type="submit" className="btn btn-success my-3 me-2">Добавить</button>
+                <button
+                  type="submit"
+                  className="btn btn-success my-3 me-2"
+                  disabled={isCreateButtonClicked}
+                >
+                  Добавить
+                </button>
               </div>
             </>
           )}
-          {/* Submit button */}
-          {/* Show this button if button with additional information not clicked */}
+          {/* Save button */}
+          {/* Show save button if button with additional information not clicked */}
           {!isAdditionalInfoVisible && (
             <div className="d-flex justify-content-center">
-              <button type="submit" className="btn btn-success my-3 me-2">Добавить</button>
+              <button
+                type="submit"
+                className="btn btn-success my-3 me-2"
+                disabled={isCreateButtonClicked}
+              >
+                Добавить
+              </button>
             </div>
           )}
         </form>
@@ -378,5 +371,3 @@ function CreateEstablishmentForm({ onClose, updateEstablishments }) {
     </div>
   );
 }
-
-export default CreateEstablishmentForm;

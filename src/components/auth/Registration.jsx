@@ -1,50 +1,71 @@
-import React, { useState, useEffect } from "react";
+// Import react
+import React, { useState } from "react";
+// Import routers
 import { Link, useNavigate } from 'react-router-dom';
-import logo from '../../assets/images/favicon.png';
+// Import axios(HTTP)
 import axios from "axios";
+// Import toast(messages)
 import { ToastContainer, toast } from 'react-toastify';
 import 'react-toastify/dist/ReactToastify.css';
-import { MDBInput } from 'mdb-react-ui-kit'
+// Import MDB
+import { MDBInput } from 'mdb-react-ui-kit';
+// Import errors
+import { registrationErrors } from '../utils/Errors';
+// Import urls
+import apiUrls from "../utils/ApiUrls";
+// Import image
+import logo from '../../assets/images/favicon.png';
 
 
-function Registration() {
+export default function Registration() {
 
-    // Set handlers and values
-    const [phone, setPhone] = useState('');
+    // Set phone number state
+    const [phoneNumber, setPhoneNumber] = useState('');
+    // Set password state
     const [password, setPassword] = useState('');
+    // Set success state
     const [isRegisterButtonClicked, setIsRegisterButtonClicked] = useState(false);
+    // Set phoneNumber pattern
     const phoneNumberPattern = /^(\+7|8)\d{10}$/;
+    // Set navigate value
     const navigate = useNavigate();
-
-    // Register handler for registration form
-    const handleRegistration = async (e) => {
+    // Format phone number number value
+    const formatPhoneNumber = (phoneNumber) => {
+        // if 8 first symdol, replace this on +7
+        if (phoneNumber.startsWith('8')) {
+            return phoneNumber.replace('8', '+7');
+        }
+        return phoneNumber;
+    };
+    // Register handler for registration form, validations
+    const handleRegistrationForm = async (e) => {
         // Prevent default form behavior
         e.preventDefault();
-        const formattedPhone = formatPhoneNumber(phone);
-        // Check is number format correct
-        if (!phoneNumberPattern.test(phone)) {
-            // Disabled save button button and set disabled time
+        // Format phoneNumber
+        const formattedPhone = formatPhoneNumber(phoneNumber);
+        // Checking if the phone number not matches the pattern
+        if (!phoneNumberPattern.test(phoneNumber)) {
+            // Disabled register button and set disabled time
             setIsRegisterButtonClicked(true)
             setTimeout(() => { setIsRegisterButtonClicked(false); }, 2000);
             // Display message
             toast.error('Пожалуйста, укажите корректный номер.', { autoClose: 1300, pauseOnHover: false, position: "top-center" });
             return;
         }
-        // Post request to backend and create user in DB
+        // Post request to backend and create user in DB and login
         try {
-            // Disabled save button and set disabled time
+            // Disabled register button and set disabled time
             setIsRegisterButtonClicked(true)
             setTimeout(() => { setIsRegisterButtonClicked(false); }, 2200);
-            // Send request
-            await axios.post('https://yaem.kz/api/v1/auth/create', {
-                phone_number: phone,
+            // Send request on backend and get response
+            await axios.post(apiUrls.createUser, {
+                phone_number: phoneNumber,
                 password: password,
-            });
+            })
             // Mesaage
             toast.success('Аккаунт создан. Перенаправление.', { autoClose: 1000, pauseOnHover: false, position: "top-center" });
-            // Redirect user to login page
-            // Send request and get response
-            const response = await axios.post('https://yaem.kz/api/v1/auth/jwt/create/', {
+            // Send request on backend and get response
+            const response = await axios.post(apiUrls.loginUser, {
                 phone_number: formattedPhone,
                 password: password,
             });
@@ -58,39 +79,12 @@ function Registration() {
             // Navigate to menu page and reload page and save tokens in sessionStorage
             window.location.reload();
             navigate('/menu');
-            // setTimeout(() => { navigate('/login'); }, 1500)
         } catch (error) {
-            // Handle error when server is unavailable
-            if (!error.response) {
-                toast.error('Технические неполадки. Пожалуйста, попробуйте позже.', { autoClose: 2000, pauseOnHover: false, position: "top-center" });
-            }
-            // Check if phone is exists
-            if (error.response.data.phone_number && error.response.data.phone_number[0] === 'This phone number is already registered.') {
-                toast.error('Номер телефона уже существует.', { autoClose: 2000, pauseOnHover: false, position: "top-center" });
-            }
-            // Check is number format correct
-            if (error.response.data.phone_number && error.response.data.phone_number[0] === 'Введен некорректный номер телефона.') {
-                toast.error('Пожалуйста, укажите корректный номер.', { autoClose: 2000, pauseOnHover: false, position: "top-center" });
-            }
-            // Check is number format correct
-            if (error.response.data.password && error.response.data.password[0] === 'Введённый пароль слишком короткий. Он должен содержать как минимум 8 символов.') {
-                toast.error('Введённый пароль слишком короткий.', { autoClose: 2000, pauseOnHover: false, position: "top-center" });
-            }
-            // Check is number format correct
-            if (error.response.data.password && error.response.data.password[0] === 'Введённый пароль слишком широко распространён.') {
-                toast.error('Введённый пароль слишком широко распространён.', { autoClose: 2000, pauseOnHover: false, position: "top-center" });
-            }
+            // Call error handler
+            registrationErrors(error)
         }
     };
-
-    // Format phone
-    const formatPhoneNumber = (phoneNumber) => {
-        if (phoneNumber.startsWith('8')) {
-            return phoneNumber.replace('8', '+7');
-        }
-        return phoneNumber;
-    };
-
+    // BLOCK HTML
     return (
         <main>
             <div className="container-fluid background">
@@ -110,20 +104,20 @@ function Registration() {
                                             <h5 className="card-title text-center fs-4">Регистрация</h5>
                                         </div>
 
-                                        {/* handleRegistration actions */}
-                                        <form className="row g-3 needs-validation" onSubmit={handleRegistration}>
+                                        {/* handleRegistrationForm */}
+                                        <form className="row g-3 needs-validation" onSubmit={handleRegistrationForm}>
                                             <div className="col-12">
-                                                {/* Phine handler */}
+                                                {/* Phone */}
                                                 <MDBInput
                                                     type="text"
                                                     label="Введите номер телефона"
-                                                    value={phone}
-                                                    onChange={(e) => setPhone(e.target.value)}
+                                                    value={phoneNumber}
+                                                    onChange={(e) => setPhoneNumber(e.target.value)}
                                                     required
                                                 />
                                             </div>
                                             <div className="col-12">
-                                                {/* Password handler */}
+                                                {/* Password */}
                                                 <MDBInput
                                                     type="password"
                                                     label="Введите пароль"
@@ -132,7 +126,7 @@ function Registration() {
                                                     required
                                                 />
                                             </div>
-                                            {/* Save button handler */}
+                                            {/* Register button */}
                                             <div className="col-12">
                                                 <button
                                                     className="btn btn-success w-100 btn-animate"
@@ -142,7 +136,7 @@ function Registration() {
                                                 </button>
                                             </div>
 
-                                            {/* Messages block */}
+                                            {/* Messages block on this page */}
                                             <ToastContainer></ToastContainer>
                                             {/* Redirect to login page */}
                                             <div className="col-12 my-0">
@@ -163,6 +157,3 @@ function Registration() {
 
     );
 }
-
-export default Registration;
-

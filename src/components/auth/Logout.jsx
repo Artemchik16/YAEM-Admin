@@ -4,18 +4,19 @@ import 'react-toastify/dist/ReactToastify.css';
 
 export default function Logout() {
 
+    // Set success state
     const [isLogoutButtonClicked, setIsLogoutButtonClicked] = useState(false);
 
-    // Logout handler
+    // Logout handler, remove tokens
     const handleLogout = () => {
         // Remove tokens from sessionStorage and redirect to login page
         sessionStorage.removeItem('accessToken');
         sessionStorage.removeItem('refreshToken');
         sessionStorage.clear();
         setIsLogoutButtonClicked(true)
+        // Redirect to login page
         window.location.href = '/login';
     };
-
     // BLOCK HTML
     return (
         <div className="col-10 col-sm-9 py-4">
@@ -23,7 +24,7 @@ export default function Logout() {
             <p className="ms-4">Вы действительно хотите выйти?</p>
             <div className="d-flex justify-content-center">
             </div>
-            {/* Handle logout button */}
+            {/* Logout button */}
             <button
                 className="btn btn-danger ms-4 btn-animate"
                 onClick={handleLogout}

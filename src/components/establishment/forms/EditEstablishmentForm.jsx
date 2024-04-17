@@ -1,12 +1,16 @@
 // Import react
 import React, { useState, useEffect } from "react";
-// Import axios
+// Import axios(HTTP)
 import axios from "axios";
-// Import react-toastify
+// Import toast(messages)
 import { toast } from 'react-toastify';
 import 'react-toastify/dist/ReactToastify.css';
 // Import MDB
 import { MDBInput, MDBTextArea, MDBSwitch } from "mdb-react-ui-kit";
+// Import urls
+import apiUrls from "../../utils/ApiUrls";
+// Import errors
+import { CreateAndUpdateEstablishmentErrors } from '../../utils/Errors';
 
 
 function EditEstablishmentForm({ establishmentId, onFinishEditing, updateEstablishments }) {
@@ -16,50 +20,90 @@ function EditEstablishmentForm({ establishmentId, onFinishEditing, updateEstabli
   const [establishmentData, setEstablishmentData] = useState(null);
   // State for visibility other info block
   const [isAdditionalInfoVisible, setIsAdditionalInfoVisible] = useState(false);
+  // Set success state
+  const [isEditButtonClicked, setIsEditButtonClicked] = useState(false);
   // Set form changed flag
   const [formChanged, setFormChanged] = useState(false);
   // Load handler
   const [loading, setLoading] = useState(true);
-  // States block for user data
+
+  // Set name state
   const [name, setName] = useState('');
+  // Set url state
   const [urlName, setUrlName] = useState('');
+  // Set city state
   const [city, setCity] = useState('');
+  // Set cities list state
   const [cities, setCities] = useState([]);
+  // Set description state
   const [description, setDescription] = useState('');
+  // Set logo state
   const [logo, setLogo] = useState(null);
+  // Create a new FormData object for uploading logo
   const formData = new FormData();
   formData.append('logo', logo);
+  // Delete logo handler
+  const handleDeleteLogo = () => {
+    setLogo(null);
+    document.getElementById('inputGroupFile04').value = "";
+  };
+  // Set address state
   const [address, setAddress] = useState("");
+  // Set phone state
   const [phone, setPhone] = useState("");
+  // Set Instagram link state
   const [instagramLink, setInstagramLink] = useState("");
+  // Set 2GIS link state
   const [twogisLink, setTwogisLink] = useState("");
-  const [outside, setOutside] = useState(null);
-  const [delivery, setDelivery] = useState(null);
+  // Set outside seating state
+  const [outside, setOutside] = useState(false);
+  // Set delivery state
+  const [delivery, setDelivery] = useState(false);
+  // Set service state
   const [service, setService] = useState("");
+  // Set Wi-Fi name state
   const [wifiName, setWifiName] = useState("");
+  // Set Wi-Fi password state
   const [wifiPassword, setWifiPassword] = useState("");
+  // Set working hours start time state
   const [workTimeStart, setWorkTimeStart] = useState('00:00');
+  // Set working hours end time state
   const [workTimeEnd, setWorkTimeEnd] = useState('00:00');
 
-
-  // Get detail data from backend on est ID
+  // When loading the component we get a list of all cities
   useEffect(() => {
-    const fetchEstablishmentData = async () => {
+    axios.get(apiUrls.city, {
+      headers: {
+        'Authorization': `Bearer ${userToken}`,
+      }
+    })
+      .then(response => {
+        setCities(response.data);
+      })
+      .catch(error => {
+        toast.error('Ошибка при получении городов', { autoClose: 2000 });
+      });
+  }, []);
+
+  // When loading the component we get detailed data for editing
+  useEffect(() => {
+    const getEstablishmentData = async () => {
       try {
-        const response = await axios.get(`https://yaem.kz/api/v1/menu/clients/${establishmentId}`, {
-          // Send token
+        const response = await axios.get(`${apiUrls.client}${establishmentId}`, {
           headers: {
             Authorization: `Bearer ${userToken}`
           }
         });
-        // Set values
+        // Set actualy data
         setEstablishmentData(response.data);
-        setLoading(false);
+        // Disable loading state when receiving data successfully
+        setTimeout(() => { setLoading(false); }, 200)
+        // Set all received data
         setName(response.data.name);
         setUrlName(response.data.url_name);
         setCity(response.data.city);
         setDescription(response.data.description);
-        // setLogo(response.data.logo);
+        setLogo(response.data.logo);
         setAddress(response.data.address);
         setPhone(response.data.phone);
         setInstagramLink(response.data.inst);
@@ -76,30 +120,15 @@ function EditEstablishmentForm({ establishmentId, onFinishEditing, updateEstabli
         setTimeout(() => { window.location.reload() }, 1400);
       }
     };
-
-    fetchEstablishmentData();
+    getEstablishmentData();
   }, [establishmentId]);
 
-  // Get request on a list of cities from backend
-  useEffect(() => {
-    axios.get("https://yaem.kz/api/v1/menu/city/", {
-      // Send token on backend
-      headers: {
-        'Authorization': `Bearer ${userToken}`,
-      }
-    })
-      .then(response => {
-        setCities(response.data);
-      })
-      .catch(error => {
-        toast.error('Ошибка при получении городов', { autoClose: 2000 });
-      });
-  }, []);
-
-  // Put request on backend
+  // Put request on backend, edit establishment
   const handleUpdate = async (e) => {
+    // Prevent default form behavior
     e.preventDefault();
     try {
+      // if the field has been changed from its original state, then add it to the dictionary
       const requestData = {
         name: name || establishmentData.name,
         url_name: urlName || establishmentData.url_name,
@@ -117,18 +146,18 @@ function EditEstablishmentForm({ establishmentId, onFinishEditing, updateEstabli
         ...(outside !== null && { outside }),
         ...(delivery !== null && { delivery }),
       };
-      if (logo) {
+      if (logo != null) {
         requestData.logo = logo;
       }
-
-      await axios.patch(`https://yaem.kz/api/v1/menu/clients/${establishmentId}/`, requestData, {
+      // Update establishment
+      await axios.patch(`${apiUrls.client}${establishmentId}/`, requestData, {
         headers: {
           Authorization: `Bearer ${userToken}`,
           'Content-Type': 'multipart/form-data'
         }
       });
-      // Success block
       toast.success('Заведение обновлено.', { autoClose: 2000, pauseOnHover: false, position: "top-center" });
+      // Close edit form
       onFinishEditing()
       // Another request on backend
       const updatedEstablishmentsResponse = await axios.get('https://yaem.kz/api/v1/menu/clients/', {
@@ -137,82 +166,27 @@ function EditEstablishmentForm({ establishmentId, onFinishEditing, updateEstabli
           'Authorization': `Bearer ${userToken}`
         }
       });
+      // Update establishment component after editing
       updateEstablishments(updatedEstablishmentsResponse.data);
-      // Error block
     } catch (error) {
-      if (error.response && error.response.data) {
-        if (error.response.data.name && error.response.data.name[0] === 'Name: only ru/en/num characters') {
-          toast.error('Имя может содержать только русские/английские/численные символы', { autoClose: 2000, pauseOnHover: false, position: "top-center" });
-        }
-        if (error.response.data.name && error.response.data.name[0] === 'Убедитесь, что это значение содержит не более 20 символов.') {
-          toast.error('Название не может содержать больше 20 символов', { autoClose: 2000, pauseOnHover: false, position: "top-center" });
-        }
-        if (error.response.data.url_name && error.response.data.url_name[0] === 'Убедитесь, что это значение содержит не более 30 символов.') {
-          toast.error('URL не может содержать больше 30 символов', { autoClose: 2000, pauseOnHover: false, position: "top-center" });
-        }
-        if (error.response.data.url_name && error.response.data.url_name[0] === 'The URL name can only contain Latin characters') {
-          toast.error('URL может содержать только английские буквы', { autoClose: 2000, pauseOnHover: false, position: "top-center" });
-        }
-        if (error.response.data.url_name && error.response.data.url_name[0] === 'Заведение с таким /url уже существует.') {
-          toast.error('URL уже занят', { autoClose: 2000, pauseOnHover: false, position: "top-center" });
-        }
-        if (error.response.data.description && error.response.data.description[0] === 'Убедитесь, что это значение содержит не более 200 символов.') {
-          toast.error('Описание не может содержать больше 200 символов', { autoClose: 2000, pauseOnHover: false, position: "top-center" });
-        }
-        if (error.response.data.logo && error.response.data.logo[0] === 'Загруженный файл не является корректным файлом.') {
-          toast.error('Загруженный файл не является корректным файлом', { autoClose: 2000, pauseOnHover: false, position: "top-center" });
-        }
-        if (error.response.data.address && error.response.data.address[0] === 'Убедитесь, что это значение содержит не более 50 символов.') {
-          toast.error('Адрес не может содержать больше 50 символов', { autoClose: 2000, pauseOnHover: false, position: "top-center" });
-        }
-        if (error.response.data.phone && error.response.data.phone[0] === 'Требуется численное значение.') {
-          toast.error('Неверный формат номера телефона', { autoClose: 2000, pauseOnHover: false, position: "top-center" });
-        }
-        if (error.response.data.phone && error.response.data.phone[0] === 'Phone: correct format - "+7XXXXXXXXXX" or "8XXXXXXXXXX"') {
-          toast.error('Неверный формат номера телефона', { autoClose: 2000, pauseOnHover: false, position: "top-center" });
-        }
-        if (error.response.data.inst && error.response.data.inst[0] === 'Instagram error: pattern - https://www.instagram.com/*') {
-          toast.error('Не корректный формат ссылки Instagram', { autoClose: 2000, pauseOnHover: false, position: "top-center" });
-        }
-        if (error.response.data.inst && error.response.data.inst[0] === 'Убедитесь, что это значение содержит не более 100 символов.') {
-          toast.error('Instagram не может содержать больше 100 символов.', { autoClose: 2000, pauseOnHover: false, position: "top-center" });
-        }
-        if (error.response.data.two_gis && error.response.data.two_gis[0] === 'Two gis error: pattern - https://2gis/*/*') {
-          toast.error('Не корректный формат ссылки Two gis', { autoClose: 2000, pauseOnHover: false, position: "top-center" });
-        }
-        if (error.response.data.two_gis && error.response.data.two_gis[0] === 'Убедитесь, что это значение содержит не более 150 символов.') {
-          toast.error('Two gis не может содержать больше 150 символов.', { autoClose: 2000, pauseOnHover: false, position: "top-center" });
-        }
-        if (error.response.data.service && error.response.data.service[0] === 'Введите правильное число.') {
-          toast.error('Процент обсулживания должен быть числом.', { autoClose: 2000, pauseOnHover: false, position: "top-center" });
-        }
-        if (error.response.data.service && error.response.data.service[0] === 'Service: only range(1, 100)') {
-          toast.error('Процент обсулживания должен быть не более 100.', { autoClose: 2000, pauseOnHover: false, position: "top-center" });
-        }
-        if (error.response.data.wifi && error.response.data.wifi[0] === 'Убедитесь, что это значение содержит не более 30 символов.') {
-          toast.error('WIFI не может содержать больше 30 символов.', { autoClose: 2000, pauseOnHover: false, position: "top-center" });
-        }
-        if (error.response.data.wifi_password && error.response.data.wifi_password[0] === 'Убедитесь, что это значение содержит не более 30 символов.') {
-          toast.error('WIFI-Пароль не может содержать больше 30 символов.', { autoClose: 2000, pauseOnHover: false, position: "top-center" });
-        }
-        if (error.response.data.work_time_start && error.response.data.work_time_start[0] === 'Неправильный формат времени. Используйте один из этих форматов: hh:mm[:ss[.uuuuuu]].') {
-          toast.error('Неправильный формат времени(hh:mm).', { autoClose: 2000, pauseOnHover: false, position: "top-center" });
-        }
-        if (error.response.data.work_time_end && error.response.data.work_time_end[0] === 'Неправильный формат времени. Используйте один из этих форматов: hh:mm[:ss[.uuuuuu]].') {
-          toast.error('Неправильный формат времени(hh:mm).', { autoClose: 2000, pauseOnHover: false, position: "top-center" });
-        }
-      }
+      // Call error handler
+      CreateAndUpdateEstablishmentErrors(error)
+    }
+    finally {
+      // Disabled edit button and set disabled time
+      setIsEditButtonClicked(true)
+      setTimeout(() => { setIsEditButtonClicked(false); }, 2000);
     }
   };
 
-  // Check if the form is changed
+  // Tracking changes to each field in the form
   useEffect(() => {
     setFormChanged(
       name !== establishmentData?.name ||
       urlName !== establishmentData?.url_name ||
       city !== establishmentData?.city ||
       description !== establishmentData?.description ||
-      //       logo !== establishmentData?.logo ||
+      logo !== establishmentData?.logo ||
       address !== establishmentData?.address ||
       phone !== establishmentData?.phone ||
       instagramLink !== establishmentData?.inst ||
@@ -225,156 +199,167 @@ function EditEstablishmentForm({ establishmentId, onFinishEditing, updateEstabli
       workTimeStart !== establishmentData?.work_time_start ||
       workTimeEnd !== establishmentData?.work_time_end
     );
-  }, [name, urlName, city, description, address, phone,
+  }, [name, urlName, city, description, logo, address, phone,
     instagramLink, twogisLink, outside, delivery, service,
     wifiName, wifiPassword, workTimeStart, workTimeEnd]);
 
-  if (loading) {
-    return <div class="d-flex justify-content-center display-middle">
-      <div class="spinner-border text-warning" role="status">
-        <span class="visually-hidden">Loading...</span>
-      </div>
-    </div>
-  }
-
-
-
+  // HTML block
   return (
-    <div>
-      {/* Back handler */}
-      <div className="btn shadow-0 btn-animate my-auto" onClick={onFinishEditing}>
-        <i className="fas fa-arrow-left-long fa-lg"></i>
-      </div>
-      <hr className="my-0"/>
-      <h2 className="my-3">Редактирование - <span className="yaem-color">{establishmentData.name}</span></h2>
-      {/* Edit establishment form */}
-      {/* Form handler */}
-      <form className="my-4" onSubmit={handleUpdate}>
-        <div className="input-group mb-4">
-          <span className="input-group-text"><i className="fas fa-font fa-xs text-muted"></i></span>
-          {/* Establishment name */}
-          <MDBInput
-            type="text"
-            label='Название заведения'
-            maxLength="20" showCounter={true}
-            defaultValue={establishmentData.name}
-            value={name}
-            onChange={(e) => setName(e.target.value)}
-          />
+    <>
+      {/* While all data is loading show spinner */}
+      {loading && (
+        <div className="spinner-border text-warning mx-auto my-auto" role="status">
+          <span className="visually-hidden">Loading...</span>
         </div>
-        <div className="input-group mb-4">
-          <span className="input-group-text"><i className="fas fa-link fa-xs text-muted"></i></span>
-          <span className="input-group-text text-muted fst-" id="basic-addon2">yaem.kz/</span>
-          {/* Establishment url */}
-          <MDBInput
-            type="text"
-            label="URL имя"
-            maxLength="20" showCounter={true}
-            defaultValue={establishmentData.url_name}
-            value={urlName}
-            onChange={(e) => setUrlName(e.target.value)}
-          />
-        </div>
-        {/* Establishment city */}
-        <select
-          value={city}
-          onChange={(e) => setCity(e.target.value)}
-          className="form-select"
-        >
-          <option value="">Выберите город</option>
-          {cities.map(city => (
-            <option key={city.id} value={city.id}>{city.name}</option>
-          ))}
-        </select>
-        {/* Button to open a block with additional information */}
-        <button type="button" className="btn btn-outline-secondary my-4 btn-animate" onClick={() => setIsAdditionalInfoVisible(!isAdditionalInfoVisible)}>Показать дополнительные поля <i class="fas fa-circle-chevron-down ms-1"></i></button>
-        {/* Show this block if button clicked */}
-        {isAdditionalInfoVisible && (
-          <>
-            {/* Establishment description */}
-            <div className="input-group mb-3">
-              <span className="input-group-text"><i className="fas fa-font fa-xs"></i></span>
-              <MDBTextArea
+      )}
+      {/* After loading show main content */}
+      {!loading && (
+        <div>
+          {/* Back handler */}
+          <div className="btn shadow-0 btn-animate my-auto" onClick={onFinishEditing}>
+            <i className="fas fa-arrow-left-long fa-lg"></i>
+          </div>
+          <hr className="my-0" />
+          <h2 className="my-3">Редактирование - <span className="yaem-color">{establishmentData.name}</span></h2>
+          {/* Edit establishment form */}
+          {/* Form handler */}
+          <form className="my-4" onSubmit={handleUpdate}>
+            <div className="input-group mb-4">
+              <span className="input-group-text"><i className="fas fa-font fa-xs text-muted"></i></span>
+              {/* Establishment name */}
+              <MDBInput
                 type="text"
-                label="Описание заведения"
-                defaultValue={establishmentData.description}
-                rows={3}
-                value={description}
-                onChange={(e) => setDescription(e.target.value)}
+                label='Название заведения'
+                maxLength="20" showCounter={true}
+                defaultValue={establishmentData.name}
+                value={name}
+                onChange={(e) => setName(e.target.value)}
               />
             </div>
-            {/* Establishment logo */}
-            <div class="input-group">
-              <label class="input-group-text" for="inputGroupFile01"><i class="far fa-image"></i></label>
-              <input
-                type="file"
-                class="form-control"
-                id="inputGroupFile04"
-                onChange={(e) => {
-                  const file = e.target.files[0];
-                  if (file) {
-                    setLogo(file);
-                  }
-                }}
+
+            <div className="input-group mb-4">
+              <span className="input-group-text"><i className="fas fa-link fa-xs text-muted"></i></span>
+              <span className="input-group-text text-muted fst-" id="basic-addon2">yaem.kz/</span>
+              {/* Establishment url */}
+              <MDBInput
+                type="text"
+                label="URL имя"
+                maxLength="20" showCounter={true}
+                defaultValue={establishmentData.url_name}
+                value={urlName}
+                onChange={(e) => setUrlName(e.target.value)}
               />
             </div>
-            <small id='helperTextExample' className='form-helper text-muted'>
-                    Размер файла не более 1мб.
+
+            {/* Establishment city */}
+            <select
+              value={city}
+              onChange={(e) => setCity(e.target.value)}
+              className="form-select"
+            >
+              <option value="">Выберите город</option>
+              {cities.map(city => (
+                <option key={city.id} value={city.id}>{city.name}</option>
+              ))}
+            </select>
+            {/* Button to open a block with additional information */}
+            <button type="button" className="btn btn-outline-secondary my-4 btn-animate" onClick={() => setIsAdditionalInfoVisible(!isAdditionalInfoVisible)}>Показать дополнительные поля <i class="fas fa-circle-chevron-down ms-1"></i></button>
+            {/* Show this block if button clicked */}
+            {isAdditionalInfoVisible && (
+              <>
+                {/* Establishment description */}
+                <div className="input-group mb-3">
+                  <span className="input-group-text"><i className="fas fa-font fa-xs"></i></span>
+                  <MDBTextArea
+                    type="text"
+                    label="Описание заведения"
+                    defaultValue={establishmentData.description}
+                    rows={3}
+                    value={description}
+                    onChange={(e) => setDescription(e.target.value)}
+                  />
+                </div>
+
+                {/* Establishment logo */}
+                <div class="input-group">
+                  <label class="input-group-text" for="inputGroupFile01"><i class="far fa-image"></i></label>
+                  <input
+                    type="file"
+                    class="form-control"
+                    id="inputGroupFile04"
+                    onChange={(e) => {
+                      const file = e.target.files[0];
+                      if (file) {
+                        setLogo(file);
+                      }
+                    }}
+                  />
+                </div>
+                <small id='helperTextExample' className='form-helper text-muted'>
+                  Размер файла не более 1мб.
                 </small>
-                <p className="text-primary">Удалить изображение</p>
-            {/* Establishment address*/}
-            <div className="input-group mb-4">
-              <span className="input-group-text"><i class="fas fa-location-dot"></i></span>
-              <MDBInput
-                type="text"
-                label="Адрес заведения"
-                maxLength="50" showCounter={true}
-                defaultValue={establishmentData.address}
-                value={address}
-                onChange={(e) => setAddress(e.target.value)}
-              />
-            </div>
-            {/* Establishment phone*/}
-            <div className="input-group mb-4">
-              <span className="input-group-text"><i class="fas fa-phone"></i></span>
-              <MDBInput
-                type="text"
-                label="Телефон для связи / заказов WhatsApp"
-                placeholder="+7..."
-                maxLength="12" showCounter={true}
-                defaultValue={establishmentData.phone}
-                value={phone}
-                onChange={(e) => setPhone(e.target.value)}
-              />
-            </div>
-            {/* Establishment instagram*/}
-            <div className="input-group mb-4">
-              <span className="input-group-text"><i class="fab fa-instagram"></i></span>
-              <MDBInput
-                type="text"
-                label="Ссылка на Instagram"
-                placeholder="instagram.com/yaem_qr/"
-                maxLength="100" showCounter={true}
-                defaultValue={establishmentData.inst}
-                value={instagramLink}
-                onChange={(e) => setInstagramLink(e.target.value)}
-              />
-            </div>
-            {/* Establishment 2gis*/}
-            <div className="input-group mb-3">
-              <span className="input-group-text"><i class="fas fa-map-location-dot"></i></span>
-              <MDBInput
-                type="text"
-                label="Ссылка на 2Gis"
-                placeholder="go.2gis.com/d9pf44"
-                maxLength="150" showCounter={true}
-                defaultValue={establishmentData.two_gis}
-                value={twogisLink}
-                onChange={(e) => setTwogisLink(e.target.value)}
-              />
-            </div>
-            {/* Establishment Outside/Delivery */}
-            <div class="form-check mx-0 px-0 my-1">
+                {/* If logo has uploaded, show reset button */}
+                {logo != null && (
+                  <p className="text-primary" onClick={handleDeleteLogo}>Удалить изображение</p>
+                )}
+
+                {/* Establishment address*/}
+                <div className="input-group mb-4">
+                  <span className="input-group-text"><i class="fas fa-location-dot"></i></span>
+                  <MDBInput
+                    type="text"
+                    label="Адрес заведения"
+                    maxLength="50" showCounter={true}
+                    defaultValue={establishmentData.address}
+                    value={address}
+                    onChange={(e) => setAddress(e.target.value)}
+                  />
+                </div>
+
+                {/* Establishment phone*/}
+                <div className="input-group mb-4">
+                  <span className="input-group-text"><i class="fas fa-phone"></i></span>
+                  <MDBInput
+                    type="text"
+                    label="Телефон для связи / заказов WhatsApp"
+                    placeholder="+7..."
+                    maxLength="12" showCounter={true}
+                    defaultValue={establishmentData.phone}
+                    value={phone}
+                    onChange={(e) => setPhone(e.target.value)}
+                  />
+                </div>
+
+                {/* Establishment instagram*/}
+                <div className="input-group mb-4">
+                  <span className="input-group-text"><i class="fab fa-instagram"></i></span>
+                  <MDBInput
+                    type="text"
+                    label="Ссылка на Instagram"
+                    placeholder="instagram.com/yaem_qr/"
+                    maxLength="100" showCounter={true}
+                    defaultValue={establishmentData.inst}
+                    value={instagramLink}
+                    onChange={(e) => setInstagramLink(e.target.value)}
+                  />
+                </div>
+
+                {/* Establishment 2gis*/}
+                <div className="input-group mb-3">
+                  <span className="input-group-text"><i class="fas fa-map-location-dot"></i></span>
+                  <MDBInput
+                    type="text"
+                    label="Ссылка на 2Gis"
+                    placeholder="go.2gis.com/d9pf44"
+                    maxLength="150" showCounter={true}
+                    defaultValue={establishmentData.two_gis}
+                    value={twogisLink}
+                    onChange={(e) => setTwogisLink(e.target.value)}
+                  />
+                </div>
+
+                {/* Establishment Outside/Delivery */}
+                <div class="form-check mx-0 px-0 my-1">
                   <MDBSwitch
                     checked={outside}
                     label='Самовывоз'
@@ -387,72 +372,88 @@ function EditEstablishmentForm({ establishmentId, onFinishEditing, updateEstabli
                     label='Доставка'
                     onChange={() => setDelivery(!delivery)}
                   />
+                </div>
 
+                {/* Establishment Service */}
+                <div className="input-group mb-4">
+                  <span className="input-group-text"><i class="fas fa-percent"></i></span>
+                  <MDBInput
+                    type="text"
+                    label="Процент обслуживания"
+                    maxLength="2" showCounter={true}
+                    defaultValue={establishmentData.service}
+                    value={service}
+                    onChange={(e) => setService(e.target.value)}
+                  />
+                </div>
+
+                {/* Establishment WiFi/Password */}
+                <div class="input-group mb-4">
+                  <span className="input-group-text"><i class="fas fa-wifi"></i></span>
+                  <MDBInput
+                    type="text"
+                    label='Wi-Fi'
+                    maxLength="30" showCounter={true}
+                    defaultValue={establishmentData.wifi}
+                    value={wifiName}
+                    onChange={(e) => setWifiName(e.target.value)}
+                  />
+                  <span className="input-group-text"><i class="fas fa-lock"></i></span>
+                  <MDBInput
+                    type="text"
+                    label='Пароль'
+                    defaultValue={establishmentData.wifi_password}
+                    value={wifiPassword}
+                    onChange={(e) => setWifiPassword(e.target.value)}
+                  />
+                </div>
+
+                {/* Establishment work time */}
+                <div className="input-group my-3">
+                  <span className="input-group-text">Рабочее время</span>
+                  <MDBInput
+                    value={workTimeStart}
+                    placeholder="10:00"
+                    defaultValue={establishmentData.work_time_start}
+                    onChange={(e) => setWorkTimeStart(e.target.value)}
+                  />
+                  <MDBInput
+                    value={workTimeEnd}
+                    placeholder="21:00"
+                    defaultValue={establishmentData.work_time_end}
+                    onChange={(e) => setWorkTimeEnd(e.target.value)}
+                  />
+                </div>
+
+                {/* Show submit button only if form is changed */}
+                <div className="d-flex justify-content-center">
+                  {formChanged &&
+                    <button
+                      type="submit"
+                      className="btn btn-success me-2 btn-animate"
+                      disabled={isEditButtonClicked}
+                    >
+                      Сохранить
+                    </button>}
+                </div>
+              </>
+            )}
+            {/* Show this button if button with additional information not clicked and form is changed */}
+            {!isAdditionalInfoVisible && formChanged && (
+              <div className="d-flex justify-content-center">
+                <button
+                  type="submit"
+                  className="btn btn-success my-3 me-2"
+                  disabled={isEditButtonClicked}
+                >
+                  Сохранить
+                </button>
               </div>
-            {/* Establishment Service */}
-            <div className="input-group mb-4">
-              <span className="input-group-text"><i class="fas fa-percent"></i></span>
-              <MDBInput
-                type="text"
-                label="Процент обслуживания"
-                maxLength="2" showCounter={true}
-                defaultValue={establishmentData.service}
-                value={service}
-                onChange={(e) => setService(e.target.value)}
-              />
-            </div>
-            {/* Establishment WiFi/Password */}
-            <div class="input-group mb-4">
-              <span className="input-group-text"><i class="fas fa-wifi"></i></span>
-              <MDBInput
-                type="text"
-                label='Wi-Fi'
-                maxLength="30" showCounter={true}
-                defaultValue={establishmentData.wifi}
-                value={wifiName}
-                onChange={(e) => setWifiName(e.target.value)}
-              />
-              <span className="input-group-text"><i class="fas fa-lock"></i></span>
-              <MDBInput
-                type="text"
-                label='Пароль'
-                defaultValue={establishmentData.wifi_password}
-                value={wifiPassword}
-                onChange={(e) => setWifiPassword(e.target.value)}
-              />
-            </div>
-
-            {/* Establishment work time */}
-            <div className="input-group my-3">
-              <span className="input-group-text">Рабочее время</span>
-              <MDBInput
-                value={workTimeStart}
-                placeholder="10:00"
-                defaultValue={establishmentData.work_time_start}
-                onChange={(e) => setWorkTimeStart(e.target.value)}
-              />
-              <MDBInput
-                value={workTimeEnd}
-                placeholder="21:00"
-                defaultValue={establishmentData.work_time_end}
-                onChange={(e) => setWorkTimeEnd(e.target.value)}
-              />
-            </div>
-
-            {/* Show submit button only if form is changed */}
-            <div className="d-flex justify-content-center">
-              {formChanged && <button type="submit" className="btn btn-success me-2 btn-animate">Сохранить</button>}
-            </div>
-          </>
-        )}
-        {/* Show this button if button with additional information not clicked and form is changed */}
-        {!isAdditionalInfoVisible && formChanged && (
-          <div className="d-flex justify-content-center">
-            <button type="submit" className="btn btn-success my-3 me-2">Сохранить</button>
-          </div>
-        )}
-      </form>
-    </div>
+            )}
+          </form>
+        </div>
+      )}
+    </>
   );
 }
 

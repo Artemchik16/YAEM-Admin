@@ -1,25 +1,34 @@
-import React, { useState, useEffect } from "react";
+// Import react
+import React, { useEffect } from "react";
+// Import routers
 import { BrowserRouter as Router, Routes, Route, Navigate } from 'react-router-dom';
+// Import custom css file
 import './assets/styles/main.css';
+// Import AOS animations
+import AOS from 'aos';
+import 'aos/dist/aos.css';
+// Import main components
 import Login from './components/auth/Login.jsx';
 import Registration from './components/auth//Registration.jsx';
 import Menu from './components/Menu.jsx';
 import NotFound from "./components/utils/404NotFound.jsx";
+// Import SEO components
 import RobotsTxt from "./components/utils/RobotsTxt.jsx";
 import SitemapXml from "./components/utils/SitemapXml.jsx";
-// importing aos
-import AOS from 'aos';
-import 'aos/dist/aos.css';
 
-// Parent component
+
+// Parent main component
 export default function App() {
   // Check is authenticated user, getting user token
   const isAuthenticated = sessionStorage.getItem('accessToken') !== null;
+  // When loading each component, load AOS animation
   useEffect(() => {
     AOS.init();
-}, [])
+  }, [])
 
+  // HTML block
   return (
+    // Routers block
     <Router>
       <Routes>
         {/* Default redirect from default(/) page on menu page */}
