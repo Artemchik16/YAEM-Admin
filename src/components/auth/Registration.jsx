@@ -8,7 +8,7 @@ import axios from "axios";
 import { ToastContainer, toast } from 'react-toastify';
 import 'react-toastify/dist/ReactToastify.css';
 // Import MDB
-import { MDBInput } from 'mdb-react-ui-kit';
+import { MDBInput, MDBCheckbox } from 'mdb-react-ui-kit';
 // Import errors
 import { registrationErrors } from '../utils/Errors';
 // Import urls
@@ -126,6 +126,14 @@ export default function Registration() {
                                                     required
                                                 />
                                             </div>
+
+                                            <div className="col-12">
+                                                {/* Offer_check */}
+                                                <MDBCheckbox name='flexCheck' value='' id='flexCheckDefault' label='Я принимаю условия' required />
+                                                <label>публичной офферты</label>
+                                            </div>
+
+
                                             {/* Register button */}
                                             <div className="col-12">
                                                 <button
