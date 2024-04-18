@@ -46,6 +46,8 @@ export default function EstablishmentCard({ establishments, onEdit, onEditDishes
                     }
                 }
             );
+            // Add the deleted establishment key to deletedEstablishments state
+            setDeletedEstablishments([...deletedEstablishments, key]);
             // Notify user about successful deletion
             toast.warning('Заведение удалено.', { autoClose: 2000 })
             // Another request on backend
@@ -58,7 +60,9 @@ export default function EstablishmentCard({ establishments, onEdit, onEditDishes
             updateEstablishments(updatedEstablishmentsResponse.data);
         } catch (error) {
             // Notify user about deletion error
-            toast.error('Ошибка при удалении заведения', { autoClose: 2000 })
+            if (error.response.data.detail && error.response.data.detail == 'Страница не найдена.') {
+                toast.error('Ошибка при удалении заведения', { autoClose: 2000 })
+            }
         }
     };
 
