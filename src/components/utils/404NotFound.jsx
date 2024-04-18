@@ -1,5 +1,8 @@
 // Import react
 import React from 'react';
+// Import routers
+import { Link } from 'react-router-dom';
+
 
 export default function NotFound() {
     // HTML block
@@ -8,12 +11,13 @@ export default function NotFound() {
             <h2>404 Not Found</h2>
             <p>Страница, которую вы ищете, не найдена.</p>
             {/* Back button */}
-            <button
-                className="btn btn-success btn-animate"
-                onClick={() => window.location.reload()}
-            >
-                <i class="fas fa-arrow-rotate-left me-1"></i> Вернуться на главную
-            </button>
+            <Link to='/menu'>
+                <button
+                    className="btn btn-success btn-animate"
+                >
+                    <i class="fas fa-arrow-rotate-left me-1"></i> Вернуться на главную
+                </button>
+            </Link>
         </div>
     );
 }
