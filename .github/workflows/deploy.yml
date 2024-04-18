@@ -19,12 +19,6 @@ jobs:
         with:
           node-version: "20"
 
-      - name: Установка зависимостей
-        run: npm install
-
-      - name: Билд приложения
-        run: npm run build
-
       - name: Деплой...
         uses: appleboy/ssh-action@master
         with:
@@ -36,4 +30,6 @@ jobs:
             cd /home/artem/YAEM-Admin
             git stash
             git pull origin master
+            npm install
+            npm run build
             echo "artemchik16" | sudo -S systemctl restart nginx
