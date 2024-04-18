@@ -1,0 +1,4 @@
+name: Сборка, билд и развертывание
+on:
+  push:
+    branches: [ master ]
