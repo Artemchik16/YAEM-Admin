@@ -1,4 +1,39 @@
+# Simple CI/CD config for deploing react app
+
 name: Сборка, билд и развертывание
+
 on:
   push:
-    branches: [ master ]
+    branches: [master]
+
+jobs:
+  deploy:
+    runs-on: ubuntu-22.04
+
+    steps:
+      - name: Проверка репозитория на наличие изменений
+        uses: actions/checkout@v4
+
+      - name: Установка и создание NodeJS
+        uses: actions/setup-node@v4
+        with:
+          node-version: "20"
+
+      - name: Установка зависимостей
+        run: npm install
+
+      - name: Билд приложения
+        run: npm run build
+
+      - name: Деплой...
+        uses: appleboy/ssh-action@master
+        with:
+          host: 194.58.120.24
+          username: root
+          password: w!KULKR9crVK
+          script: |
+            su artem
+            cd /home/artem/YAEM-Admin
+            git stash
+            git pull origin master
+            echo "artemchik16" | sudo -S systemctl restart nginx
