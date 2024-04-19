@@ -130,7 +130,7 @@ export default function Registration() {
                                             <div className="col-12">
                                                 {/* Offer_check */}
                                                 <MDBCheckbox name='flexCheck' value='' id='flexCheckDefault' label='Я принимаю условия' required />
-                                                <a href="src/assets/images/Public_offer_yaem.pdf" target="_blank" rel="noopener noreferrer">публичной офферты</a>
+                                                <a href="public/Public_offer_yaem.pdf" target="_blank" rel="noopener noreferrer">публичной офферты</a>
                                             </div>
 
 
