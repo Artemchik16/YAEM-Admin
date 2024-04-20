@@ -44,7 +44,7 @@ export default function Main() {
       <div className="container-fluid">
         <div className="row">
           {/* Sidebar menu */}
-          <div className="navbar col-2 col-sm-3 py-0 border-end px-1 my-0 user-select-none" style={{ maxWidth: '300px' }}>
+          <div className="navbar col-2 py-0 border-end px-1 my-0 user-select-none" style={{ maxWidth: '300px' }}>
             <div className='d-flex mb-auto flex-column sticky-top' style={{ minHeight: '100vh' }}>
               <img className="mx-auto my-4 text-center d-block d-sm-none btn-animate" onClick={() => window.location.reload()} style={{ maxHeight: '40px' }} src={favicon} alt="YAEM logo" />
               <img className="mx-auto my-4 text-center d-none d-sm-block btn-animate" onClick={() => window.location.reload()} draggable="false" style={{ maxHeight: '50px' }} src={logo} alt="YAEM logo" />
