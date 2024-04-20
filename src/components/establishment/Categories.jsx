@@ -54,17 +54,20 @@ function Categories({ establishmentId, onFinishDish, establishmentUrl }) {
     }
 
     return (
-        <div className="container mx-0 px-0">
-            <div className="row">
-                <div className="col">
+        <div className="container-fluid mx-0 px-0">
+            <div className="row mx-0 px-0">
+                <div className="col-2 mx-0 px-0">
                     <div data-aos="fade-in" data-aos-delay="100" className="btn shadow-0 btn-animate my-auto" onClick={onFinishDish}>
                         <i className="fas fa-arrow-left-long fa-lg"></i>
                     </div>
                 </div>
-                <div className="col text-end">
-                    <a href={`https://yaem.kz/${establishmentUrl}/menu`} target="_blank">
-                        <div data-aos="fade-in"  className="btn shadow-0 btn-animate my-auto text-nowrap">В меню
-                        <i className="fas fa-arrow-right-long fa-lg mx-1"></i>
+                <div className="col-6 mx-0 px-0 my-1">
+                    <h3 className="text-truncate">КАФЕХА 123123123</h3>
+                </div>
+                <div className="col-2 text-end mx-0 px-0">
+                    <a href={`https://yaem.kz/${establishmentUrl}/menu`} target="_blank" className="mx-0 px-0">
+                        <div data-aos="fade-in"  className="btn shadow-0 btn-animate my-auto text-nowrap text-dark">В меню
+                        <i className="fas fa-arrow-right-long fa-lg ms-1"></i>
                         </div>
                     </a>
                 </div>

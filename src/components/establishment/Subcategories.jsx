@@ -67,7 +67,7 @@ function Subcategories({ categoryId }) {
     }
 
     return (
-        <div className="container px-0">
+        <div className="container-fluid mx-0 px-0">
             {/* show this block if user has not any categories */}
             <h2 className="mt-2 mb-0">Категории
                 <div className="btn shadow-0 text-success btn-animate mx-1 px-2 py-0"

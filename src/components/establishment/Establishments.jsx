@@ -97,7 +97,7 @@ export default function Establishment() {
       )}
       {/* After loading show main content */}
       {!loading && (
-        <div className="col-10 col-sm-9 py-4 mx-auto">
+        <div className="col-10 py-4 mx-auto">
           {/* Create establishments */}
           {showEstablishments && !showCreateForm && (
             <div className="container px-0">

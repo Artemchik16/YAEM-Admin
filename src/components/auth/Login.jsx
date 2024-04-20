@@ -129,7 +129,7 @@ export default function Login() {
                                                     type="submit"
                                                     disabled={isLoginButtonClicked}
                                                 >
-                                                    Войти(TEST CI CD)
+                                                    Войти
                                                 </button>
                                             </div>
                                             {/* Messages block on this page */}
