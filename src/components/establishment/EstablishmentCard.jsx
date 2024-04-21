@@ -68,7 +68,7 @@ export default function EstablishmentCard({ establishments, onEdit, onEditDishes
 
     // HTMP block
     return (
-        <div className="container">
+        <div className="container mx-0 px-0">
             <div className="d-flex flex-wrap justify-content-evenly">
                 {/* Loop through the establishments data */}
                 {Object.keys(establishments).map((key) => (

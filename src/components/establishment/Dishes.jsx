@@ -40,7 +40,7 @@ function Dishes({ subcategoryId }) {
                 setDishes(dishesResponse.data);
                 setLoading(false);
             } catch (error) {
-                toast.error('Ошибка при получении блюд.', { autoClose: 1000 });
+                toast.error('Ошибка при получении позиций.', { autoClose: 1000 });
                 setLoading(false);
             }
         };
@@ -61,7 +61,7 @@ function Dishes({ subcategoryId }) {
                 }
             );
             // Notify user about successful deletion
-            toast.warning('Блюдо удалено.', { autoClose: 1000 });
+            toast.warning('Позиция удалена.', { autoClose: 1000 });
             // Remove the deleted dish from the dishes list
             const updatedDishes = dishes.filter(dish => dish.id !== dishId);
             setDishes(updatedDishes);
@@ -69,7 +69,7 @@ function Dishes({ subcategoryId }) {
             setConfirmDelete(null);
         } catch (error) {
             // Notify user about deletion error
-            toast.error('Ошибка при удалении блюда', { autoClose: 2000 });
+            toast.error('Ошибка при удалении позиции', { autoClose: 2000 });
         }
     };
 
@@ -83,7 +83,7 @@ function Dishes({ subcategoryId }) {
 
     return (
         <div className="container my-2 px-0">
-            <h5 className="mb-0">Блюда
+            <h5 className="mb-0">Позиции
                 <div className="btn shadow-0 text-success btn-animate mx-1 px-2 py-0"
                     onClick={toggleAddModal}>
                     <i className="far fa-square-plus fa-2x"></i>
@@ -97,7 +97,7 @@ function Dishes({ subcategoryId }) {
                             <div className="card shadow text-center" style={{ width: '288px', height: '127px' }}>
                                 <div className="card-body px-0 py-0">
                                 {/* Render deletion confirmation message */}
-                                <p className="my-3"><strong>Безвозвратно</strong> удалить блюдо <strong>{dish.name}</strong>?</p>
+                                <p className="my-3"><strong>Безвозвратно</strong> удалить позицию <strong>{dish.name}</strong>?</p>
                                 <div className="d-flex justify-content-center text-center">
                                     {/* Button to confirm deletion */}
                                     <button className="btn btn-sm btn-danger me-2" onClick={() => handleDeleteDish(dishToDelete, index)}>Да, удалить</button>
