@@ -40,11 +40,12 @@ export default function Establishment() {
   // User hints/guide and handlers
   const [stepEnabled, setStepEnabled] = useState(true);
   const [steps, setSteps] = useState([
-    { element: '#start-guide', intro: 'Тут будет отображаться список ваших заведений.' },
-    { element: "#create-establishment", intro: "Создайте заведение.", },
-    { element: "#edit-establishment", intro: "Редактируйте заведение.", },
-    { element: "#qr-review", intro: "Скачайте QR код или перейдите в меню", },
-    { element: "#create-menu", intro: "Создайте меню", },
+    { element: '#start-guide', intro: 'Тут будет отображаться список ваших заведений' },
+    { element: "#create-establishment", intro: "Создайте своё первое заведение", },
+    { element: "#edit-establishment", intro: "Добавить или изменить информацию о заведении", },
+    { element: "#qr-review", intro: "Тут можно скачать QR код и перейти в меню", },
+    { element: "#create-menu", intro: "В данном меню можно создавать и редактировать меню", },
+    { element: "#delete-establishment", intro: "Удалить заведение, и меню. *ВАЖНО: данные о меню и заведении будут полностью удалены, без возможности восстановления", },
   ]);
   const onExit = () => {
     setStepEnabled(true);
@@ -133,16 +134,19 @@ export default function Establishment() {
                   <p>Чтобы добавить заведение, нажмите кнопку "+".</p>
                   <hr />
                   {/* Show user guide, only if user has not any establishments */}
-                  <h1 id='start-guide'>GUIDE CARD COMPONENT</h1>
                   {/* Display demo establishment card for user guide */}
+                  <div className="card" id='start-guide'>
+                  <div className="card-body">
                   <div className="row">
+
                     <div className="col">
-                      <h5 className="card-title ms-2 me-0 pe-0">Element
+
+                      <h5 className="card-title ms-2 me-0 pe-0">Название заведения
                         {/* Edit button */}
                         <div id='edit-establishment' className="btn btn-animate my-1 shadow-0 ms-1 me-0 px-0 py-0">
                           <i className="fas fa-pen fa-lg"></i>
                         </div>
-                        <p className="my-3 fs-6 text-muted">г.R</p>
+                        <p className="my-3 fs-6 text-muted">Город</p>
                       </h5>
                     </div>
                     <div className="d-flex flex-wrap justify-content-evenly text-center my-3">
@@ -155,8 +159,10 @@ export default function Establishment() {
                         <i className="fas fa-book-open fa-lg"></i>
                       </div>
                       {/* Delete button */}
-                      <div className="btn btn-animate btn-outline-danger my-1" style={{ width: '70px' }}>
+                      <div className="btn btn-animate btn-outline-danger my-1" id="delete-establishment" style={{ width: '70px' }}>
                         <i className="fas fa-trash fa-lg"></i>
+                      </div>
+                      </div>
                       </div>
                     </div>
                   </div>
