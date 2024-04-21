@@ -13,6 +13,7 @@
     "@fortawesome/fontawesome-free": "^6.5.2",
     "aos": "^3.0.0-beta.6",
     "axios": "^1.6.8",
+    "intro.js-react": "^1.0.0",
     "mdb-react-ui-kit": "^7.2.0",
     "qrcode.react": "^3.1.0",
     "react": "^18.2.0",
