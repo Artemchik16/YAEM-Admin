@@ -7,6 +7,9 @@ import 'react-toastify/dist/ReactToastify.css';
 import axios from "axios";
 // Import urls
 import apiUrls from "../utils/ApiUrls.js";
+// Import intro js(user guide)
+import { Steps } from 'intro.js-react';
+import 'intro.js/introjs.css';
 // Import components
 import CreateEstablishmentForm from './forms/CreateEstablishmentForm.jsx';
 import EditEstablishmentForm from './forms/EditEstablishmentForm.jsx';
@@ -34,6 +37,18 @@ export default function Establishment() {
   // Open and close create establishments component
   const handleCreateFormIsOpen = () => { setShowCreateForm(true); };
   const handleCreateFormIsClose = () => { setShowCreateForm(false); };
+  // User hints/guide and handlers
+  const [stepEnabled, setStepEnabled] = useState(true);
+  const [steps, setSteps] = useState([
+    { element: '#start-guide', intro: 'Тут будет отображаться список ваших заведений.' },
+    { element: "#create-establishment", intro: "Создайте заведение.", },
+    { element: "#edit-establishment", intro: "Редактируйте заведение.", },
+    { element: "#qr-review", intro: "Скачайте QR код или перейдите в меню", },
+    { element: "#create-menu", intro: "Создайте меню", },
+  ]);
+  const onExit = () => {
+    setStepEnabled(true);
+  };
 
   // When loading the component, get all the user's establishments
   useEffect(() => {
@@ -51,7 +66,7 @@ export default function Establishment() {
         setTimeout(() => { setLoading(false); }, 200)
       } catch (error) {
         // if when loading a component the user is not authenticated, refresh the page and log him out
-        if (error.response && error.response.status && error.response.status === 401) {
+        if (error.response && error.responеse.status && error.response.status === 401) {
           sessionStorage.clear();
           window.location.reload();
         }
@@ -104,7 +119,7 @@ export default function Establishment() {
               <h1 className="ms-4 mb-3">Заведения
                 <span>
                   {/* Create establishments form open */}
-                  <div className="btn shadow-0 btn-animate px-3 my-1 mx-2 py-0"
+                  <div id='create-establishment' className="btn shadow-0 btn-animate px-3 my-1 mx-2 py-0"
                     onClick={handleCreateFormIsOpen}
                   >
                     <i className="far fa-square-plus text-success fa-2x"></i>
@@ -117,6 +132,46 @@ export default function Establishment() {
                   <p>Здесь будет отображен список ваших заведений.</p>
                   <p>Чтобы добавить заведение, нажмите кнопку "+".</p>
                   <hr />
+                  {/* Show user guide, only if user has not any establishments */}
+                  <h1 id='start-guide'>GUIDE CARD COMPONENT</h1>
+                  {/* Display demo establishment card for user guide */}
+                  <div className="row">
+                    <div className="col">
+                      <h5 className="card-title ms-2 me-0 pe-0">Element
+                        {/* Edit button */}
+                        <div id='edit-establishment' className="btn btn-animate my-1 shadow-0 ms-1 me-0 px-0 py-0">
+                          <i className="fas fa-pen fa-lg"></i>
+                        </div>
+                        <p className="my-3 fs-6 text-muted">г.R</p>
+                      </h5>
+                    </div>
+                    <div className="d-flex flex-wrap justify-content-evenly text-center my-3">
+                      {/* QR button */}
+                      <div id='qr-review' className="btn btn-animate my-1" style={{ width: '70px' }}>
+                        <i className="fas fa-qrcode fa-lg"></i>
+                      </div>
+                      {/* Menu button */}
+                      <div id='create-menu' className="btn btn-animate my-1" style={{ width: '70px' }}>
+                        <i className="fas fa-book-open fa-lg"></i>
+                      </div>
+                      {/* Delete button */}
+                      <div className="btn btn-animate btn-outline-danger my-1" style={{ width: '70px' }}>
+                        <i className="fas fa-trash fa-lg"></i>
+                      </div>
+                    </div>
+                  </div>
+                  {/* Display steps handler */}
+                  <Steps
+                    enabled={stepEnabled}
+                    steps={steps}
+                    initialStep={0}
+                    options={{
+                      nextLabel: 'Далее',
+                      prevLabel: 'Назад',
+                      doneLabel: 'Понятно'
+                    }}
+                    onExit={onExit}
+                  />
                 </>
               )}
               {/* If user have any establishments*/}
