@@ -94,6 +94,7 @@ function EditEstablishmentForm({ establishmentId, onFinishEditing, updateEstabli
             Authorization: `Bearer ${userToken}`
           }
         });
+        console.log(response.data)
         // Set actualy data
         setEstablishmentData(response.data);
         // Disable loading state when receiving data successfully
@@ -104,6 +105,7 @@ function EditEstablishmentForm({ establishmentId, onFinishEditing, updateEstabli
         setCity(response.data.city);
         setDescription(response.data.description);
         setLogo(response.data.logo);
+        // document.getElementById('inputGroupFile04').value(response.data.logo)
         setAddress(response.data.address);
         setPhone(response.data.phone);
         setInstagramLink(response.data.inst);
@@ -160,7 +162,7 @@ function EditEstablishmentForm({ establishmentId, onFinishEditing, updateEstabli
       // Close edit form
       onFinishEditing()
       // Another request on backend
-      const updatedEstablishmentsResponse = await axios.get('https://yaem.kz/api/v1/menu/clients/', {
+      const updatedEstablishmentsResponse = await axios.get(apiUrls.client, {
         // Send token on backend
         headers: {
           'Authorization': `Bearer ${userToken}`
@@ -300,7 +302,7 @@ function EditEstablishmentForm({ establishmentId, onFinishEditing, updateEstabli
                 </small>
                 {/* If logo has uploaded, show reset button */}
                 {logo != null && (
-                  <p className="text-primary" onClick={handleDeleteLogo}>Удалить изображение</p>
+                  <p className="text-primary" onClick={handleDeleteLogo}>Удалить изображение {establishmentData.logo}</p>
                 )}
 
                 {/* Establishment address*/}

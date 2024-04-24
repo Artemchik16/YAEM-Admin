@@ -37,19 +37,6 @@ export default function Establishment() {
   // Open and close create establishments component
   const handleCreateFormIsOpen = () => { setShowCreateForm(true); };
   const handleCreateFormIsClose = () => { setShowCreateForm(false); };
-  // User hints/guide and handlers
-  const [stepEnabled, setStepEnabled] = useState(true);
-  const [steps, setSteps] = useState([
-    { element: '#start-guide', intro: 'Тут будет отображаться список ваших заведений' },
-    { element: "#create-establishment", intro: "Создайте своё первое заведение", },
-    { element: "#edit-establishment", intro: "Добавить или изменить информацию о заведении", },
-    { element: "#qr-review", intro: "Тут можно скачать QR код и перейти в меню", },
-    { element: "#create-menu", intro: "В данном меню можно создавать и редактировать меню", },
-    { element: "#delete-establishment", intro: "Удалить заведение, и меню. *ВАЖНО: данные о меню и заведении будут полностью удалены, без возможности восстановления", },
-  ]);
-  const onExit = () => {
-    setStepEnabled(true);
-  };
 
   // When loading the component, get all the user's establishments
   useEffect(() => {
@@ -133,51 +120,6 @@ export default function Establishment() {
                   <p>Здесь будет отображен список ваших заведений.</p>
                   <p>Чтобы добавить заведение, нажмите кнопку "+".</p>
                   <hr />
-                  {/* Show user guide, only if user has not any establishments */}
-                  {/* Display demo establishment card for user guide */}
-                  <div className="card" id='start-guide'>
-                  <div className="card-body">
-                  <div className="row">
-
-                    <div className="col">
-
-                      <h5 className="card-title ms-2 me-0 pe-0">Название заведения
-                        {/* Edit button */}
-                        <div id='edit-establishment' className="btn btn-animate my-1 shadow-0 ms-1 me-0 px-0 py-0">
-                          <i className="fas fa-pen fa-lg"></i>
-                        </div>
-                        <p className="my-3 fs-6 text-muted">Город</p>
-                      </h5>
-                    </div>
-                    <div className="d-flex flex-wrap justify-content-evenly text-center my-3">
-                      {/* QR button */}
-                      <div id='qr-review' className="btn btn-animate my-1" style={{ width: '70px' }}>
-                        <i className="fas fa-qrcode fa-lg"></i>
-                      </div>
-                      {/* Menu button */}
-                      <div id='create-menu' className="btn btn-animate my-1" style={{ width: '70px' }}>
-                        <i className="fas fa-book-open fa-lg"></i>
-                      </div>
-                      {/* Delete button */}
-                      <div className="btn btn-animate btn-outline-danger my-1" id="delete-establishment" style={{ width: '70px' }}>
-                        <i className="fas fa-trash fa-lg"></i>
-                      </div>
-                      </div>
-                      </div>
-                    </div>
-                  </div>
-                  {/* Display steps handler */}
-                  <Steps
-                    enabled={stepEnabled}
-                    steps={steps}
-                    initialStep={0}
-                    options={{
-                      nextLabel: 'Далее',
-                      prevLabel: 'Назад',
-                      doneLabel: 'Понятно'
-                    }}
-                    onExit={onExit}
-                  />
                 </>
               )}
               {/* If user have any establishments*/}
