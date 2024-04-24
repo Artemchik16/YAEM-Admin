@@ -214,7 +214,7 @@ function EditEstablishmentForm({ establishmentId, onFinishEditing, updateEstabli
       )}
       {/* After loading show main content */}
       {!loading && (
-        <div>
+        <div className="container">
           {/* Back handler */}
           <div className="btn shadow-0 btn-animate my-auto" onClick={onFinishEditing}>
             <i className="fas fa-arrow-left-long fa-lg"></i>

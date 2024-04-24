@@ -61,8 +61,8 @@ function Categories({ establishmentId, onFinishDish, establishmentUrl }) {
                         <i className="fas fa-arrow-left-long fa-lg"></i>
                     </div>
                 </div>
-                <div className="col-6 mx-0 px-0 my-1">
-                    <h3 className="text-truncate">КАФЕХА 123123123</h3>
+                <div className="col-8 mx-0 px-0 my-1">
+                    <h3 className="text-truncate">ЗАВЕДЕНИЕ</h3>
                 </div>
                 <div className="col-2 text-end mx-0 px-0">
                     <a href={`https://yaem.kz/${establishmentUrl}/menu`} target="_blank" className="mx-0 px-0">

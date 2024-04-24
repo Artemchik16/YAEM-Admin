@@ -108,6 +108,18 @@ function EditCategoryModal({ open, setOpen, categoryId, setSelectedCategoryId, s
                                 value={editedCategoryZindex}
                                 onChange={(e) => setEditedCategoryZindex(e.target.value)}
                             />
+{/*                             <div class="input-group"> */}
+{/*                                 <label class="input-group-text" for="inputGroupFile01"><i class="far fa-image"></i></label> */}
+{/*                                 <input */}
+{/*                                   type="file" */}
+{/*                                   class="form-control" */}
+{/*                                   id="inputGroupFile04" */}
+{/*                                   onChange={(e) => setLogo(e.target.files[0])} */}
+{/*                                 /> */}
+{/*                           </div> */}
+                          <small id='helperTextExample' className='form-helper text-muted'>
+                            Размер файла не более 1мб.
+                          </small>
                         </MDBModalBody>
                         <MDBModalFooter>
                             {formChanged && <MDBBtn color="success" disabled={isSaving || (!editedCategoryName || !editedCategoryZindex)}>Сохранить</MDBBtn>}

@@ -92,7 +92,7 @@ export default function EstablishmentCard({ establishments, onEdit, onEditDishes
                             ) : (
                                 <>
                                     {/* Display establishment data from backend */}
-                                    <div className="row">
+                                    <div className="row" style={{ minHeight: '100px' }}>
                                         <div className="col">
                                             <h5 className="card-title ms-2 me-0 pe-0">{establishments[key].name}
                                                 {/* Button to open DetailEstablishment component */}
