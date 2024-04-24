@@ -100,6 +100,18 @@ function AddCategoryModal({ open, setOpen, establishmentId, updateCategories, se
                                 value={categoryZindex}
                                 onChange={(e) => setCategoryZindex(e.target.value)}
                             />
+{/*                             <div class="input-group"> */}
+{/*                                 <label class="input-group-text" for="inputGroupFile01"><i class="far fa-image"></i></label> */}
+{/*                                 <input */}
+{/*                                   type="file" */}
+{/*                                   class="form-control" */}
+{/*                                   id="inputGroupFile04" */}
+{/*                                   onChange={(e) => setLogo(e.target.files[0])} */}
+{/*                                 /> */}
+{/*                           </div> */}
+                          <small id='helperTextExample' className='form-helper text-muted'>
+                            Размер файла не более 1мб.
+                          </small>
                         </MDBModalBody>
                         <MDBModalFooter>
                             {/* Button to submit the form */}

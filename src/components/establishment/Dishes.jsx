@@ -82,7 +82,7 @@ function Dishes({ subcategoryId }) {
     }
 
     return (
-        <div className="container my-2 px-0">
+        <div className="my-2 px-0">
             <h5 className="mb-0">Позиции
                 <div className="btn shadow-0 text-success btn-animate mx-1 px-2 py-0"
                     onClick={toggleAddModal}>
