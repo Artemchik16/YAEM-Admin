@@ -53,7 +53,7 @@ export default function EstablishmentCard({ establishments, onEdit, onEditDishes
             // Another request on backend
             const updatedEstablishmentsResponse = await axios.get(apiUrls.client, {
                 headers: {
-                    'Authorization': `Bearer ${token}`
+                    'Authorization': `Bearer ${userToken}`
                 }
             });
             // Update establishment component after deleting

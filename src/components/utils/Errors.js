@@ -28,11 +28,11 @@ export function registrationErrors(error) {
         toast.error('Ошибка, пожалуйста, попробуйте позже.', baseErrorMessageConfig);
     }
     // Check if phone number already exists
-    if (error.response.data.phone_number && error.response.data.phone_number[0] === 'This phoneNumber number is already registered.') {
+    if (error.response.data.phone_number && error.response.data.phone_number[0] === 'This phone number is already registered.') {
         toast.error('Номер телефона уже существует.', baseErrorMessageConfig);
     }
     // Check is number format correct
-    if (error.response.data.phone_number && error.response.data.phone_number[0] === 'Введен некорректный номер телефона.') {
+    if (error.response.data.phone_number && error.response.data.phone_number[0] === 'Введите корректный номер телефона.') {
         toast.error('Пожалуйста, укажите корректный номер.', baseErrorMessageConfig);
     }
     // Check is password format correct
@@ -80,6 +80,9 @@ export function CreateAndUpdateEstablishmentErrors(error) {
         // Image error
         if (error.response.data.logo && error.response.data.logo[0] === 'Загруженный файл не является корректным файлом.') {
             toast.error('Загруженный файл не является корректным файлом', baseErrorMessageConfig);
+        }
+        if (error.response.data.logo && error.response.data.logo[0] === 'Image: max size error(1mb)') {
+            toast.error('Недопустимый размер изображения', baseErrorMessageConfig);
         }
         // Address error
         if (error.response.data.address && error.response.data.address[0] === 'Убедитесь, что это значение содержит не более 50 символов.') {

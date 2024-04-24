@@ -11,8 +11,9 @@ export default function Logout() {
     const handleLogout = () => {
         // Remove tokens from sessionStorage and redirect to login page
         sessionStorage.removeItem('accessToken');
-        sessionStorage.removeItem('refreshToken');
+        localStorage.removeItem('refreshToken');
         sessionStorage.clear();
+        localStorage.clear();
         setIsLogoutButtonClicked(true)
         // Redirect to login page
         window.location.href = '/login';
