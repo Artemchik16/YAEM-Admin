@@ -65,8 +65,10 @@ export default function Login() {
             // Get tokens from response and save this in sessionStorage
             const accessToken = response.data.access;
             const refreshToken = response.data.refresh;
+            // set access token
             sessionStorage.setItem('accessToken', accessToken);
-            sessionStorage.setItem('refreshToken', refreshToken);
+            // set refresh token
+            localStorage.setItem('refreshToken', refreshToken);
             // Save success message in session storage, display on menu page
             sessionStorage.setItem('IsLoginSuccess', 'Добро пожаловать.');
             // Navigate to menu page and reload page and save tokens in sessionStorage
