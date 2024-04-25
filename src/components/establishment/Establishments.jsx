@@ -32,6 +32,7 @@ export default function Establishment() {
   const [selectedEstablishmentID, setSelectedEstablishmentID] = useState(null);
   const [editingDishId, setEditingDishId] = useState(null);
   const [selectedEstablishmentURL, setSelectedEstablishmentURL] = useState(null);
+  const [selectedEstablishmentName, setSelectedEstablishmentName] = useState(null);
   // Set show create establishments component
   const [showCreateForm, setShowCreateForm] = useState(false);
   // Open and close create establishments component
@@ -78,9 +79,10 @@ export default function Establishment() {
     setShowEstablishments(true);
   };
   // Function for setting the identifier of the edited dishes and hiding the list of establishments
-  const handleEditDishes = (establishmentId, establishmentUrl) => {
+  const handleEditDishes = (establishmentId, establishmentUrl, establishmentName) => {
     setEditingDishId(establishmentId);
     setSelectedEstablishmentURL(establishmentUrl);
+    setSelectedEstablishmentName(establishmentName);
     setShowEstablishments(false);
   };
   // Function for resetting the identifier of the edited dishes and displaying a list of establishments
@@ -152,6 +154,7 @@ export default function Establishment() {
             <Categories
               establishmentId={editingDishId}
               establishmentUrl={selectedEstablishmentURL}
+              establishmentName={selectedEstablishmentName}
               onFinishDish={handleFinishEditingDishes}
             />
           )}
