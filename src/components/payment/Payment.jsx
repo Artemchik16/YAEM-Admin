@@ -272,8 +272,8 @@ export default function Payment() {
                 <div style={{ position: 'absolute', top: '0', right: '0', backgroundColor: 'red', color: '#fff', padding: '5px 10px', borderRadius: '5px 0 0 0' }}>
                   <i className="fab fa-hotjar"></i>
                 </div>
-                <del className="text-center" style={{ color: '#fd7014' }}><p className="fw-bold fs-6 my-0" >15 000 ₸/мес </p></del>
-                <p className="fw-bold fs-5 my-0 text-center mb-1" style={{ color: '#fd7014' }}>13 000 ₸/мес <span className="fs-6">(-15 %)</span></p>
+                <del className="text-center" style={{ color: '#fd7014' }}><p className="fw-bold fs-6 my-0" >18 000 ₸/мес </p></del>
+                <p className="fw-bold fs-5 my-0 text-center mb-1" style={{ color: '#fd7014' }}>15 000 ₸/мес <span className="fs-6">(-17 %)</span></p>
                 <small className="card-text d-block"><i className="fas fa-check text-success"></i> Онлайн меню с фото блюд</small>
                 <small className="card-text d-block"><i className="fas fa-check text-success"></i> Меню на 3х языках</small>
                 <small className="card-text d-block"><i className="fas fa-check text-success"></i> Настольный QR код</small>
