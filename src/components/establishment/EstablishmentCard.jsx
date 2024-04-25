@@ -17,7 +17,7 @@ export default function EstablishmentCard({ establishments, onEdit, onEditDishes
     // is used to handle the establishment edit event and calls the onEdit function, passing it the establishmentId.
     const handleEdit = (establishmentId) => { onEdit(establishmentId); };
     // is used to handle the dishes edit event and calls the onEditDish function, passing it the establishmentId.
-    const handleEditDish = (establishmentId, establishmentUrl) => { onEditDishes(establishmentId, establishmentUrl); };
+    const handleEditDish = (establishmentId, establishmentUrl, establishmentName) => { onEditDishes(establishmentId, establishmentUrl, establishmentName); };
     // State for deleted establishments and confirmation of deletion
     const [deletedEstablishments, setDeletedEstablishments] = useState([]);
     const [confirmDelete, setConfirmDelete] = useState(null);
@@ -167,7 +167,7 @@ export default function EstablishmentCard({ establishments, onEdit, onEditDishes
 
                                         {/* Button to open Dishes component */}
                                         <div className="btn btn-animate my-1" style={{ width: '70px' }}
-                                            onClick={() => handleEditDish(establishments[key].id, establishments[key].url_name)}>
+                                            onClick={() => handleEditDish(establishments[key].id, establishments[key].url_name, establishments[key].name)}>
                                             <i className="fas fa-book-open fa-lg"></i>
                                         </div>
 
