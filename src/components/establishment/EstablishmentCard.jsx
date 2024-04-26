@@ -47,7 +47,8 @@ export default function EstablishmentCard({ establishments, onEdit, onEditDishes
                 }
             );
             // Add the deleted establishment key to deletedEstablishments state
-            setDeletedEstablishments([...deletedEstablishments, key]);
+            setDeletedEstablishments(prevState => [...prevState, key]);
+            setConfirmDelete(null);
             // Notify user about successful deletion
             toast.warning('Заведение удалено.', { autoClose: 2000 })
             // Another request on backend
@@ -73,9 +74,9 @@ export default function EstablishmentCard({ establishments, onEdit, onEditDishes
                 {/* Loop through the establishments data */}
                 {Object.keys(establishments).map((key) => (
                     // Render the establishment card if it's not deleted
-                    !deletedEstablishments.includes(key) &&
+                    !deletedEstablishments.includes(establishments[key].id) &&
                     // delete animation
-                    <div key={key} className={`card mx-2 my-2${deletedEstablishments.includes(key) ? '' : ''}`} style={{ width: '400px' }}>
+                    <div key={establishments[key].id} className={`card mx-2 my-2${deletedEstablishments.includes(key) ? '' : ''}`} style={{ width: '400px' }}>
                         <div className="card-body px-0 py-0">
                             {/* Check if deletion confirmation is active */}
                             {confirmDelete === key ? (

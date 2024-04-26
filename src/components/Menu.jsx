@@ -52,7 +52,7 @@ export default function Main() {
               <ul className="list-group list-group-light my-3" style={{ '--mdb-list-group-light-active-bg': '#ff9753', '--mdb-list-group-light-active-color': 'black' }}>
 
                 {/* Profile tab */}
-                <li className={`list-group-item border-0 d-flex justify-content-center btn-animate ${activeTab === 'profile' && 'active'}`} onClick={() => handleTabChange('profile')}
+                <li className={`disabled list-group-item border-0 d-flex justify-content-center btn-animate ${activeTab === 'profile' && 'active'}`} onClick={() => handleTabChange('profile')}
                 >
                   <div className="d-flex">
                     <i className="fas fa-user mx-auto my-auto"></i>

@@ -16,7 +16,7 @@ export function loginErrors(error) {
         toast.error('Ошибка, пожалуйста, попробуйте позже.', baseErrorMessageConfig);
     }
     // Error user does not exist
-    if (error.response.data.detail == 'No active account found with the given credentials' || error.response.status == 401) {
+    if (error.response.data.detail == 'No active account found with the given credentials') {
         toast.error('Неверный номер телефона или пароль.', baseErrorMessageConfig);
     }
 }
