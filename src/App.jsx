@@ -55,7 +55,7 @@ export default function App() {
     axios.interceptors.response.use(
       response => response,
       error => {
-        if (error.response.status === 401) {
+        if (error.response.status === 401 && error.response.data.detail === 'Given token not valid for any token type') {
           // If the error status is 401 (Unauthorized), refresh the access token
           refreshAccessToken();
         }
