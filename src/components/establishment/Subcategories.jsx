@@ -69,7 +69,7 @@ function Subcategories({ categoryId }) {
     return (
         <div className="container-fluid mx-0 px-0">
             {/* show this block if user has not any categories */}
-            <h2 className="mt-2 mb-0">Категории
+            <h4 className="mt-2 mb-0">Категории
                 <div className="btn shadow-0 text-success btn-animate mx-1 px-2 py-0"
                     onClick={toggleAddModal}>
                     <i className="far fa-square-plus fa-2x"></i>
@@ -89,7 +89,7 @@ function Subcategories({ categoryId }) {
                         </div>
                     </div>
                 )}
-            </h2>
+            </h4>
 
             {/* For loop, display subcategories and handle click */}
             <MDBTable responsive hover small align='middle' className="text-center my-2">
@@ -97,16 +97,22 @@ function Subcategories({ categoryId }) {
                     <tr>
                         {subcategories.map(subcategory => (
                             <th className="mx-0 px-1" scope='col'>
-                                <button
-                                    key={subcategory.id}
-                                    type="button"
-                                    className={`btn btn-outline-dark btn-animate text-nowrap btn-sm mx-0 px-1  ${subcategory.id === selectedSubcategoryId ? 'active' : ''}`}
-                                    data-mdb-color="dark"
-                                    onClick={() => handleSubcategoryClick(subcategory)}
-                                    style={{ '--mdb-btn-hover-bg': '#ff9753', '--mdb-btn-active-bg': '#ff9753' }}
-                                >
-                                    {subcategory.name}
-                                </button>
+                                <div className='position-relative d-inline-block mt-1 user-select-none'>
+                                    <button
+                                        key={subcategory.id}
+                                        type="button"
+                                        className={`btn btn-outline-dark btn-animate text-nowrap btn-sm mx-0 px-1  ${subcategory.id === selectedSubcategoryId ? 'active' : ''}`}
+                                        data-mdb-color="dark"
+                                        onClick={() => handleSubcategoryClick(subcategory)}
+                                        style={{ '--mdb-btn-hover-bg': '#ff9753', '--mdb-btn-active-bg': '#ff9753' }}
+                                    >
+                                        {subcategory.name}
+                                    </button>
+                                    <MDBBadge color='secondary' light pill className='position-absolute translate-middle border'>
+                                      {subcategory.z_index}
+                                      <span class="visually-hidden">unread messages</span>
+                                    </MDBBadge>
+                                </div>
                             </th>
                         ))}
                     </tr>

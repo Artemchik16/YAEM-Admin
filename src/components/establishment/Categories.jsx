@@ -6,7 +6,7 @@ import Subcategories from './Subcategories';
 import AddCategoryModal from './modals/categories/AddCategoryModal.jsx';
 import RemoveCategoryModal from './modals/categories/RemoveCategoryModal.jsx';
 import EditCategoryModal from './modals/categories/EditCategoryModal.jsx';
-import { MDBTable, MDBTableHead } from 'mdb-react-ui-kit';
+import { MDBTable, MDBTableHead, MDBBadge } from 'mdb-react-ui-kit';
 
 function Categories({ establishmentId, onFinishDish, establishmentUrl, establishmentName }) {
     const userToken = sessionStorage.getItem('accessToken');
@@ -66,7 +66,7 @@ function Categories({ establishmentId, onFinishDish, establishmentUrl, establish
 {/*                 </div> */}
                 <div className="col-10 text-end mx-auto px-0 text-truncate">
                     <a href={`https://yaem.kz/${establishmentUrl}/menu`} target="_blank" className="mx-0 px-0">
-                        <div data-aos="fade-in"  className="btn btn-sm shadow-0 btn-animate my-auto text-nowrap text-dark">В меню {establishmentName}
+                        <div data-aos="fade-in"  className="btn btn-sm shadow-0 btn-animate my-auto text-nowrap text-dark ">В меню
                         <i className="fas fa-arrow-right-long fa-lg ms-1"></i>
                         </div>
                     </a>
@@ -74,7 +74,7 @@ function Categories({ establishmentId, onFinishDish, establishmentUrl, establish
             </div>
             <hr className="mt-2" />
 
-            <h2 className="mt-3 mb-2">Разделы
+            <h4 className="mt-3 mb-2">Разделы
                 <div className="btn shadow-0 text-success btn-animate mx-1 px-2 py-0" onClick={toggleAddModal}>
                     <i className="far fa-square-plus fa-2x"></i>
                 </div>
@@ -88,13 +88,14 @@ function Categories({ establishmentId, onFinishDish, establishmentUrl, establish
                         </div>
                     </div>
                 )}
-            </h2>
+            </h4>
 
             <MDBTable responsive hover small align='middle' className="text-center">
                 <MDBTableHead>
                     <tr>
                         {categories.map(category => (
                             <th data-aos="fade-in" scope='col' key={category.id}>
+                                <div className='position-relative d-inline-block mt-1 user-select-none'>
                                 <button
                                     type="button"
                                     className={`btn btn-outline-dark btn-animate text-nowrap ${category.id === selectedCategoryId ? 'active' : ''}`}
@@ -103,6 +104,11 @@ function Categories({ establishmentId, onFinishDish, establishmentUrl, establish
                                 >
                                     {category.name}
                                 </button>
+                                <MDBBadge color='secondary' light pill className='position-absolute translate-middle border'>
+                                  {category.z_index}
+                                  <span class="visually-hidden">unread messages</span>
+                                </MDBBadge>
+                                </div>
                             </th>
                         ))}
                     </tr>
