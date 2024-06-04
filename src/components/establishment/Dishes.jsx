@@ -8,6 +8,7 @@ import 'react-toastify/dist/ReactToastify.css';
 // Import components
 import AddDishModal from './modals/dishes/AddDishModal.jsx';
 import EditDishModal from './modals/dishes/EditDishModal.jsx';
+import { MDBBadge, MDBIcon } from 'mdb-react-ui-kit';
 
 function Dishes({ subcategoryId }) {
 
@@ -83,12 +84,12 @@ function Dishes({ subcategoryId }) {
 
     return (
         <div className="my-2 px-0">
-            <h5 className="mb-0">Позиции
+            <h3 className="mb-0">Позиции
                 <div className="btn shadow-0 text-success btn-animate mx-1 px-2 py-0"
                     onClick={toggleAddModal}>
                     <i className="far fa-square-plus fa-2x"></i>
                 </div>
-            </h5>
+            </h3>
             <div className='row'>
                 {dishes.map((dish, index) => (
                     <div className="col-auto my-2 mx-auto" key={index}>
@@ -109,7 +110,8 @@ function Dishes({ subcategoryId }) {
                         ) : (
                             <div className='col-auto my-2 mx-auto' key={index}>
                                 {/* Render the dish card */}
-                                <div className={`card shadow mx-auto${dish.stop ? ' border border-danger' : ''}`} style={{ width: '288px' }}>
+                                <div className='d-inline-block mt-1 user-select-none'>
+                                <div className={`card shadow mx-auto position-relative${dish.stop ? ' border border-danger' : ''}`} style={{ width: '288px' }}>
                                     <div className="card-body px-0 py-0">
                                         <>
                                             {/* Render dish data from backend */}
@@ -155,6 +157,12 @@ function Dishes({ subcategoryId }) {
                                             </div>
                                         </>
                                     </div>
+                                    <MDBBadge color='secondary' light pill className='position-absolute top-0 end-0 border'>
+                                       #{dish.z_index}
+                                      <span class="visually-hidden">unread messages</span>
+                                    </MDBBadge>
+                                </div>
+
                                 </div>
                             </div>
                         )}

@@ -220,9 +220,12 @@ function EditEstablishmentForm({ establishmentId, onFinishEditing, updateEstabli
     <>
       {/* While all data is loading show spinner */}
       {loading && (
-        <div className="spinner-border text-warning mx-auto my-auto" role="status">
-          <span className="visually-hidden">Loading...</span>
+        <div className="col text-center my-auto">
+            <div className="spinner-border text-warning" role="status">
+                <span className="visually-hidden">Loading...</span>
+            </div>
         </div>
+
       )}
       {/* After loading show main content */}
       {!loading && (

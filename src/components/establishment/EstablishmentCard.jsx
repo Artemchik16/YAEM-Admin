@@ -98,13 +98,13 @@ export default function EstablishmentCard({ establishments, onEdit, onEditDishes
                                             <h5 className="card-title ms-2 me-0 pe-0">{establishments[key].name}
                                                 {/* Button to open DetailEstablishment component */}
                                                 <div className="btn btn-animate my-1 shadow-0 ms-1 me-0 px-0 py-0" onClick={() => handleEdit(establishments[key].id)}>
-                                                    <i className="fas fa-pen fa-lg"></i>
+                                                    <i className="fas fa-pen fa-lg text-muted"></i>
                                                 </div>
                                                 <p className="my-3 fs-6 text-muted">г.{establishments[key].city}</p>
                                             </h5>
                                         </div>
                                         <div className="col-auto text-end">
-                                            <img className="card-img-top" loading="lazy" src={establishments[key].logo} style={{ maxWidth: '100px', maxHeight: '100px' }}></img>
+                                            <img className="card-img-top" draggable="false" loading="lazy" src={establishments[key].logo} style={{ maxWidth: '100px', maxHeight: '100px' }}></img>
                                         </div>
                                     </div>
                                     <hr />
