@@ -158,7 +158,7 @@ function Dishes({ subcategoryId }) {
                                         </>
                                     </div>
                                     <MDBBadge color='secondary' light pill className='position-absolute top-0 end-0 border'>
-                                       {dish.z_index}
+                                       #{dish.z_index}
                                       <span class="visually-hidden">unread messages</span>
                                     </MDBBadge>
                                 </div>

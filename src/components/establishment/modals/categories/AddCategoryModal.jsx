@@ -85,9 +85,9 @@ function AddCategoryModal({ open, setOpen, establishmentId, updateCategories, se
                         <MDBModalBody>
                             {/* Input field for category name */}
                             <MDBInput
-                                label='Наименование категории'
+                                label='Наименование раздела'
                                 type='text'
-                                placeholder="Завтраки"
+                                placeholder="Кухня/Бар"
                                 value={categoryName}
                                 onChange={(e) => setCategoryName(e.target.value)}
                             />
@@ -109,9 +109,9 @@ function AddCategoryModal({ open, setOpen, establishmentId, updateCategories, se
 {/*                                   onChange={(e) => setLogo(e.target.files[0])} */}
 {/*                                 /> */}
 {/*                           </div> */}
-                          <small id='helperTextExample' className='form-helper text-muted'>
-                            Размер файла не более 1мб.
-                          </small>
+{/*                           <small id='helperTextExample' className='form-helper text-muted'> */}
+{/*                             Размер файла не более 1мб. */}
+{/*                           </small> */}
                         </MDBModalBody>
                         <MDBModalFooter>
                             {/* Button to submit the form */}

@@ -117,9 +117,9 @@ function EditCategoryModal({ open, setOpen, categoryId, setSelectedCategoryId, s
 {/*                                   onChange={(e) => setLogo(e.target.files[0])} */}
 {/*                                 /> */}
 {/*                           </div> */}
-                          <small id='helperTextExample' className='form-helper text-muted'>
-                            Размер файла не более 1мб.
-                          </small>
+{/*                           <small id='helperTextExample' className='form-helper text-muted'> */}
+{/*                             Размер файла не более 1мб. */}
+{/*                           </small> */}
                         </MDBModalBody>
                         <MDBModalFooter>
                             {formChanged && <MDBBtn color="success" disabled={isSaving || (!editedCategoryName || !editedCategoryZindex)}>Сохранить</MDBBtn>}
