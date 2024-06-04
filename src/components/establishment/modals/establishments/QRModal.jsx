@@ -35,7 +35,7 @@ export default function QRModal({ open, establishmentName, establishmentUrl, onC
                     </MDBModalHeader>
                     <MDBModalBody className="">
                         {/* Generate QR code block */}
-                        <QRCode id='QR-code' size={300} value={`https://yaem.kz/${establishmentUrl}/menu`} />
+                        <QRCode id='QR-code' size={250} value={`https://yaem.kz/${establishmentUrl}/menu`} />
                         <p>Отсканируйте / скачайте QR код для просмотра меню</p>
                         <MDBInputGroup className='mb-3'>
                             {/* URL */}
@@ -46,7 +46,7 @@ export default function QRModal({ open, establishmentName, establishmentUrl, onC
                                     Перейти в меню</a>
                             </MDBBtn>
                         </MDBInputGroup>
-                        <p className="text-start mt-3 fw-bold note note-secondary">*Настольные QR коды предоставляются в Тарифах "Серебро" / "Золото"</p>
+                        <p className="text-start my-1 fw-bold note note-secondary">*Настольные QR коды предоставляются в Тарифах "Серебро" / "Золото"</p>
                     </MDBModalBody>
                     <MDBModalFooter>
                         {/* Png download */}

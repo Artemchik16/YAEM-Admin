@@ -39,15 +39,16 @@ function EditEstablishmentForm({ establishmentId, onFinishEditing, updateEstabli
   const [description, setDescription] = useState('');
 
   // Set logo state
-  // const [logo, setLogo] = useState(null);
+  const [logo, setLogo] = useState(null);
   // Create a new FormData object for uploading logo
-  // const formData = new FormData();
-  // formData.append('logo', logo);
+  const formData = new FormData();
+  formData.append('logo', logo);
+
   // Delete logo handler
-  // const handleDeleteLogo = () => {
-  //   setLogo(null);
-  //   document.getElementById('inputGroupFile04').value = "";
-  // };
+  const handleDeleteLogo = () => {
+    setLogo(null);
+    document.getElementById('inputGroupFile04').value = "";
+  };
 
   // Set address state
   const [address, setAddress] = useState("");
@@ -96,6 +97,7 @@ function EditEstablishmentForm({ establishmentId, onFinishEditing, updateEstabli
             Authorization: `Bearer ${userToken}`
           }
         });
+        console.log(response);
         // Set actualy data
         setEstablishmentData(response.data);
         // Disable loading state when receiving data successfully
@@ -105,8 +107,7 @@ function EditEstablishmentForm({ establishmentId, onFinishEditing, updateEstabli
         setUrlName(response.data.url_name);
         setCity(response.data.city);
         setDescription(response.data.description);
-        // setLogo(response.data.logo);
-        // document.getElementById('inputGroupFile04').value(response.data.logo)
+        setLogo(response.data.logo);
         setAddress(response.data.address);
         setPhone(response.data.phone);
         setInstagramLink(response.data.inst);
@@ -149,9 +150,17 @@ function EditEstablishmentForm({ establishmentId, onFinishEditing, updateEstabli
         ...(outside !== null && { outside }),
         ...(delivery !== null && { delivery }),
       };
-      // if (logo != null) {
-      //   requestData.logo = logo;
-      // }
+
+
+      if (logo && typeof logo !== 'string') {
+        requestData.logo = logo;
+      }
+      if (logo && typeof logo === 'string') {
+        requestData.logo = null
+      }
+
+      console.log(requestData);
+
       // Update establishment
       await axios.patch(`${apiUrls.client}${establishmentId}/`, requestData, {
         headers: {
@@ -189,7 +198,7 @@ function EditEstablishmentForm({ establishmentId, onFinishEditing, updateEstabli
       urlName !== establishmentData?.url_name ||
       city !== establishmentData?.city ||
       description !== establishmentData?.description ||
-      // logo !== establishmentData?.logo ||
+      logo !== establishmentData?.logo ||
       address !== establishmentData?.address ||
       phone !== establishmentData?.phone ||
       instagramLink !== establishmentData?.inst ||
@@ -202,7 +211,7 @@ function EditEstablishmentForm({ establishmentId, onFinishEditing, updateEstabli
       workTimeStart !== establishmentData?.work_time_start ||
       workTimeEnd !== establishmentData?.work_time_end
     );
-  }, [name, urlName, city, description, address, phone,
+  }, [name, urlName, city, description, logo, address, phone,
     instagramLink, twogisLink, outside, delivery, service,
     wifiName, wifiPassword, workTimeStart, workTimeEnd]);
 
@@ -284,7 +293,7 @@ function EditEstablishmentForm({ establishmentId, onFinishEditing, updateEstabli
                 </div>
 
                 {/* Establishment logo */}
-                {/* <div class="input-group">
+                <div class="input-group">
                   <label class="input-group-text" for="inputGroupFile01"><i class="far fa-image"></i></label>
                   <input
                     type="file"
@@ -297,10 +306,11 @@ function EditEstablishmentForm({ establishmentId, onFinishEditing, updateEstabli
                       }
                     }}
                   />
-                </div> */}
-                {/* <small id='helperTextExample' className='form-helper text-muted'>
+                </div>
+                <small id='helperTextExample' className='form-helper text-muted'>
                   Размер файла не более 1мб.
-                </small> */}
+                </small>
+                <small>{establishmentData.logo}</small>
                 {/* If logo has uploaded, show reset button */}
                 {/* {logo != null && (
                   <p className="text-primary" onClick={handleDeleteLogo}>Удалить изображение {establishmentData.logo}</p>

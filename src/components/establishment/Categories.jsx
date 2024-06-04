@@ -57,16 +57,16 @@ function Categories({ establishmentId, onFinishDish, establishmentUrl, establish
         <div className="container-fluid mx-0 px-0">
             <div className="row mx-0 px-0">
                 <div className="col-2 mx-0 px-0">
-                    <div data-aos="fade-in" data-aos-delay="100" className="btn shadow-0 btn-animate my-auto" onClick={onFinishDish}>
+                    <div data-aos="fade-in" data-aos-delay="100" className="btn btn-sm shadow-0 btn-animate my-auto" onClick={onFinishDish}>
                         <i className="fas fa-arrow-left-long fa-lg"></i>
                     </div>
                 </div>
-                <div className="col-8 mx-0 px-0 my-1">
-                    <h3 className="text-truncate">{establishmentName}</h3>
-                </div>
-                <div className="col-2 text-end mx-0 px-0">
+{/*                 <div className="col-8 mx-0 px-0 my-1"> */}
+{/*                     <h3 className="text-truncate">{establishmentName}</h3> */}
+{/*                 </div> */}
+                <div className="col-10 text-end mx-auto px-0 text-truncate">
                     <a href={`https://yaem.kz/${establishmentUrl}/menu`} target="_blank" className="mx-0 px-0">
-                        <div data-aos="fade-in"  className="btn shadow-0 btn-animate my-auto text-nowrap text-dark">В меню
+                        <div data-aos="fade-in"  className="btn btn-sm shadow-0 btn-animate my-auto text-nowrap text-dark">В меню {establishmentName}
                         <i className="fas fa-arrow-right-long fa-lg ms-1"></i>
                         </div>
                     </a>

@@ -134,7 +134,7 @@ export default function Payment() {
       setIsPaymentButtonClicked(true)
       toast.error('Пожалуйста, укажите корректный номер Kaspi', { autoClose: 1500, pauseOnHover: false, position: "top-center" });
       // Enable payment button
-      setTimeout(() => { setIsPaymentButtonClicked(false); }, 2000);
+      setTimeout(() => { setIsPaymentButtonClicked(false); }, 3000);
       return;
     }
     // Months validation
@@ -143,7 +143,7 @@ export default function Payment() {
       setIsPaymentButtonClicked(true)
       toast.error('Пожалуйста, укажите количество месяцев', { autoClose: 1500, pauseOnHover: false, position: "top-center" });
       // Enable payment button
-      setTimeout(() => { setIsPaymentButtonClicked(false); }, 2000);
+      setTimeout(() => { setIsPaymentButtonClicked(false); }, 3000);
       return;
     }
 
@@ -168,13 +168,13 @@ export default function Payment() {
       });
       // Disabled and enabled payment button
       setIsPaymentButtonClicked(true)
-      setTimeout(() => { setIsPaymentButtonClicked(false); }, 3000);
+      setTimeout(() => { setIsPaymentButtonClicked(false); }, 15000);
       // Set payments data and show
       setPayments(response.data)
     } catch (error) {
       // Disabled and enabled payment button
       setIsPaymentButtonClicked(true)
-      setTimeout(() => { setIsPaymentButtonClicked(false); }, 3000);
+      setTimeout(() => { setIsPaymentButtonClicked(false); }, 15000);
       // Limit payment error
       if (error.response.data && error.response.data[0] === 'Payment: limit error') {
         toast.error('Достигнут лимит заявок. Удалите заявку, либо дождитесь звонка администратора', { autoClose: 2000, pauseOnHover: false, position: "top-center" });

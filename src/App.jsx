@@ -26,46 +26,46 @@ export default function App() {
   const isAuthenticated = accessToken !== null;
 
   // Function to refresh access token
-  const refreshAccessToken = async () => {
-    try {
-      // Send request to refresh access token
-      const response = await axios.post(apiUrls.refreshTokens, {
-        refresh: refreshToken,
-      });
-      // Get new access token from response
-      const newAccessToken = response.data.access;
-      const newRefreshToken = response.data.refresh
-      // Save new access and refresh token
-      sessionStorage.setItem('accessToken', newAccessToken);
-      localStorage.setItem('refreshToken', newRefreshToken);
-      window.location.reload();
-    } catch (error) {
-      window.location.reload();
-    }
-  };
+  // const refreshAccessToken = async () => {
+  //   try {
+  //     // Send request to refresh access token
+  //     const response = await axios.post(apiUrls.refreshTokens, {
+  //       refresh: refreshToken,
+  //     });
+  //     // Get new access token from response
+  //     const newAccessToken = response.data.access;
+  //     const newRefreshToken = response.data.refresh
+  //     // Save new access and refresh token
+  //     sessionStorage.setItem('accessToken', newAccessToken);
+  //     localStorage.setItem('refreshToken', newRefreshToken);
+  //     window.location.reload();
+  //   } catch (error) {
+  //     window.location.reload();
+  //   }
+  // };
 
   // When loading each component, load AOS animation and refresh tokens
   useEffect(() => {
     AOS.init();
     // Check if there is a refresh token in local storage and refresh access token if present
-    if (refreshToken && !accessToken) {
-      refreshAccessToken();
-    }
-    // Add a response interceptor to handle 401 errors
-    axios.interceptors.response.use(
-      response => response,
-      error => {
-        if (error.response.status === 401 && error.response.data.detail === 'Given token not valid for any token type') {
-          // If the error status is 401 (Unauthorized), refresh the access token
-          refreshAccessToken();
-        }
-        return Promise.reject(error);
-      }
-    );
-    // Clean up the interceptor when component unmounts
-    return () => {
-      axios.interceptors.response.eject();
-    };
+    // if (refreshToken && !accessToken) {
+    //   refreshAccessToken();
+    // }
+    // // Add a response interceptor to handle 401 errors
+    // axios.interceptors.response.use(
+    //   response => response,
+    //   error => {
+    //     if (error.response.status === 401 && error.response.data.detail === 'Given token not valid for any token type') {
+    //       // If the error status is 401 (Unauthorized), refresh the access token
+    //       refreshAccessToken();
+    //     }
+    //     return Promise.reject(error);
+    //   }
+    // );
+    // // Clean up the interceptor when component unmounts
+    // return () => {
+    //   axios.interceptors.response.eject();
+    // };
   }, []);
 
   // HTML block
