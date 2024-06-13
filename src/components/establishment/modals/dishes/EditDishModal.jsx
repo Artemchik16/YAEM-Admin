@@ -114,6 +114,7 @@ function EditDishModal({ open, setOpen, dishId, updateDishes, subcategoryId }) {
     const handleCloseModal = () => {
         setIsAdditionalInfoVisible(false);
         setOpen(false);
+        setImage(null);
     };
 
     return (
