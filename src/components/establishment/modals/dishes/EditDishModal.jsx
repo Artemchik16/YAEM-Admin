@@ -40,7 +40,7 @@ function EditDishModal({ open, setOpen, dishId, updateDishes, subcategoryId }) {
                 setDishZindex(response.data.z_index);
                 setDishActualPrice(response.data.actual_price);
                 setDishStop(response.data.stop);
-                // setImage(response.data.image)
+                setImage(null)
                 setDishOldPrice(response.data.old_price);
                 setDishDescription(response.data.description);
                 setDishPopular(response.data.popular);
